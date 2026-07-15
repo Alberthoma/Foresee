@@ -1,0 +1,11 @@
+# Carpeta de referencia local del proyecto anterior.
+# Es un repositorio Git propio en la PC, por lo que "git add ."
+# la registraba como submódulo roto y rompía el despliegue de
+# GitHub Pages (fatal: No url found for submodule path...).
+# Se mantiene solo en local como material de consulta.
+Proyecto-Anterior/
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
