@@ -1,11 +1,28 @@
-# Carpeta de referencia local del proyecto anterior.
-# Es un repositorio Git propio en la PC, por lo que "git add ."
-# la registraba como submódulo roto y rompía el despliegue de
-# GitHub Pages (fatal: No url found for submodule path...).
-# Se mantiene solo en local como material de consulta.
+# === Protección crítica del despliegue ===
+# Proyecto-Anterior es un repositorio Git propio en la PC. Sin esta
+# línea, "git add ." lo registra como submódulo roto (sin .gitmodules)
+# y rompe el build de GitHub Pages
+# (fatal: No url found for submodule path 'Proyecto-Anterior').
+# Se mantiene solo en local como material de referencia.
 Proyecto-Anterior/
 
 # Archivos del sistema operativo
-.DS_Store
 Thumbs.db
+.DS_Store
 desktop.ini
+
+# Archivos de registro (Logs)
+*.log
+
+# Carpetas de dependencias y compilación
+node_modules/
+dist/
+build/
+
+# Archivos con secretos y configuraciones locales (¡MUY IMPORTANTE!)
+config.js
+.env.wittfinances-282f1
+
+# Otros archivos que has decidido ignorar (si es intencional, está bien)
+link.txt
+Imagenes/Imagenes.rar
