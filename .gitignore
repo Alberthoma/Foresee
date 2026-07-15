@@ -1,10 +1,8 @@
-# === Protección crítica del despliegue ===
-# Proyecto-Anterior es un repositorio Git propio en la PC. Sin esta
-# línea, "git add ." lo registra como submódulo roto (sin .gitmodules)
-# y rompe el build de GitHub Pages
-# (fatal: No url found for submodule path 'Proyecto-Anterior').
-# Se mantiene solo en local como material de referencia.
-Proyecto-Anterior/
+# NOTA: Proyecto-Anterior SÍ se sube al repo (se usa como referencia
+# desde el móvil). Para que no rompa GitHub Pages, esa carpeta NO debe
+# contener una subcarpeta oculta .git propia (eso la volvería un
+# submódulo roto). Con la .git interna eliminada, se sube como archivos
+# normales sin conflicto.
 
 # Archivos del sistema operativo
 Thumbs.db
