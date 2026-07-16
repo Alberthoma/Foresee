@@ -234,7 +234,7 @@ async function deleteCreditCard(id) {
 
 export function initTarjetas() {
   document.getElementById("btn-add-card").addEventListener("click", openCcModal);
-  document.getElementById("cc-close-btn").addEventListener("click", () => guardClose(isCcDirty, closeCcModalRaw));
+  document.getElementById("cc-close-btn").addEventListener("click", closeCcModalRaw);
   document.getElementById("cc-modal").addEventListener("click", (e) => {
     if (e.target === e.currentTarget) guardClose(isCcDirty, closeCcModalRaw);
   });

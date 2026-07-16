@@ -212,7 +212,7 @@ export function initRecurrentes() {
       document.getElementById("rec-tip-banner").classList.add("hidden");
     }
   });
-  document.getElementById("rec-close-btn").addEventListener("click", () => guardClose(isRecDirty, closeRecModalRaw));
+  document.getElementById("rec-close-btn").addEventListener("click", closeRecModalRaw);
   document.getElementById("rec-modal").addEventListener("click", (e) => {
     if (e.target === e.currentTarget) guardClose(isRecDirty, closeRecModalRaw);
   });

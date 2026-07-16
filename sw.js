@@ -1,4 +1,4 @@
-const CACHE_NAME = 'foresee-cache-v2';
+const CACHE_NAME = 'foresee-cache-v5';
 
 const STATIC_ASSETS = [
   'manifest.json',

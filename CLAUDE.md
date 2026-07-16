@@ -53,12 +53,25 @@ No hay comandos de build, lint, ni tests automatizados. La verificación se hace
 
 ## Estado actual
 
-- **Versión activa:** `V F2 0001` (2026-07-15) — primera publicación completa, Fases 1–9 del plan de reconstrucción
-- **Próxima versión:** `V F2 0002`
+- **Versión activa:** `V F2 0002` (2026-07-15) — fixes de cierre de formularios, pantalla completa y responsive mobile
+- **Próxima versión:** `V F2 0003`
 - **Archivo de entrada:** `index.html` (raíz) — carga `css/base.css`, `css/secciones.css` y `js/main.js`
 - **Último informe de sesión:** `MD/Sesion 2026-07-15 — Reconstruccion Foresee 2.0.md`
+- **Último informe de actualización:** `Informes de actualización/V F2 0002 — 2026-07-15.md`
 
 > Nomenclatura `V F2 XXXX` (Foresee **2**) para no confundirla con `V FSA XXXX` del proyecto anterior — son dos apps distintas en dos repos distintos.
+
+---
+
+## 🗣️ Protocolo de cada petición (importante — pedido explícito del usuario, 2026-07-15)
+
+Para cualquier petición que implique **modificar algo** (código, configuración, documentos):
+
+1. Primero compartir opinión/sugerencias (si las hay) y un plan concreto de qué se va a hacer.
+2. Esperar la aprobación del usuario.
+3. Recién ahí ejecutar: modificación → verificación → reporte.
+
+No aplica a preguntas puramente informativas (explicar algo, mostrar contenido) que no impliquen cambiar ningún archivo — esas se responden directo.
 
 ---
 
@@ -155,6 +168,8 @@ Editar el/los módulo/s → ejecutar `/foresee2-commit` (hace el resto solo). Si
 ---
 
 ## 🗺️ Arquitectura de la app
+
+> 📍 **Mapa detallado de código** (qué contiene y qué exporta cada archivo `.js`/`.css`, y una guía rápida de "dónde busco esto"): ver [`MD/Arquitectura y Mapa de Código — Foresee 2.0.md`](MD/Arquitectura%20y%20Mapa%20de%20C%C3%B3digo%20%E2%80%94%20Foresee%202.0.md). Consultarlo antes de buscar a mano en qué archivo vive una función — el skill `/foresee2-mapa` hace esto automáticamente.
 
 ### Secciones (data-section, iguales al origen)
 
@@ -267,6 +282,7 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 | Versión | Fecha | Cambio |
 |---------|-------|--------|
 | V F2 0001 | 2026-07-15 | Reconstrucción completa de Foresee (origen: `Proyecto-Anterior/`, V FSA 0061) en 9 fases: esqueleto, registros, recurrentes+proyección, saldos+reportes+presupuesto, tarjetas+comunes, configuración, voz, importar (CSV/Excel/OCR), PWA+cierre. Misma funcionalidad, misma estética, arquitectura modular con ES modules. Publicado en `alberthoma.github.io/Foresee`. |
+| V F2 0002 | 2026-07-15 | Fix cierre de formularios (x cierra directo, confirm-modal con z-index corregido para el clic en el fondo), fix pantalla completa al cerrar sesión, fix "Total banco" cortado en Recurrentes mobile, fix padding de bordes en 4 tablas mobile. |
 
 ---
 

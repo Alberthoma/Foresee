@@ -513,7 +513,7 @@ export function initRegistros() {
     btn.addEventListener("click", () => btn.closest(".filter-group").classList.toggle("filter-open"));
   });
 
-  document.getElementById("transfer-close-btn").addEventListener("click", () => guardClose(isTransferDirty, closeTransferModalRaw));
+  document.getElementById("transfer-close-btn").addEventListener("click", closeTransferModalRaw);
   document.getElementById("transfer-modal").addEventListener("click", (e) => {
     if (e.target === e.currentTarget) guardClose(isTransferDirty, closeTransferModalRaw);
   });

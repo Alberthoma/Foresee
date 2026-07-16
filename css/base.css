@@ -612,6 +612,12 @@ body.view-content #alerts-area { display: none; }
   padding: var(--space-md);
 }
 .modal-overlay.active { display: flex; }
+/* confirm-modal puede abrirse ENCIMA de otro modal ya activo (ej. clic en
+   el fondo de rec-modal/cc-modal/transfer-modal con datos sin guardar) —
+   necesita quedar por delante, si no ambos comparten z-index 1000 y gana
+   el que esté más abajo en el HTML, dejando la confirmación tapada e
+   inutilizable. */
+#confirm-modal { z-index: 1100; }
 .modal-box {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);

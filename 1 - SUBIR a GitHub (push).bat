@@ -25,29 +25,28 @@ if not exist ".git" (
 git remote get-url origin >nul 2>&1
 if errorlevel 1 git remote add origin https://github.com/Alberthoma/Foresee.git
 
-:: 3. PROTECCION (correccion de esta sesion):
-::    Si la carpeta Proyecto-Anterior tiene su propia .git interna, Git
-::    la sube como "submodulo roto" y ROMPE la publicacion de la web.
-::    Aqui se elimina esa .git interna y cualquier puntero de submodulo.
+:: 3. PROTECCION: si Proyecto-Anterior tiene su propia .git interna, Git la
+::    sube como "submodulo roto" y ROMPE la publicacion de la web. Chequeo
+::    barato, solo actua si hace falta (no toca nada en el caso normal).
 if exist "Proyecto-Anterior\.git" (
   echo [AVISO] Proyecto-Anterior tenia una .git interna. Eliminandola...
   rmdir /s /q "Proyecto-Anterior\.git"
 )
-git rm --cached Proyecto-Anterior >nul 2>&1
 
-:: 4. Agrega todos los cambios
-git add .
+:: 4. Muestra un resumen de lo que va a subir
+echo Cambios detectados:
+git add -A
+git status --short
+echo.
 
-:: 5. Pide un mensaje para este cambio
-set "msg="
-set /p "msg=Escribe un mensaje para este cambio (Enter = Actualizacion): "
-if "%msg%"=="" set "msg=Actualizacion del sitio"
-
-:: 6. Guarda el cambio (si no hay nada nuevo, continua igual)
-git commit -m "%msg%"
+:: 5. Guarda el cambio con un mensaje automatico (fecha y hora) - sin pedir
+::    nada por teclado. Se usa PowerShell para la fecha porque el formato
+::    de "date /t" cambia segun la configuracion regional de Windows.
+for /f "delims=" %%i in ('powershell -NoProfile -Command "Get-Date -Format \"yyyy-MM-dd HH:mm\""') do set "marca=%%i"
+git commit -m "Actualizacion automatica - %marca%" >nul 2>&1
 if errorlevel 1 echo (No habia cambios nuevos que guardar, continuo...)
 
-:: 7. Trae primero lo ultimo de GitHub y lo combina (evita rechazos si
+:: 6. Trae primero lo ultimo de GitHub y lo combina (evita rechazos si
 ::    editaste algo desde el movil)
 echo.
 echo Sincronizando con GitHub antes de subir...
@@ -59,7 +58,7 @@ if errorlevel 1 (
   pause & exit /b 1
 )
 
-:: 8. Sube a GitHub
+:: 7. Sube a GitHub
 git push -u origin main
 if errorlevel 1 (
   echo.

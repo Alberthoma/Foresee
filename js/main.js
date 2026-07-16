@@ -239,6 +239,7 @@ async function handleForgotPassword() {
 
 async function handleLogout() {
   try {
+    exitFullscreen();
     unloadUserData();
     resetRecurringEngineState();
     resetMonthTransitionState();

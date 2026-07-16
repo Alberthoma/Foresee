@@ -7,7 +7,7 @@
 // evita los ~90 líneas duplicadas que el origen tenía entre
 // finalizeTransaction/finalizeProjection.
 import { appState } from "../state.js";
-import { fillSelect, openModal, closeModal, showToast, guardClose } from "./ui.js";
+import { fillSelect, openModal, closeModal, showToast } from "./ui.js";
 import { openCategoryModal } from "./category-modal.js";
 import { processReceiptImage } from "./ocr.js";
 
@@ -15,14 +15,6 @@ let calcExpr = "0";
 let tempData = {};
 let editId = null;
 let onFinalizeCb = null;
-
-function isCalcDirty() {
-  return (
-    calcExpr !== "0" ||
-    !!document.getElementById("calc-desc").value.trim() ||
-    !!document.getElementById("calc-bank").value
-  );
-}
 
 export function openCalcModal({ editItem = null, initialTipo = "expense", onFinalize, titleNew = "Nueva Transacción", titleEdit = "Editar Transacción" } = {}) {
   const today = new Date().toISOString().slice(0, 10);
@@ -63,10 +55,6 @@ export function openCalcModal({ editItem = null, initialTipo = "expense", onFina
 function closeCalcModalRaw() {
   closeModal("calc-modal");
   document.removeEventListener("keydown", handleCalcKeyboard);
-}
-
-function closeCalcModal() {
-  guardClose(isCalcDirty, closeCalcModalRaw);
 }
 
 function setCalcTipo(tipo) {
@@ -190,7 +178,7 @@ async function handleScanReceipt(file) {
 }
 
 export function initCalcModal() {
-  document.getElementById("calc-close-btn").addEventListener("click", closeCalcModal);
+  document.getElementById("calc-close-btn").addEventListener("click", closeCalcModalRaw);
   document.getElementById("calc-scan-receipt-btn").addEventListener("click", () =>
     document.getElementById("calc-receipt-input").click(),
   );

@@ -8,7 +8,11 @@
    ===================================================================== */
 .rec-empty { padding: var(--space-xl) var(--space-md); text-align: center; color: var(--color-text-muted); font-size: var(--font-sm); }
 .rec-amount { color: var(--color-danger); font-weight: 400; }
-.rec-amount-shared { display: block; font-size: var(--font-xs); color: var(--color-text-muted); font-weight: 400; }
+/* white-space:normal anula el nowrap heredado de la celda de monto (que
+   lo necesita para el monto principal) — sin esto, "Total banco: $X" no
+   puede bajar de línea dentro de su columna y sigue de largo hasta el
+   borde de la pantalla en vez de truncarse o envolver. */
+.rec-amount-shared { display: block; font-size: var(--font-xs); color: var(--color-text-muted); font-weight: 400; white-space: normal; }
 .field-hint { font-size: var(--font-xs); color: var(--color-text-muted); margin: -4px 0 0; line-height: 1.3; }
 #rec-modal .modal-box { box-shadow: 0 0 0 1.5px var(--color-danger), 0 8px 32px rgba(240, 82, 82, 0.18); }
 
@@ -64,7 +68,7 @@
   #rec-table tbody td:nth-child(2) { width: 10%; text-align: center; padding: 4px 2px; }
   #rec-table tbody td:nth-child(3) { width: 48%; text-align: left; }
   #rec-table tbody td:nth-child(4) { width: 15%; padding: 4px 2px; text-align: center; }
-  #rec-table tbody td:nth-child(5) { width: 30%; white-space: nowrap; text-align: right; }
+  #rec-table tbody td:nth-child(5) { width: 30%; white-space: nowrap; text-align: right; padding-right: 4px; }
 
   #proj-table thead { display: none; }
   #proj-table { table-layout: fixed; width: 100%; }
@@ -76,7 +80,7 @@
   #proj-table tbody td:nth-child(4) { width: 15%; padding: 2px 2px; text-align: right; }
   #proj-table tbody td:nth-child(5) { width: 7%; text-align: center; padding: 4px 0; }
   #proj-table tbody td:nth-child(6) { width: 37%; white-space: nowrap; }
-  #proj-table tbody td:nth-child(7) { width: 37%; white-space: nowrap; text-align: right; }
+  #proj-table tbody td:nth-child(7) { width: 37%; white-space: nowrap; text-align: right; padding-right: 4px; }
 
   .filter-group .proj-next-month-label { display: none; }
   .filter-group.filter-open .proj-next-month-label { display: flex; }
@@ -88,8 +92,9 @@
      sin esto, table-layout:fixed toma el ancho YA recortado de esta celda
      (casi 0) para fijar la columna entera, y el "Totales" del tfoot
      termina superpuesto sobre la celda vecina. */
-  #budget-table tbody td:nth-child(1) { width: 58px; max-width: none; text-align: center; padding: 4px 2px; }
+  #budget-table tbody td:nth-child(1) { width: 58px; max-width: none; text-align: center; padding: 4px 4px; }
   #budget-table tbody td:nth-child(2) { width: 30%; }
+  #budget-table tbody td:nth-child(4) { padding-right: 4px; }
   #budget-table tfoot .tfoot-label { font-size: 0.7rem; text-align: center; white-space: nowrap; padding: 4px 2px; }
   .budget-input { max-width: 70px; padding: 3px 4px; }
 }
@@ -496,7 +501,7 @@ input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
   #reg-table tbody td:nth-child(4) { width: 15%; padding: 4px 2px; text-align: right; }
   #reg-table tbody td:nth-child(5) { width: 7%; text-align: center; padding: 4px 0; }
   #reg-table tbody td:nth-child(6) { width: 37%; white-space: nowrap; }
-  #reg-table tbody td:nth-child(7) { width: 37%; white-space: nowrap; text-align: right; }
+  #reg-table tbody td:nth-child(7) { width: 37%; white-space: nowrap; text-align: right; padding-right: 4px; }
 
   .cell-bank-text { display: none; }
   .btn-row-info {
