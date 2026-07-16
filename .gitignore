@@ -1,0 +1,25 @@
+# NOTA: Proyecto-Anterior SÍ se sube al repo (se usa como referencia
+# desde el móvil). Para que no rompa GitHub Pages, esa carpeta NO debe
+# contener una subcarpeta oculta .git propia (eso la volvería un
+# submódulo roto). Verificado 2026-07-15: no tiene .git interna.
+
+# Archivos del sistema operativo
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Archivos de registro (Logs)
+*.log
+
+# Carpetas de dependencias y compilación
+node_modules/
+dist/
+build/
+
+# Archivos con secretos y configuraciones locales (¡MUY IMPORTANTE!)
+config.js
+.env.wittfinances-282f1
+
+# Otros archivos que se han decidido ignorar
+link.txt
+Imagenes/Imagenes.rar
