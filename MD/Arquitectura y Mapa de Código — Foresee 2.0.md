@@ -20,7 +20,7 @@ Referencia detallada de qué hay en cada archivo del proyecto. Objetivo: ubicar 
 | 3c. Pull-to-refresh | Indicador de flecha/spinner arriba de la pantalla |
 | 4. Toast | Notificaciones flotantes (éxito/error/warning) |
 | 5. Header bar (desktop) | Logo, título, botones de header (incluye filosofía, pantalla completa) |
-| 6. Tab bar | Barra de pestañas fija abajo — **único cambio de layout vs. el origen** |
+| 6. Tab bar | Barra de pestañas fija arriba, idéntica al origen (el intento de moverla abajo en V F2 0001 se revirtió en V F2 0003) |
 | 7. View state | Clases `view-dashboard` / `view-content` en `<body>` |
 | 8. Main layout + dashboard | Grid de tarjetas del dashboard |
 | 9. Content area | Action bar (botones por pestaña) + `.tab-pane` |

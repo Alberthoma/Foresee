@@ -2,9 +2,8 @@
    Foresee 2.0 — base.css
    Tokens y componentes compartidos. Paleta idéntica al origen (Foresee
    V FSA 0061): tema oscuro azul-marino + tema claro "Gris Perla".
-   Único cambio de layout vs. el origen: la tab-bar va fija abajo (antes
-   arriba), así que las reglas de "mover tab-bar a top:0 en view-content"
-   del origen no existen aquí — simplifica el layout base/content.
+   Layout idéntico al origen: tab-bar fija arriba (debajo del header en
+   desktop, sola en mobile/view-content).
    ===================================================================== */
 
 /* =====================================================================
@@ -129,9 +128,8 @@ body {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  /* Header fijo arriba (desktop) + tab-bar fija abajo (siempre) */
-  padding-top: var(--header-bar-h);
-  padding-bottom: var(--tab-bar-h);
+  /* Desktop: espacio para header fijo + tab-bar fija, ambos arriba */
+  padding-top: calc(var(--header-bar-h) + var(--tab-bar-h));
 }
 button { cursor: pointer; font-family: inherit; }
 input, textarea, select { font-family: inherit; }
@@ -369,19 +367,17 @@ img { display: block; }
 }
 
 /* =====================================================================
-   6. TAB BAR — fija abajo (único cambio de layout vs. el origen)
+   6. TAB BAR
    ===================================================================== */
 #tab-bar {
   position: fixed;
-  bottom: 0;
+  top: var(--header-bar-h);
   left: 0;
   right: 0;
-  background-color: var(--color-surface);
-  border-top: 1px solid var(--color-border);
+  background-color: transparent;
   z-index: 99;
   height: var(--tab-bar-h);
   display: flex;
-  align-items: center;
   overflow-x: auto;
   gap: 3px;
   padding: var(--space-xs);
@@ -397,7 +393,7 @@ img { display: block; }
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
-  background-color: var(--color-surface-2);
+  background-color: var(--color-surface);
   flex: 1;
   gap: 2px;
   min-width: 60px;
@@ -439,6 +435,11 @@ img { display: block; }
 body.view-dashboard #content-area { display: none; }
 body.view-content #dashboard,
 body.view-content #alerts-area { display: none; }
+body.view-content #app-header { display: none; }
+body.view-content { padding-top: var(--tab-bar-h); }
+
+/* En content view, la tab-bar se mueve a top:0 (reemplaza al header) */
+body.view-content #tab-bar { top: 0; }
 
 /* =====================================================================
    8. MAIN LAYOUT + DASHBOARD
@@ -545,7 +546,7 @@ body.view-content #alerts-area { display: none; }
   gap: var(--space-sm);
   flex-wrap: wrap;
   position: sticky;
-  top: 0;
+  top: var(--tab-bar-h);
   z-index: 50;
   background: color-mix(in srgb, var(--color-bg) 80%, transparent);
   backdrop-filter: blur(8px);
@@ -853,14 +854,14 @@ footer p { font-size: var(--font-xs); color: var(--color-text-muted); }
    14. RESPONSIVE — MOBILE (≤ 768px)
    ===================================================================== */
 @media (max-width: 768px) {
-  body { padding-top: 0; padding-bottom: var(--tab-bar-mobile-h); }
+  body { padding-top: var(--tab-bar-mobile-h); }
   #app-header { display: none; }
-  #tab-bar { height: var(--tab-bar-mobile-h); }
+  #tab-bar { height: var(--tab-bar-mobile-h); top: 0; }
   .tab-btn { flex: none; min-width: 52px; }
   .tab-btn img { height: 3rem; width: auto; }
   .tab-btn span { font-size: 0.62rem; }
   #dashboard { grid-template-columns: 1fr; }
-  #toast-container { bottom: calc(var(--tab-bar-mobile-h) + var(--space-md)); }
+  #toast-container { bottom: var(--space-lg); }
   #auth-modal .modal-box { max-width: 100%; border-radius: var(--radius-lg); }
   .auth-btn-row { flex-direction: column; }
   #action-bar { gap: var(--space-xs); }

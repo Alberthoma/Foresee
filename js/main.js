@@ -43,7 +43,7 @@ import { renderConfigurationLists, initConfiguracion } from "./secciones/configu
 import { initOnboarding, showOnboarding, shouldShowOnboarding } from "./secciones/onboarding.js";
 import { initVoz } from "./secciones/voz.js";
 import { initImportar } from "./secciones/importar.js";
-import { requestFullscreen, exitFullscreen, setupPullToRefresh, setupSwipeNavigation } from "./lib/pwa.js";
+import { requestFullscreen, exitFullscreen, setupPullToRefresh } from "./lib/pwa.js";
 import { tryCheckMonthTransition, resetMonthTransitionState } from "./lib/month-transition.js";
 
 /* ===================================================================
@@ -342,9 +342,8 @@ function setupEventListeners() {
     });
   });
 
-  // Pull-to-refresh y swipe horizontal entre pestañas (mobile)
+  // Pull-to-refresh (mobile)
   setupPullToRefresh(renderAll);
-  setupSwipeNavigation({ getCurrentTab: () => appState.currentTab, switchTab });
 
   initTooltip();
   initCalcModal();

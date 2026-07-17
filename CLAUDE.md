@@ -1,7 +1,7 @@
 # Foresee 2.0 — Gestor de Presupuesto Web
 
 ## Qué es Foresee 2.0
-Foresee 2.0 es la **reconstrucción completa** de Foresee (la app original vive en `Proyecto-Anterior/`, single-file, ~17.800 líneas). Misma funcionalidad al 100% ("ni una función menos"), misma estética visual (tema oscuro azul-marino + tema claro "Gris Perla", mismos íconos de Cloudinary, mismos tokens de color) — pero con código depurado y modular (ES modules nativos, sin build step, sin librerías nuevas más allá de las que ya usaba el origen). El único cambio de layout aprobado fue mover la barra de pestañas de arriba a abajo (fija).
+Foresee 2.0 es la **reconstrucción completa** de Foresee (la app original vive en `Proyecto-Anterior/`, single-file, ~17.800 líneas). Misma funcionalidad al 100% ("ni una función menos"), misma estética visual (tema oscuro azul-marino + tema claro "Gris Perla", mismos íconos de Cloudinary, mismos tokens de color) — pero con código depurado y modular (ES modules nativos, sin build step, sin librerías nuevas más allá de las que ya usaba el origen). Layout idéntico al origen: barra de pestañas fija arriba (un cambio a "fija abajo" se probó en V F2 0001 y se revirtió en V F2 0003 a pedido del usuario, por diferencias de estilo/comportamiento con el origen).
 
 App web de gestión de presupuesto personal, pensada principalmente para móvil: ingresos, gastos, saldos, deudas y proyecciones futuras.
 
@@ -53,11 +53,11 @@ No hay comandos de build, lint, ni tests automatizados. La verificación se hace
 
 ## Estado actual
 
-- **Versión activa:** `V F2 0002` (2026-07-15) — fixes de cierre de formularios, pantalla completa y responsive mobile
-- **Próxima versión:** `V F2 0003`
+- **Versión activa:** `V F2 0003` (2026-07-16) — tab-bar de vuelta a top (igual que el origen) y eliminación del swipe entre pestañas
+- **Próxima versión:** `V F2 0004`
 - **Archivo de entrada:** `index.html` (raíz) — carga `css/base.css`, `css/secciones.css` y `js/main.js`
 - **Último informe de sesión:** `MD/Sesion 2026-07-15 — Reconstruccion Foresee 2.0.md`
-- **Último informe de actualización:** `Informes de actualización/V F2 0002 — 2026-07-15.md`
+- **Último informe de actualización:** `Informes de actualización/V F2 0003 — 2026-07-16.md`
 
 > Nomenclatura `V F2 XXXX` (Foresee **2**) para no confundirla con `V FSA XXXX` del proyecto anterior — son dos apps distintas en dos repos distintos.
 
@@ -251,7 +251,7 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 - Preservar la estética visual exacta del origen (paleta, íconos Cloudinary, tokens)
 - **CSS puro** — sin Tailwind, Bootstrap ni librerías externas
 - **Mobile-first** — breakpoints: 480px, 640px, 768px, 1024px, 1280px
-- Único cambio de layout permitido frente al origen: tab-bar abajo en vez de arriba (ya aplicado)
+- Layout idéntico al origen — tab-bar fija arriba (el intento de moverla abajo en V F2 0001 se revirtió en V F2 0003)
 
 ### Seguridad
 - No insertar datos del usuario en el DOM vía `innerHTML` — usar `createTextNode`/`textContent`
@@ -283,6 +283,7 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 |---------|-------|--------|
 | V F2 0001 | 2026-07-15 | Reconstrucción completa de Foresee (origen: `Proyecto-Anterior/`, V FSA 0061) en 9 fases: esqueleto, registros, recurrentes+proyección, saldos+reportes+presupuesto, tarjetas+comunes, configuración, voz, importar (CSV/Excel/OCR), PWA+cierre. Misma funcionalidad, misma estética, arquitectura modular con ES modules. Publicado en `alberthoma.github.io/Foresee`. |
 | V F2 0002 | 2026-07-15 | Fix cierre de formularios (x cierra directo, confirm-modal con z-index corregido para el clic en el fondo), fix pantalla completa al cerrar sesión, fix "Total banco" cortado en Recurrentes mobile, fix padding de bordes en 4 tablas mobile. |
+| V F2 0003 | 2026-07-16 | Tab-bar de vuelta a `top` (revierte el cambio de layout de V F2 0001, ahora idéntica al origen): sin borde, fondo transparente, botones de altura uniforme. Eliminada por completo la función de swipe entre pestañas (`js/lib/pwa.js`) — no existía en el origen y provocaba que el usuario saliera de la app al deslizar hacia la derecha. |
 
 ---
 
