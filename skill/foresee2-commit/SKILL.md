@@ -79,11 +79,20 @@ Si la versión fue un intento fallido (el usuario lo indica), agregar con emoji 
 | V F2 [SIGUIENTE] ⚠️ | [HOY] | SUPERADO — [descripción breve], ver V F2 [SIGUIENTE+1] |
 ```
 
-### Paso 7 — Verificar antes de publicar
+### Paso 7 — Bump de CACHE_NAME en sw.js (si se tocó CSS/JS)
+El service worker (`sw.js`) sirve `index.html` siempre de la red, pero **todo lo demás (CSS, JS, imágenes) lo sirve `cache-first`** — una vez que un usuario lo cacheó, no vuelve a pedirlo a la red aunque cambie en el servidor. A diferencia del proyecto original (todo el código vivía inline en un único `index.html`, por lo que casi nunca pasaba por la rama cacheada), acá `css/base.css`, `css/secciones.css` y todos los `js/**/*.js` son archivos externos reales — cualquier cambio en ellos queda atrapado en la caché vieja de los usuarios hasta que se invalide.
+
+Si esta versión modificó **cualquier `.css` o `.js`** (no solo `index.html`):
+1. Abrir `sw.js` y subir en 1 el número de `CACHE_NAME` (ej: `'foresee-cache-v5'` → `'foresee-cache-v6'`).
+2. Mencionarlo en el informe de actualización si se creó uno.
+
+Si el cambio de esta versión tocó **solo** `index.html`/`CLAUDE.md`/Markdown (nada de `css/` o `js/`), este paso no aplica.
+
+### Paso 8 — Verificar antes de publicar
 - `node --check` sobre cada archivo `.js` tocado
 - Si el cambio es visual/responsive, verificar manualmente o con Playwright (390px de viewport, sin overflow horizontal)
 
-### Paso 8 — Commit y push
+### Paso 9 — Commit y push
 ```bash
 git add -A
 git commit -m "V F2 [SIGUIENTE] — [descripción breve del cambio]"
@@ -91,7 +100,7 @@ git push origin main
 ```
 Si el push falla por desalineación con el remoto, hacer `git pull --rebase origin main` primero y avisar al usuario si hay conflictos — nunca `--force` sin confirmar explícitamente.
 
-### Paso 9 — Confirmar resultado
+### Paso 10 — Confirmar resultado
 ```
 ✅ Versión V F2 [SIGUIENTE] publicada en GitHub.
 

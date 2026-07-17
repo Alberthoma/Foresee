@@ -53,11 +53,11 @@ No hay comandos de build, lint, ni tests automatizados. La verificación se hace
 
 ## Estado actual
 
-- **Versión activa:** `V F2 0003` (2026-07-16) — tab-bar de vuelta a top (igual que el origen) y eliminación del swipe entre pestañas
-- **Próxima versión:** `V F2 0004`
+- **Versión activa:** `V F2 0004` (2026-07-16) — bump de `CACHE_NAME` en `sw.js` (v5→v6) para invalidar la caché vieja de CSS/JS
+- **Próxima versión:** `V F2 0005`
 - **Archivo de entrada:** `index.html` (raíz) — carga `css/base.css`, `css/secciones.css` y `js/main.js`
 - **Último informe de sesión:** `MD/Sesion 2026-07-15 — Reconstruccion Foresee 2.0.md`
-- **Último informe de actualización:** `Informes de actualización/V F2 0003 — 2026-07-16.md`
+- **Último informe de actualización:** `Informes de actualización/V F2 0004 — 2026-07-16.md`
 
 > Nomenclatura `V F2 XXXX` (Foresee **2**) para no confundirla con `V FSA XXXX` del proyecto anterior — son dos apps distintas en dos repos distintos.
 
@@ -284,6 +284,7 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 | V F2 0001 | 2026-07-15 | Reconstrucción completa de Foresee (origen: `Proyecto-Anterior/`, V FSA 0061) en 9 fases: esqueleto, registros, recurrentes+proyección, saldos+reportes+presupuesto, tarjetas+comunes, configuración, voz, importar (CSV/Excel/OCR), PWA+cierre. Misma funcionalidad, misma estética, arquitectura modular con ES modules. Publicado en `alberthoma.github.io/Foresee`. |
 | V F2 0002 | 2026-07-15 | Fix cierre de formularios (x cierra directo, confirm-modal con z-index corregido para el clic en el fondo), fix pantalla completa al cerrar sesión, fix "Total banco" cortado en Recurrentes mobile, fix padding de bordes en 4 tablas mobile. |
 | V F2 0003 | 2026-07-16 | Tab-bar de vuelta a `top` (revierte el cambio de layout de V F2 0001, ahora idéntica al origen): sin borde, fondo transparente, botones de altura uniforme. Eliminada por completo la función de swipe entre pestañas (`js/lib/pwa.js`) — no existía en el origen y provocaba que el usuario saliera de la app al deslizar hacia la derecha. |
+| V F2 0004 | 2026-07-16 | Bump de `CACHE_NAME` en `sw.js` (v5→v6) — V F2 0003 no llegaba a los usuarios con caché previa porque el service worker sirve CSS/JS `cache-first`. Se agregó este paso al protocolo de `/foresee2-commit` para futuras versiones que toquen `.css`/`.js`. |
 
 ---
 
