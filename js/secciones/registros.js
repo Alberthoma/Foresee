@@ -148,6 +148,8 @@ export function renderTransactionsTable() {
     const tr = document.createElement("tr");
     tr.className = rowClass;
     tr.dataset.id = tx.id;
+    tr.dataset.desc = tx.description || "";
+    tr.dataset.bank = tx.bank || "";
 
     const tdChk = document.createElement("td");
     const chk = document.createElement("input");
@@ -191,14 +193,6 @@ export function renderTransactionsTable() {
     bankSpan.className = "cell-bank-text";
     bankSpan.textContent = tx.bank || "—";
     tdBank.appendChild(bankSpan);
-    const infoBtn = document.createElement("button");
-    infoBtn.className = "btn-row-info";
-    infoBtn.dataset.action = "info";
-    infoBtn.dataset.desc = tx.description || "";
-    infoBtn.dataset.bank = tx.bank || "";
-    infoBtn.setAttribute("aria-label", "Ver detalle");
-    infoBtn.textContent = "i";
-    tdBank.appendChild(infoBtn);
     tr.appendChild(tdBank);
 
     const tdAmt = document.createElement("td");
@@ -478,15 +472,19 @@ export function initRegistros() {
 
   document.getElementById("reg-tbody").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-action]");
-    if (!btn) return;
-    if (btn.dataset.action === "edit") {
-      const tx = appState.transactions.find((t) => t.id === btn.dataset.id);
-      if (tx) openCalcModal({ editItem: tx, onFinalize: saveTransaction });
+    if (btn) {
+      if (btn.dataset.action === "edit") {
+        const tx = appState.transactions.find((t) => t.id === btn.dataset.id);
+        if (tx) openCalcModal({ editItem: tx, onFinalize: saveTransaction });
+      }
+      if (btn.dataset.action === "delete") deleteTransaction(btn.dataset.id);
+      if (btn.dataset.action === "cat") openCatForTxEdit(btn.dataset.id);
+      if (btn.dataset.action === "edit-desc") startDescEdit(btn, btn.dataset.id, btn.dataset.desc);
+      return;
     }
-    if (btn.dataset.action === "delete") deleteTransaction(btn.dataset.id);
-    if (btn.dataset.action === "cat") openCatForTxEdit(btn.dataset.id);
-    if (btn.dataset.action === "edit-desc") startDescEdit(btn, btn.dataset.id, btn.dataset.desc);
-    if (btn.dataset.action === "info") toggleInfoRow(btn, 8);
+    if (e.target.closest(".tx-checkbox")) return;
+    const tr = e.target.closest("tr");
+    if (tr) toggleInfoRow(tr, 8);
   });
 
   document.getElementById("reg-select-all").addEventListener("change", (e) => {

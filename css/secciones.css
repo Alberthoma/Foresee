@@ -73,12 +73,12 @@
   #proj-table thead { display: none; }
   #proj-table { table-layout: fixed; width: 100%; }
   #proj-table th:nth-child(3), #proj-table td:nth-child(3),
+  #proj-table th:nth-child(5), #proj-table td:nth-child(5),
   #proj-table th:nth-child(8), #proj-table td:nth-child(8) { display: none; }
   #proj-table tbody td { font-size: 1rem; font-weight: 400; padding: 4px 2px; overflow: hidden; text-overflow: ellipsis; max-width: 0; text-align: right; }
   #proj-table tbody td:nth-child(1) { width: 10%; padding-left: 4px; padding-right: 2px; text-align: left; }
   #proj-table tbody td:nth-child(2) { width: 10%; text-align: center; padding: 4px 2px; }
-  #proj-table tbody td:nth-child(4) { width: 15%; padding: 2px 2px; text-align: right; }
-  #proj-table tbody td:nth-child(5) { width: 7%; text-align: center; padding: 4px 0; }
+  #proj-table tbody td:nth-child(4) { width: 22%; padding: 2px 2px; text-align: right; }
   #proj-table tbody td:nth-child(6) { width: 37%; white-space: nowrap; }
   #proj-table tbody td:nth-child(7) { width: 37%; white-space: nowrap; text-align: right; padding-right: 4px; }
 
@@ -241,6 +241,7 @@ input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
 }
 .data-table tr:last-child td { border-bottom: none; }
 .data-table tbody tr:hover { background-color: var(--color-surface-2); }
+#reg-table tbody tr, #proj-table tbody tr:not(.proj-month-divider) { cursor: pointer; }
 .data-table tfoot td {
   font-weight: 400;
   background-color: var(--color-surface);
@@ -316,12 +317,11 @@ input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
 .cat-display { display: flex; align-items: center; gap: var(--space-xs); }
 .cat-display img { width: 22px; height: 22px; object-fit: contain; }
 
-/* Fila de detalle (info) — banco/descripción completa en móvil */
+/* Fila de detalle (info) — banco/descripción completa en móvil; se abre
+   tocando la fila entera (ver reg-tbody/proj-tbody click en su .js) */
 .info-row td { background-color: var(--color-surface-2); padding: 5px var(--space-sm); border-bottom: 1px solid var(--color-border); }
 .info-row-content { display: flex; flex-wrap: wrap; gap: var(--space-md); font-size: var(--font-sm); color: var(--color-text); }
 .info-bank { color: var(--color-text-muted); }
-.btn-row-info { display: none; }
-.cell-bank-text { display: inline; }
 
 /* Tooltip flotante */
 .foresee-tip {
@@ -494,24 +494,18 @@ input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
   #reg-table thead { display: none; }
   #reg-table { table-layout: fixed; width: 100%; }
   #reg-table th:nth-child(3), #reg-table td:nth-child(3),
+  #reg-table th:nth-child(5), #reg-table td:nth-child(5),
   #reg-table th:nth-child(8), #reg-table td:nth-child(8) { display: none; }
   #reg-table tbody td { font-size: 1rem; font-weight: 400; padding: 4px 2px; overflow: hidden; text-overflow: ellipsis; max-width: 0; text-align: right; }
   #reg-table tbody td:nth-child(1) { width: 10%; padding-left: 4px; padding-right: 2px; text-align: left; }
   #reg-table tbody td:nth-child(2) { width: 10%; text-align: center; padding: 4px 2px; }
-  #reg-table tbody td:nth-child(4) { width: 15%; padding: 4px 2px; text-align: right; }
-  #reg-table tbody td:nth-child(5) { width: 7%; text-align: center; padding: 4px 0; }
+  #reg-table tbody td:nth-child(4) { width: 22%; padding: 4px 2px; text-align: right; }
   #reg-table tbody td:nth-child(6) { width: 37%; white-space: nowrap; }
   #reg-table tbody td:nth-child(7) { width: 37%; white-space: nowrap; text-align: right; padding-right: 4px; }
 
-  .cell-bank-text { display: none; }
-  .btn-row-info {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--color-accent); color: #fff;
-    font-size: 0.7rem; font-weight: 400; font-style: italic;
-    border: none; cursor: pointer;
-  }
   .cat-display span { display: none; }
+  #reg-table .cat-display img, #proj-table .cat-display img,
+  #rec-table .cat-display img, #budget-table .cat-display img { width: 34px; height: 34px; }
 
   .btn-key, #calc-modal .btn-key { font-size: 1.3rem; padding: 22px var(--space-xs); }
   .calc-display, #calc-modal .calc-display { font-size: 1.8rem; min-height: 64px; }

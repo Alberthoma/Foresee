@@ -137,6 +137,8 @@ export function renderProyeccionTable() {
     tr.className = pAdds ? "row--income" : "row--expense";
     if (p.isVirtual) tr.classList.add("proj-virtual");
     if (p.isPureProjection) tr.classList.add("proj-manual");
+    tr.dataset.desc = p.description || "";
+    tr.dataset.bank = p.bank || "";
 
     const tdChk = tr.insertCell();
     if (!p.isVirtual) {
@@ -160,14 +162,6 @@ export function renderProyeccionTable() {
     bankSpan.className = "cell-bank-text";
     bankSpan.textContent = p.bank || "—";
     tdBank.appendChild(bankSpan);
-    const infoBtn = document.createElement("button");
-    infoBtn.className = "btn-row-info";
-    infoBtn.dataset.action = "info";
-    infoBtn.dataset.desc = p.description || "";
-    infoBtn.dataset.bank = p.bank || "";
-    infoBtn.setAttribute("aria-label", "Ver detalle");
-    infoBtn.textContent = "i";
-    tdBank.appendChild(infoBtn);
 
     const tdAmt = tr.insertCell();
     tdAmt.className = pAdds ? "amount--income" : "amount--expense";
@@ -335,18 +329,22 @@ export function initProyeccion() {
 
   document.getElementById("proj-tbody").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-action]");
-    if (!btn) return;
-    const { action, id } = btn.dataset;
-    if (action === "delete-proj") deleteProjection(id);
-    if (action === "edit-proj") {
-      const proj = appState.projections.find((p) => p.id === id);
-      if (proj) openCalcModal({ editItem: proj, onFinalize: saveProjection, titleNew: "Nueva Proyección", titleEdit: "Editar Proyección" });
+    if (btn) {
+      const { action, id } = btn.dataset;
+      if (action === "delete-proj") deleteProjection(id);
+      if (action === "edit-proj") {
+        const proj = appState.projections.find((p) => p.id === id);
+        if (proj) openCalcModal({ editItem: proj, onFinalize: saveProjection, titleNew: "Nueva Proyección", titleEdit: "Editar Proyección" });
+      }
+      if (action === "delete-tx") deleteTransaction(id);
+      if (action === "edit-tx") {
+        const tx = appState.transactions.find((t) => t.id === id);
+        if (tx) openCalcModal({ editItem: tx, onFinalize: saveTransaction });
+      }
+      return;
     }
-    if (action === "delete-tx") deleteTransaction(id);
-    if (action === "edit-tx") {
-      const tx = appState.transactions.find((t) => t.id === id);
-      if (tx) openCalcModal({ editItem: tx, onFinalize: saveTransaction });
-    }
-    if (action === "info") toggleInfoRow(btn, 8);
+    if (e.target.closest(".proj-checkbox")) return;
+    const tr = e.target.closest("tr");
+    if (tr && !tr.classList.contains("proj-month-divider")) toggleInfoRow(tr, 8);
   });
 }
