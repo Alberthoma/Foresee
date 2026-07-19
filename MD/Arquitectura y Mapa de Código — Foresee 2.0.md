@@ -2,6 +2,8 @@
 
 Referencia detallada de qué hay en cada archivo del proyecto. Objetivo: ubicar en segundos qué archivo tocar para un pedido dado, sin tener que leer los ~28 módulos para orientarse. Ver también `CLAUDE.md` (resumen + protocolos) y, para el pipeline de Importar específicamente, `Proyecto-Anterior/MD/Pipeline de Importación CSV — Referencia.md` (se mantiene como referencia porque `import-pipeline.js` y `ocr.js` replican ese flujo función por función).
 
+> 🗺️ **¿Sos Alberto y no Claude?** Esta página es densa y técnica a propósito (está pensada para que Claude la lea rápido). Para una versión en criollo, con ejemplos tipo "quiero cambiar el tamaño de las fuentes, ¿dónde lo hago?", ver [`Guia Rapida — Donde Modificar CSS y JS.md`](Guia%20Rapida%20%E2%80%94%20Donde%20Modificar%20CSS%20y%20JS.md).
+
 ## Cómo está dividido, en una frase
 `js/lib/` = lógica **compartida** entre varias secciones (un motor, un helper, un modal genérico). `js/secciones/` = lógica de **una sola pestaña**, un archivo por pestaña. Si el pedido es "algo se ve/rompe en la pestaña X", empezar por `secciones/X.js`. Si es "un cálculo/comportamiento está mal en varias pantallas a la vez", casi seguro vive en `lib/`.
 

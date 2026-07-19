@@ -243,6 +243,8 @@ Editar el/los módulo/s → ejecutar `/foresee2-commit` (hace el resto solo). Si
 ## 🗺️ Arquitectura de la app
 
 > 📍 **Mapa detallado de código** (qué contiene y qué exporta cada archivo `.js`/`.css`, y una guía rápida de "dónde busco esto"): ver [`MD/Arquitectura y Mapa de Código — Foresee 2.0.md`](MD/Arquitectura%20y%20Mapa%20de%20C%C3%B3digo%20%E2%80%94%20Foresee%202.0.md). Consultarlo antes de buscar a mano en qué archivo vive una función — el skill `/foresee2-mapa` hace esto automáticamente.
+>
+> 🗺️ **Guía para el usuario, no técnica** (ejemplos tipo "quiero cambiar el tamaño de las fuentes, ¿dónde lo hago?"): ver [`MD/Guia Rapida — Donde Modificar CSS y JS.md`](MD/Guia%20Rapida%20%E2%80%94%20Donde%20Modificar%20CSS%20y%20JS.md).
 
 ### Secciones (data-section, iguales al origen)
 
