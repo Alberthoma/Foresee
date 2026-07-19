@@ -53,12 +53,12 @@ No hay comandos de build, lint, ni tests automatizados. La verificación se hace
 
 ## Estado actual
 
-- **Versión activa:** `V F2 0005` (2026-07-18) — filas de Registros/Proyección desplegables al toque (reemplaza el botón "i"), íconos de categoría más grandes en mobile
-- **Próxima versión:** `V F2 0006`
+- **Versión activa:** `V F2 0006` (2026-07-19) — Firebase App Check inicializado (modo monitor, sin bloquear todavía)
+- **Próxima versión:** `V F2 0007`
 - **Archivo de entrada:** `index.html` (raíz) — carga `css/base.css`, `css/secciones.css` y `js/main.js`
 - **Último informe de sesión:** `MD/Sesion 2026-07-18 — Fixes de UI-PWA y Plan de Comercializacion.md`
-- **Último informe de actualización:** `Informes de actualización/V F2 0005 — 2026-07-18.md`
-- **Último respaldo:** `Respaldos/V F2 0005 — 2026-07-18/`
+- **Último informe de actualización:** `Informes de actualización/V F2 0006 — 2026-07-19.md`
+- **Último respaldo:** `Respaldos/V F2 0006 — 2026-07-19/`
 
 > Nomenclatura `V F2 XXXX` (Foresee **2**) para no confundirla con `V FSA XXXX` del proyecto anterior — son dos apps distintas en dos repos distintos.
 
@@ -359,6 +359,7 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 | V F2 0003 | 2026-07-16 | Tab-bar de vuelta a `top` (revierte el cambio de layout de V F2 0001, ahora idéntica al origen): sin borde, fondo transparente, botones de altura uniforme. Eliminada por completo la función de swipe entre pestañas (`js/lib/pwa.js`) — no existía en el origen y provocaba que el usuario saliera de la app al deslizar hacia la derecha. |
 | V F2 0004 | 2026-07-16 | Bump de `CACHE_NAME` en `sw.js` (v5→v6) — V F2 0003 no llegaba a los usuarios con caché previa porque el service worker sirve CSS/JS `cache-first`. Se agregó este paso al protocolo de `/foresee2-commit` para futuras versiones que toquen `.css`/`.js`. |
 | V F2 0005 | 2026-07-18 | En Registros/Proyección, la fila completa ahora se despliega al tocarla (reemplaza el botón "i" de banco/descripción). Íconos de categoría más grandes en mobile en las 4 tablas que los usan (Registros, Proyección, Recurrentes, Presupuesto). Bump de `CACHE_NAME` (v6→v7). |
+| V F2 0006 | 2026-07-19 | Firebase App Check inicializado en `js/firebase.js` (ReCaptchaV3Provider) — modo monitor, no bloquea nada todavía hasta que el usuario active "Enforce" en Firebase Console. Bump de `CACHE_NAME` (v7→v8). |
 
 ---
 
@@ -367,4 +368,4 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 - **Sin tests automatizados** — verificación manual + Playwright ad-hoc, igual que el origen
 - **Repo de GitHub** trae de más `Proyecto-Anterior/` completo (imágenes, videos, backups del app viejo) y una carpeta `backup/` con documentos de planificación — no rompe nada pero infla el tamaño del repo (~6MB); queda como está a pedido del usuario
 - **"Reinicio" de la app al cambiar de pestaña del navegador** — sospecha fuerte de que es un artefacto de Live Server (recarga al reconectar su WebSocket), no un bug de la app (no hay ningún listener de `visibilitychange`/`focus`/`reload` en el código). Falta confirmar probando en `alberthoma.github.io/Foresee` fuera de Live Server. Ver detalle en `MD/Sesion 2026-07-18 — Fixes de UI-PWA y Plan de Comercializacion.md`.
-- **Comercialización en marcha** — checklist de 21 pasos en `MD/Plan Comercializacion — Foresee 2.0.md` (también como [checklist interactivo](https://claude.ai/code/artifact/70baf7d7-8d72-45a1-b20f-071318d3e7f0)). Próximo ítem: Firebase App Check.
+- **Comercialización en marcha** — checklist de 21 pasos en `MD/Plan Comercializacion — Foresee 2.0.md` (también como [checklist interactivo](https://claude.ai/code/artifact/70baf7d7-8d72-45a1-b20f-071318d3e7f0)). Firebase App Check ya inicializado (V F2 0006), pendiente que el usuario active "Enforce" en Firebase Console tras confirmar unos días sin problemas. Próximo ítem: verificación de email al registrarse.

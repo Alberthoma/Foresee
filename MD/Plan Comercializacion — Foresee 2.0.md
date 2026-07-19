@@ -27,7 +27,7 @@ Este posicionamiento decide el precio, qué features priorizar, y qué mensaje d
 
 1. **(Seguridad)** ✅ Reglas de Firestore traídas al repo como código (`firestore.rules`, `firebase.json`, `.firebaserc`) y revisadas — el aislamiento entre usuarios está bien: nadie puede leer/escribir datos de otro usuario.
 2. **(Seguridad)** ✅ `{appId}` fijado a `wittfinances-282f1` en la regla (ya no acepta cualquier valor) — publicada en Firebase Console y confirmada por Alberto (2026-07-18).
-3. **(Seguridad)** Agregar Firebase App Check — evita que bots/scripts golpeen Firestore/Cloud Functions simulando ser la app real.
+3. **(Seguridad)** ✅ Firebase App Check agregado en `js/firebase.js` (ReCaptchaV3Provider, V F2 0006) — modo monitor, sin bloquear. Pendiente que Alberto active "Enforce" en Firebase Console tras unos días sin problemas.
 4. **(Seguridad)** Evaluar exigir verificación de email al registrarse (`sendEmailVerification`) — hoy no existe.
 5. **(Producto)** Metas de ahorro — meta con monto objetivo + fecha opcional, barra de progreso, aportes manuales. Se apoya en el mismo patrón que `categoryBudgets`, sin arquitectura nueva.
 6. **(Producto)** Deudas y préstamos (pendiente desde el proyecto original, nunca se construyó).
