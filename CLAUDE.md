@@ -191,8 +191,37 @@ Si no se sabe el hash, pedirle a Claude "buscá el commit de V F2 XXXX" — pued
 Mismas frases disparadoras que el proyecto anterior: *"cierra la sesión", "guarda todo lo de esta sesión", "documenta la sesión", "procede a cerrar"*.
 
 1. Proponer un título para la sesión, confirmar con el usuario.
-2. Crear `MD/Sesion YYYY-MM-DD — Titulo.md` con: resumen, un bloque por tema trabajado (contexto → qué se encontró → decisión → resultado), estado al cierre, pendientes, commits de la sesión.
-3. Commit + push del documento.
+2. Crear `MD/Sesion YYYY-MM-DD — Titulo.md`:
+   ```markdown
+   # Sesión YYYY-MM-DD — Título
+
+   **Fecha:** YYYY-MM-DD
+   **Versión activa al cierre:** V F2 XXXX
+   **Tipo:** [Código / Infraestructura / Documentación / Planificación / Mixta]
+
+   ## Resumen
+   [dos o tres líneas: qué se trabajó y cuál fue el resultado]
+
+   ## [Una sección por cada tema o bloque de trabajo]
+   - Contexto o punto de partida
+   - Lo que se analizó o encontró
+   - Decisión tomada y por qué
+   - Resultado o solución aplicada
+
+   ## Estado al cierre
+   [tabla o lista: componente → estado actual]
+
+   ## Pendiente para próxima sesión
+   [si hay algo sin terminar o que requiere seguimiento]
+
+   ## Commits de esta sesión
+   | Hash | Mensaje |
+   |------|---------|
+   | `xxxxxxx` | mensaje |
+   ```
+3. Commit + push del documento (`git push origin main` normal — nunca `--force`/`--force-with-lease` para esto, este repo puede tener cambios hechos fuera de la sesión).
+
+Si el usuario retoma la misma sesión más tarde el mismo día, actualizar el documento existente con lo nuevo en vez de crear uno duplicado.
 
 ---
 
@@ -202,8 +231,7 @@ Mismas frases disparadoras que el proyecto anterior: *"cierra la sesión", "guar
 - **Remote:** `https://github.com/Alberthoma/Foresee.git`
 - **Rama:** `main`
 - **GitHub Pages:** activado, sirve desde `main` / raíz — `https://alberthoma.github.io/Foresee/`
-
-> ⚠️ **Estado al 2026-07-15:** esta carpeta (`# Reforma`, próximamente `# Foresee`) **todavía no tiene `.git` inicializado**. El contenido ya está publicado en GitHub (idéntico, verificado byte a byte salvo finales de línea), pero para hacer cambios futuros y publicarlos hay que inicializar el repo local aquí (`git init` + `git remote add origin ...` + `git branch -M main` + primer `git fetch`/`git reset` para alinear con lo que ya hay en GitHub) o clonar el repo de nuevo en esta carpeta. Ver `MD/Sesion 2026-07-15 — Reconstruccion Foresee 2.0.md` para el detalle completo de esta investigación.
+- **Repo local:** inicializado y alineado con `origin/main` (se resolvió el 2026-07-15 — ver `MD/Sesion 2026-07-15 — Reconstruccion Foresee 2.0.md` para el detalle de esa investigación si hace falta contexto histórico).
 - **`Proyecto-Anterior/`** se sube al repo como referencia (sin su propio `.git` interno, para no romper Pages con un submódulo roto — ya pasó una vez y se corrigió).
 - **`backup/`** en el repo contiene los documentos de planificación originales (PDF/MD), no es un backup del código.
 
@@ -335,7 +363,6 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 ---
 
 ## Deuda técnica / pendiente
-- **Repo local sin inicializar** en esta carpeta — ver nota en "Git y publicación"
 - **`x Foresee`** (carpeta duplicada con `.git` propio) fue eliminada el 2026-07-15 tras confirmar que no tenía nada que no estuviera ya en GitHub o en esta carpeta
 - **Sin tests automatizados** — verificación manual + Playwright ad-hoc, igual que el origen
 - **Repo de GitHub** trae de más `Proyecto-Anterior/` completo (imágenes, videos, backups del app viejo) y una carpeta `backup/` con documentos de planificación — no rompe nada pero infla el tamaño del repo (~6MB); queda como está a pedido del usuario
