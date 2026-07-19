@@ -69,7 +69,8 @@ Para cambios menores (typos, ajustes puntuales de estilo) no hace falta informe 
 ### Paso 6 — Actualizar CLAUDE.md
 1. `**Versión activa:** \`V F2 [ACTUAL]\`` → `**Versión activa:** \`V F2 [SIGUIENTE]\``
 2. `**Próxima versión:** \`V F2 [SIGUIENTE]\`` → `**Próxima versión:** \`V F2 [SIGUIENTE+1]\``
-3. Agregar fila a la tabla **Historial de versiones**:
+3. `**Último respaldo:**` → `Respaldos/V F2 [SIGUIENTE] — [HOY]/`
+4. Agregar fila a la tabla **Historial de versiones**:
    ```
    | V F2 [SIGUIENTE] | [HOY] | [Resumen de una línea del cambio] |
    ```
@@ -92,7 +93,16 @@ Si el cambio de esta versión tocó **solo** `index.html`/`CLAUDE.md`/Markdown (
 - `node --check` sobre cada archivo `.js` tocado
 - Si el cambio es visual/responsive, verificar manualmente o con Playwright (390px de viewport, sin overflow horizontal)
 
-### Paso 9 — Commit y push
+### Paso 9 — Crear el respaldo de archivos
+Copiar el estado final (ya editado) de la app a `Respaldos/V F2 [SIGUIENTE] — [HOY]/`, para poder restaurarlo sin depender de git (ver "🆘 Si algo sale mal" en `CLAUDE.md`):
+```bash
+mkdir -p "Respaldos/V F2 [SIGUIENTE] — [HOY]"
+cp index.html manifest.json sw.js "Respaldos/V F2 [SIGUIENTE] — [HOY]/"
+cp -r css js "Respaldos/V F2 [SIGUIENTE] — [HOY]/"
+```
+No usar la carpeta `backup/` (minúscula) — es para documentos de planificación, no para esto.
+
+### Paso 10 — Commit y push
 ```bash
 git add -A
 git commit -m "V F2 [SIGUIENTE] — [descripción breve del cambio]"
@@ -100,14 +110,15 @@ git push origin main
 ```
 Si el push falla por desalineación con el remoto, hacer `git pull --rebase origin main` primero y avisar al usuario si hay conflictos — nunca `--force` sin confirmar explícitamente.
 
-### Paso 10 — Confirmar resultado
+### Paso 11 — Confirmar resultado
 ```
 ✅ Versión V F2 [SIGUIENTE] publicada en GitHub.
 
 Archivos actualizados y subidos:
 • index.html — versión en el pie de página actualizada
 • Informes de actualización/V F2 [SIGUIENTE] — [HOY].md — informe creado (si aplica)
-• CLAUDE.md — versión activa, próxima e historial actualizados
+• Respaldos/V F2 [SIGUIENTE] — [HOY]/ — respaldo completo de la app creado
+• CLAUDE.md — versión activa, próxima, respaldo e historial actualizados
 
 URL: https://alberthoma.github.io/Foresee/
 ```

@@ -58,6 +58,7 @@ No hay comandos de build, lint, ni tests automatizados. La verificación se hace
 - **Archivo de entrada:** `index.html` (raíz) — carga `css/base.css`, `css/secciones.css` y `js/main.js`
 - **Último informe de sesión:** `MD/Sesion 2026-07-15 — Reconstruccion Foresee 2.0.md`
 - **Último informe de actualización:** `Informes de actualización/V F2 0005 — 2026-07-18.md`
+- **Último respaldo:** `Respaldos/V F2 0005 — 2026-07-18/`
 
 > Nomenclatura `V F2 XXXX` (Foresee **2**) para no confundirla con `V FSA XXXX` del proyecto anterior — son dos apps distintas en dos repos distintos.
 
@@ -89,15 +90,28 @@ Antes de tocar cualquier código, en este orden:
 
 ## 📋 Protocolo de cambio — obligatorio en cada modificación
 
-### Paso 1 — Editar el/los módulo/s correspondientes
+### Paso 1 — Respaldo (automático, antes de tocar nada)
+Igual espíritu que el proyecto anterior (que respaldaba su único `index.html` en `Backup/`), adaptado a la arquitectura modular: como la app hoy vive repartida en ~28 archivos (`index.html` es solo el shell), un respaldo útil tiene que copiar **todo el árbol de la app**, no un solo archivo.
+
+Antes de commitear la versión, copiar el estado que se va a publicar a `Respaldos/V F2 XXXX — YYYY-MM-DD/`:
+```bash
+mkdir -p "Respaldos/V F2 XXXX — YYYY-MM-DD"
+cp index.html manifest.json sw.js "Respaldos/V F2 XXXX — YYYY-MM-DD/"
+cp -r css js "Respaldos/V F2 XXXX — YYYY-MM-DD/"
+```
+Lo hace `/foresee2-commit` automáticamente — no hace falta a mano. Este respaldo es un complemento visual/manual para restaurar sin usar git (ver sección "🆘 Si algo sale mal" más abajo); **no reemplaza** al historial de git, que ya guarda una foto completa de cada versión.
+
+> ⚠️ No usar la carpeta `backup/` (minúscula) para esto — esa ya existe y es para los documentos de planificación originales (PDF/MD), no para código. `Respaldos/` es una carpeta distinta.
+
+### Paso 2 — Editar el/los módulo/s correspondientes
 Usar **Edit** para cambios puntuales. Un archivo modular rara vez supera las ~700 líneas, así que **Write completo** es aceptable solo para archivos nuevos, nunca para reescribir uno existente con contenido significativo.
 
-### Paso 2 — Actualizar versión en el footer
+### Paso 3 — Actualizar versión en el footer
 ```html
 <p id="app-version">Foresee 2.0 — V F2 XXXX</p>
 ```
 
-### Paso 3 — Crear informe (para cambios no triviales)
+### Paso 4 — Crear informe (para cambios no triviales)
 Crear `Informes de actualización/V F2 XXXX — YYYY-MM-DD.md`:
 ```markdown
 # Informe de Actualización — V F2 XXXX
@@ -120,14 +134,15 @@ Crear `Informes de actualización/V F2 XXXX — YYYY-MM-DD.md`:
 ```
 Para cambios menores (typos, ajustes de estilo puntuales) no hace falta informe — alcanza con el mensaje de commit descriptivo.
 
-### Paso 4 — Actualizar este CLAUDE.md
+### Paso 5 — Actualizar este CLAUDE.md
 - **Versión activa** → nuevo número
 - **Próxima versión** → XXXX + 1
 - **Último informe de sesión** → si corresponde
+- **Último respaldo** → `Respaldos/V F2 XXXX — YYYY-MM-DD/`
 - Agregar fila al **Historial de versiones**
 
-### Paso 5 — Publicar
-Ejecutar el skill `/foresee2-commit` — hace todo automáticamente: actualiza el footer, crea el informe (si aplica), actualiza CLAUDE.md, hace commit y push a GitHub.
+### Paso 6 — Publicar
+Ejecutar el skill `/foresee2-commit` — hace todo automáticamente: crea el respaldo, actualiza el footer, crea el informe (si aplica), actualiza CLAUDE.md, hace commit y push a GitHub.
 
 ---
 
@@ -138,6 +153,36 @@ Igual que en el proyecto anterior:
 1. El informe de esa versión se marca al inicio: `> ⚠️ SUPERADO — El fix fue incorrecto. Ver V F2 XXXX para la solución correcta.`
 2. La versión mala **no se revierte** — queda registrada con su número
 3. La siguiente versión es el intento de corrección, con nota `> Corrige el intento fallido de V F2 XXXX.`
+
+---
+
+## 🆘 Si algo sale mal — cómo revertir
+
+Dos formas de volver atrás, de la más simple a la más precisa. No hace falta ser experto en git para usar la primera.
+
+### Opción A — Copiar el respaldo de archivos (la más simple)
+Cada versión tiene su carpeta en `Respaldos/V F2 XXXX — YYYY-MM-DD/` con una copia completa de `index.html`, `manifest.json`, `sw.js`, `css/` y `js/` tal como quedaron en esa versión. Para volver a ese estado exacto:
+1. Copiar el contenido de esa carpeta encima de la raíz del proyecto (reemplazando `index.html`, `manifest.json`, `sw.js`, `css/`, `js/`).
+2. Pedirle a Claude que corra `/foresee2-commit` para publicar la vuelta atrás como una versión nueva (nunca se "borra" una versión — se corrige con una versión más, igual que el protocolo de corrección de arriba).
+
+### Opción B — git (más preciso, permite ver un solo archivo o toda la versión)
+Cada versión publicada es también un commit completo. Comandos copiables:
+```bash
+# Ver el historial con qué versión es cada commit
+git log --oneline
+
+# Ver exactamente qué cambió en una versión (ej: V F2 0005)
+git show <hash-del-commit>
+
+# Traer UN archivo puntual de vuelta a como estaba en otra versión, sin tocar el resto
+git checkout <hash-del-commit> -- ruta/al/archivo
+
+# Deshacer una versión entera manteniendo el historial (crea un commit nuevo que la revierte)
+git revert <hash-del-commit>
+```
+Si no se sabe el hash, pedirle a Claude "buscá el commit de V F2 XXXX" — puede encontrarlo por el mensaje de commit (todos arrancan con `V F2 XXXX — `).
+
+**Nunca usar `git reset --hard` ni `git push --force`** para esto salvo que el usuario lo pida explícitamente — `git revert` es igual de efectivo y no reescribe el historial.
 
 ---
 
