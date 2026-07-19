@@ -53,12 +53,12 @@ No hay comandos de build, lint, ni tests automatizados. La verificación se hace
 
 ## Estado actual
 
-- **Versión activa:** `V F2 0008` (2026-07-19) — nueva pestaña "Metas de Ahorro" (monto objetivo, fecha opcional, barra de progreso, aportes manuales)
-- **Próxima versión:** `V F2 0009`
+- **Versión activa:** `V F2 0009` (2026-07-19) — fix: Chrome ofrecía "guardar contraseña" en los campos numéricos de Metas/Tarjetas
+- **Próxima versión:** `V F2 0010`
 - **Archivo de entrada:** `index.html` (raíz) — carga `css/base.css`, `css/secciones.css` y `js/main.js`
 - **Último informe de sesión:** `MD/Sesion 2026-07-19 — Firebase App Check y Verificacion de Email.md`
 - **Último informe de actualización:** `Informes de actualización/V F2 0008 — 2026-07-19.md`
-- **Último respaldo:** `Respaldos/V F2 0008 — 2026-07-19/`
+- **Último respaldo:** `Respaldos/V F2 0009 — 2026-07-19/`
 
 > Nomenclatura `V F2 XXXX` (Foresee **2**) para no confundirla con `V FSA XXXX` del proyecto anterior — son dos apps distintas en dos repos distintos.
 
@@ -363,6 +363,7 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 | V F2 0006 | 2026-07-19 | Firebase App Check inicializado en `js/firebase.js` (ReCaptchaV3Provider) — modo monitor, no bloquea nada todavía hasta que el usuario active "Enforce" en Firebase Console. Bump de `CACHE_NAME` (v7→v8). |
 | V F2 0007 | 2026-07-19 | Recordatorio de verificación de email: correo automático al registrarse (`sendEmailVerification`) + aviso descartable en el dashboard (no bloquea el uso de la app). Bump de `CACHE_NAME` (v8→v9). |
 | V F2 0008 | 2026-07-19 | Nueva pestaña "Metas de Ahorro" (`js/secciones/metas.js`, primera pestaña nueva desde la reconstrucción): monto objetivo, fecha opcional, barra de progreso, aportes manuales — reutiliza casi toda la familia de clases CSS `.cc-card-*` de Tarjetas. Nueva colección Firestore `savingsGoals`. Bump de `CACHE_NAME` (v9→v10). |
+| V F2 0009 | 2026-07-19 | Fix: Chrome ofrecía guardar como contraseña los campos numéricos "Ahorrado"/"Objetivo" (Metas) y los 4 campos inline de Tarjetas — 2 campos numéricos adyacentes sin `autocomplete` calzan con el patrón que Chrome usa para detectar un login. Se agrega `autocomplete="off"` a los 6 inputs. Solo toca `index.html` (sin CSS/JS), no requiere bump de `CACHE_NAME`. |
 
 ---
 
