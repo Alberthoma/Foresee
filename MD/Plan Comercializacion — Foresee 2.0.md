@@ -29,13 +29,13 @@ Este posicionamiento decide el precio, qué features priorizar, y qué mensaje d
 2. **(Seguridad)** ✅ `{appId}` fijado a `wittfinances-282f1` en la regla (ya no acepta cualquier valor) — publicada en Firebase Console y confirmada por Alberto (2026-07-18).
 3. **(Seguridad)** Agregar Firebase App Check — evita que bots/scripts golpeen Firestore/Cloud Functions simulando ser la app real.
 4. **(Seguridad)** Evaluar exigir verificación de email al registrarse (`sendEmailVerification`) — hoy no existe.
-5. **(Seguridad)** Confirmar plan de facturación de Firebase (Blaze) y poner alertas de presupuesto en Google Cloud Console.
-6. **(Producto)** Inglés en la interfaz (i18n de textos) — prioridad alta, esfuerzo medio.
-7. **(Producto)** Metas de ahorro — meta con monto objetivo + fecha opcional, barra de progreso, aportes manuales. Se apoya en el mismo patrón que `categoryBudgets`, sin arquitectura nueva.
-8. **(Producto)** Deudas y préstamos (pendiente desde el proyecto original, nunca se construyó).
-9. **(Producto)** Voz en inglés — parser de NLP nuevo, separado y más grande que la traducción de interfaz. Después de validar demanda en inglés.
-10. **(Distribución)** Landing page de ventas (hoy no existe — la app va directo al login).
-11. **(Distribución)** Analítica de producto — con una herramienta que respete la promesa de privacidad ya hecha en los Términos.
+5. **(Producto)** Metas de ahorro — meta con monto objetivo + fecha opcional, barra de progreso, aportes manuales. Se apoya en el mismo patrón que `categoryBudgets`, sin arquitectura nueva.
+6. **(Producto)** Deudas y préstamos (pendiente desde el proyecto original, nunca se construyó).
+7. **(Producto)** Voz en inglés — parser de NLP nuevo, separado y más grande que la traducción de interfaz. Después de validar demanda en inglés.
+8. **(Distribución)** Landing page de ventas (hoy no existe — la app va directo al login).
+9. **(Distribución)** Analítica de producto — con una herramienta que respete la promesa de privacidad ya hecha en los Términos.
+10. **(Seguridad)** Confirmar plan de facturación de Firebase (Blaze) y poner alertas de presupuesto en Google Cloud Console.
+11. **(Producto)** Inglés en la interfaz (i18n de textos) — prioridad alta, esfuerzo medio.
 12. **(Legal)** Consultar abogado/contador en EE.UU.: figura legal para cobrar (LLC vs. persona individual), impuestos, cumplimiento normativo.
 13. **(Legal)** Redactar Términos de Servicio y Política de Privacidad reales (los actuales en `index.html` son un placeholder — dicen "no autorizado para uso comercial", hay que reemplazarlos antes de cobrar).
 14. **(Legal)** Definir política de reembolsos/cancelación antes de activar cobros.
