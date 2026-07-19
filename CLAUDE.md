@@ -56,7 +56,7 @@ No hay comandos de build, lint, ni tests automatizados. La verificación se hace
 - **Versión activa:** `V F2 0007` (2026-07-19) — recordatorio de verificación de email (correo automático + aviso descartable en el dashboard)
 - **Próxima versión:** `V F2 0008`
 - **Archivo de entrada:** `index.html` (raíz) — carga `css/base.css`, `css/secciones.css` y `js/main.js`
-- **Último informe de sesión:** `MD/Sesion 2026-07-18 — Fixes de UI-PWA y Plan de Comercializacion.md`
+- **Último informe de sesión:** `MD/Sesion 2026-07-19 — Firebase App Check y Verificacion de Email.md`
 - **Último informe de actualización:** `Informes de actualización/V F2 0007 — 2026-07-19.md`
 - **Último respaldo:** `Respaldos/V F2 0007 — 2026-07-19/`
 
