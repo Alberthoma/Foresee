@@ -56,7 +56,7 @@ No hay comandos de build, lint, ni tests automatizados. La verificación se hace
 - **Versión activa:** `V F2 0005` (2026-07-18) — filas de Registros/Proyección desplegables al toque (reemplaza el botón "i"), íconos de categoría más grandes en mobile
 - **Próxima versión:** `V F2 0006`
 - **Archivo de entrada:** `index.html` (raíz) — carga `css/base.css`, `css/secciones.css` y `js/main.js`
-- **Último informe de sesión:** `MD/Sesion 2026-07-15 — Reconstruccion Foresee 2.0.md`
+- **Último informe de sesión:** `MD/Sesion 2026-07-18 — Fixes de UI-PWA y Plan de Comercializacion.md`
 - **Último informe de actualización:** `Informes de actualización/V F2 0005 — 2026-07-18.md`
 - **Último respaldo:** `Respaldos/V F2 0005 — 2026-07-18/`
 
@@ -366,3 +366,5 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 - **`x Foresee`** (carpeta duplicada con `.git` propio) fue eliminada el 2026-07-15 tras confirmar que no tenía nada que no estuviera ya en GitHub o en esta carpeta
 - **Sin tests automatizados** — verificación manual + Playwright ad-hoc, igual que el origen
 - **Repo de GitHub** trae de más `Proyecto-Anterior/` completo (imágenes, videos, backups del app viejo) y una carpeta `backup/` con documentos de planificación — no rompe nada pero infla el tamaño del repo (~6MB); queda como está a pedido del usuario
+- **"Reinicio" de la app al cambiar de pestaña del navegador** — sospecha fuerte de que es un artefacto de Live Server (recarga al reconectar su WebSocket), no un bug de la app (no hay ningún listener de `visibilitychange`/`focus`/`reload` en el código). Falta confirmar probando en `alberthoma.github.io/Foresee` fuera de Live Server. Ver detalle en `MD/Sesion 2026-07-18 — Fixes de UI-PWA y Plan de Comercializacion.md`.
+- **Comercialización en marcha** — checklist de 21 pasos en `MD/Plan Comercializacion — Foresee 2.0.md` (también como [checklist interactivo](https://claude.ai/code/artifact/70baf7d7-8d72-45a1-b20f-071318d3e7f0)). Próximo ítem: Firebase App Check.
