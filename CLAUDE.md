@@ -53,12 +53,12 @@ No hay comandos de build, lint, ni tests automatizados. La verificación se hace
 
 ## Estado actual
 
-- **Versión activa:** `V F2 0007` (2026-07-19) — recordatorio de verificación de email (correo automático + aviso descartable en el dashboard)
-- **Próxima versión:** `V F2 0008`
+- **Versión activa:** `V F2 0008` (2026-07-19) — nueva pestaña "Metas de Ahorro" (monto objetivo, fecha opcional, barra de progreso, aportes manuales)
+- **Próxima versión:** `V F2 0009`
 - **Archivo de entrada:** `index.html` (raíz) — carga `css/base.css`, `css/secciones.css` y `js/main.js`
 - **Último informe de sesión:** `MD/Sesion 2026-07-19 — Firebase App Check y Verificacion de Email.md`
-- **Último informe de actualización:** `Informes de actualización/V F2 0007 — 2026-07-19.md`
-- **Último respaldo:** `Respaldos/V F2 0007 — 2026-07-19/`
+- **Último informe de actualización:** `Informes de actualización/V F2 0008 — 2026-07-19.md`
+- **Último respaldo:** `Respaldos/V F2 0008 — 2026-07-19/`
 
 > Nomenclatura `V F2 XXXX` (Foresee **2**) para no confundirla con `V FSA XXXX` del proyecto anterior — son dos apps distintas en dos repos distintos.
 
@@ -254,6 +254,7 @@ Editar el/los módulo/s → ejecutar `/foresee2-commit` (hace el resto solo). Si
 | Gastos Recurrentes | `recurrentes` | `js/secciones/recurrentes.js` |
 | Gastos Comunes | `gastos-comunes` | `js/secciones/comunes.js` |
 | Tarjetas / Préstamos | `tarjetas` | `js/secciones/tarjetas.js` |
+| Metas de Ahorro | `metas` | `js/secciones/metas.js` |
 | Saldos | `saldos` | `js/secciones/saldos.js` |
 | Reportes | `reportes` | `js/secciones/reportes.js` |
 | Presupuesto | `presupuesto` | `js/secciones/presupuesto.js` |
@@ -262,7 +263,7 @@ Editar el/los módulo/s → ejecutar `/foresee2-commit` (hace el resto solo). Si
 
 ### Estado global `appState` (`js/state.js`)
 
-Mismos campos que el origen: `transactions`, `projections`, `recurringExpenses`, `creditCards`, `gastosComunes`, `categories`, `banks`, `descriptions`, `categoryBudgets`, `openingBalance`, `userAlias`, `currency`, `notificationsEnabled`/`emailRemindersEnabled`/`pushRemindersEnabled`, `budgetAlertsShown`, `lastMonthProcessed`, `filterMonth`/`filterBank`/`filterCategory`, `currentTab`, `currentUser`.
+Mismos campos que el origen (`transactions`, `projections`, `recurringExpenses`, `creditCards`, `gastosComunes`, `categories`, `banks`, `descriptions`, `categoryBudgets`, `openingBalance`, `userAlias`, `currency`, `notificationsEnabled`/`emailRemindersEnabled`/`pushRemindersEnabled`, `budgetAlertsShown`, `lastMonthProcessed`, `filterMonth`/`filterBank`/`filterCategory`, `currentTab`, `currentUser`) más `savingsGoals` (V F2 0008, Metas de Ahorro — no existía en el origen).
 
 Patrón pub-sub: `onStateChange(fn)` registra renderers, `scheduleRenderAll()` los dispara con debounce de 50ms tras cada `onSnapshot` de Firestore.
 
@@ -361,6 +362,7 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 | V F2 0005 | 2026-07-18 | En Registros/Proyección, la fila completa ahora se despliega al tocarla (reemplaza el botón "i" de banco/descripción). Íconos de categoría más grandes en mobile en las 4 tablas que los usan (Registros, Proyección, Recurrentes, Presupuesto). Bump de `CACHE_NAME` (v6→v7). |
 | V F2 0006 | 2026-07-19 | Firebase App Check inicializado en `js/firebase.js` (ReCaptchaV3Provider) — modo monitor, no bloquea nada todavía hasta que el usuario active "Enforce" en Firebase Console. Bump de `CACHE_NAME` (v7→v8). |
 | V F2 0007 | 2026-07-19 | Recordatorio de verificación de email: correo automático al registrarse (`sendEmailVerification`) + aviso descartable en el dashboard (no bloquea el uso de la app). Bump de `CACHE_NAME` (v8→v9). |
+| V F2 0008 | 2026-07-19 | Nueva pestaña "Metas de Ahorro" (`js/secciones/metas.js`, primera pestaña nueva desde la reconstrucción): monto objetivo, fecha opcional, barra de progreso, aportes manuales — reutiliza casi toda la familia de clases CSS `.cc-card-*` de Tarjetas. Nueva colección Firestore `savingsGoals`. Bump de `CACHE_NAME` (v9→v10). |
 
 ---
 
@@ -369,4 +371,4 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 - **Sin tests automatizados** — verificación manual + Playwright ad-hoc, igual que el origen
 - **Repo de GitHub** trae de más `Proyecto-Anterior/` completo (imágenes, videos, backups del app viejo) y una carpeta `backup/` con documentos de planificación — no rompe nada pero infla el tamaño del repo (~6MB); queda como está a pedido del usuario
 - **"Reinicio" de la app al cambiar de pestaña del navegador** — sospecha fuerte de que es un artefacto de Live Server (recarga al reconectar su WebSocket), no un bug de la app (no hay ningún listener de `visibilitychange`/`focus`/`reload` en el código). Falta confirmar probando en `alberthoma.github.io/Foresee` fuera de Live Server. Ver detalle en `MD/Sesion 2026-07-18 — Fixes de UI-PWA y Plan de Comercializacion.md`.
-- **Comercialización en marcha** — checklist de 21 pasos en `MD/Plan Comercializacion — Foresee 2.0.md` (también como [checklist interactivo](https://claude.ai/code/artifact/70baf7d7-8d72-45a1-b20f-071318d3e7f0)). Firebase App Check ya inicializado (V F2 0006), pendiente que el usuario active "Enforce" en Firebase Console tras confirmar unos días sin problemas. Recordatorio de verificación de email ya agregado (V F2 0007). Próximo ítem: metas de ahorro.
+- **Comercialización en marcha** — checklist de 21 pasos en `MD/Plan Comercializacion — Foresee 2.0.md` (también como [checklist interactivo](https://claude.ai/code/artifact/70baf7d7-8d72-45a1-b20f-071318d3e7f0)). Firebase App Check ya inicializado (V F2 0006), pendiente que el usuario active "Enforce" en Firebase Console tras confirmar unos días sin problemas. Recordatorio de verificación de email (V F2 0007) y Metas de Ahorro (V F2 0008) ya agregados. Próximo ítem: deudas y préstamos.
