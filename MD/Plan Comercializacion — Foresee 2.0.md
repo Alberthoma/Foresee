@@ -26,7 +26,7 @@ Este posicionamiento decide el precio, qué features priorizar, y qué mensaje d
 ## Checklist — orden de trabajo
 
 1. **(Seguridad)** ✅ Reglas de Firestore traídas al repo como código (`firestore.rules`, `firebase.json`, `.firebaserc`) y revisadas — el aislamiento entre usuarios está bien: nadie puede leer/escribir datos de otro usuario.
-2. **(Seguridad)** ✅ `{appId}` fijado a `wittfinances-282f1` en la regla (ya no acepta cualquier valor) — pendiente: pegar esta versión en Firebase Console → Firestore → Reglas y publicarla, hoy solo existe en el repo.
+2. **(Seguridad)** ✅ `{appId}` fijado a `wittfinances-282f1` en la regla (ya no acepta cualquier valor) — publicada en Firebase Console y confirmada por Alberto (2026-07-18).
 3. **(Seguridad)** Agregar Firebase App Check — evita que bots/scripts golpeen Firestore/Cloud Functions simulando ser la app real.
 4. **(Seguridad)** Evaluar exigir verificación de email al registrarse (`sendEmailVerification`) — hoy no existe.
 5. **(Seguridad)** Confirmar plan de facturación de Firebase (Blaze) y poner alertas de presupuesto en Google Cloud Console.
@@ -53,5 +53,4 @@ Este posicionamiento decide el precio, qué features priorizar, y qué mensaje d
 
 ## Decisiones pendientes de Alberto
 - Confirmar el posicionamiento de nicho (español/privacidad primero, inglés como expansión) antes de fijar precio final.
-- Publicar en Firebase Console la regla con `appId` fijo (punto 2) — hoy solo está en el repo.
 - Revisar y ajustar el orden del checklist si cambia alguna prioridad.
