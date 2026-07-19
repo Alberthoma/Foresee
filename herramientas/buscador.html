@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Buscador de código — Foresee 2.0 (herramienta interna)</title>
+<link rel="stylesheet" href="../css/base.css" />
+<style>
+  body { padding: 0; align-items: stretch; }
+  .page { max-width: 820px; margin: 0 auto; padding: var(--space-lg) var(--space-md) var(--space-xl); }
+  h1 { font-size: var(--font-xl); margin-bottom: 4px; }
+  .subtitle { color: var(--color-text-muted); font-size: var(--font-sm); margin-bottom: var(--space-lg); }
+  .search-wrap { position: relative; margin-bottom: var(--space-md); }
+  #q {
+    width: 100%; box-sizing: border-box;
+    background: var(--color-surface-2); border: 1px solid var(--color-border);
+    color: var(--color-text); border-radius: var(--radius-md);
+    padding: var(--space-md); font-size: 1.1rem; font-family: inherit;
+  }
+  #q:focus { outline: none; border-color: var(--color-accent); }
+  .count { color: var(--color-text-muted); font-size: var(--font-xs); margin-bottom: var(--space-sm); }
+  .results { display: flex; flex-direction: column; gap: var(--space-xs); }
+  .result {
+    display: flex; align-items: baseline; gap: var(--space-sm);
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--radius-md); padding: var(--space-sm) var(--space-md);
+    cursor: pointer; transition: border-color 0.15s, background 0.15s;
+  }
+  .result:hover { border-color: var(--color-accent); background: var(--color-surface-2); }
+  .result.copied { border-color: var(--color-success); }
+  .badge {
+    font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 2px 7px; border-radius: var(--radius-full); flex-shrink: 0;
+  }
+  .badge--concepto { background: rgba(79, 143, 255, 0.18); color: var(--color-accent); }
+  .badge--css { background: rgba(245, 158, 11, 0.18); color: var(--color-warning); }
+  .badge--js { background: rgba(34, 201, 122, 0.18); color: var(--color-success); }
+  .badge--html { background: rgba(167, 139, 250, 0.18); color: #a78bfa; }
+  .r-main { flex: 1; min-width: 0; }
+  .r-name { font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: 0.9rem; color: var(--color-text); }
+  .r-desc { font-size: var(--font-xs); color: var(--color-text-muted); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .r-loc { font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: var(--font-xs); color: var(--color-text-muted); white-space: nowrap; flex-shrink: 0; }
+  .empty { text-align: center; padding: var(--space-xl); color: var(--color-text-muted); }
+  .hint { font-size: var(--font-xs); color: var(--color-text-muted); margin-top: var(--space-lg); line-height: 1.6; }
+  .hint code { background: var(--color-surface-2); padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+  <div class="page">
+    <h1>🔍 Buscador de código — Foresee 2.0</h1>
+    <p class="subtitle">Herramienta interna, no forma parte de la app. Escribí qué querés cambiar (en criollo o técnico) y te dice archivo + línea.</p>
+    <div class="search-wrap">
+      <input type="text" id="q" placeholder="ej. tamaño de fuentes, .cc-card, renderSavingsGoals, btn-add-meta…" autofocus />
+    </div>
+    <p class="count" id="count"></p>
+    <div class="results" id="results"></div>
+    <p class="hint">
+      Tocá un resultado para copiar <code>archivo:línea</code> al portapapeles.
+      Si el código cambió mucho desde la última vez, corré <code>node herramientas/build-index.js</code> para actualizar el índice.
+    </p>
+  </div>
+
+  <script src="index-data.js"></script>
+  <script>
+    const BADGE = { "css-var": "CSS", "css-selector": "CSS", "js-export": "JS", "js-function": "JS", "html-id": "HTML", "html-data": "HTML" };
+    const LABEL = { "css-var": "variable CSS", "css-selector": "selector CSS", "js-export": "export JS", "js-function": "función JS", "html-id": "id HTML", "html-data": "atributo HTML" };
+
+    function norm(s) {
+      return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+    }
+
+    const STOPWORDS = new Set(["de", "la", "el", "en", "y", "a", "que", "los", "las", "un", "una", "del", "para", "con", "por", "es", "al", "lo", "mi", "tu", "su", "me", "se"]);
+    function meaningfulTokens(s) {
+      return s.split(/\s+/).filter((t) => t.length >= 3 && !STOPWORDS.has(t));
+    }
+
+    const index = (window.SEARCH_INDEX || []).map((e) => ({ ...e, _norm: norm(e.name) }));
+    const concepts = (window.SEARCH_CONCEPTS || []).map((c) => ({
+      ...c,
+      _keywords: c.query.split(",").map((k) => norm(k.trim())),
+    }));
+
+    function search(rawQuery) {
+      const q = norm(rawQuery.trim());
+      if (!q) return [];
+      const qMeaningful = meaningfulTokens(q);
+      const results = [];
+
+      // Conceptos curados — match exacto/substring, o al menos la mitad de
+      // las palabras "con peso" de la búsqueda presentes en la keyword
+      // (evita que "de"/"el"/etc. generen coincidencias falsas).
+      concepts.forEach((c) => {
+        let best = 0;
+        c._keywords.forEach((kw) => {
+          if (kw.includes(q) || q.includes(kw)) {
+            best = Math.max(best, 100 - Math.abs(kw.length - q.length));
+            return;
+          }
+          const kwTokens = meaningfulTokens(kw);
+          if (!qMeaningful.length || !kwTokens.length) return;
+          const matches = qMeaningful.filter((t) => kwTokens.some((kt) => kt.includes(t) || t.includes(kt)));
+          const ratio = matches.length / qMeaningful.length;
+          if (ratio >= 0.5) best = Math.max(best, 40 * ratio);
+        });
+        if (best > 0) {
+          results.push({ score: best + 200, type: "concepto", name: c.file, desc: c.desc, file: c.file, line: null });
+        }
+      });
+
+      // Índice técnico — substring match sobre el nombre.
+      index.forEach((e) => {
+        const pos = e._norm.indexOf(q);
+        if (pos === -1) return;
+        const score = 100 - pos - Math.abs(e._norm.length - q.length) * 0.5;
+        results.push({ score, type: e.type, name: e.name, desc: e.snippet, file: e.file, line: e.line });
+      });
+
+      results.sort((a, b) => b.score - a.score);
+      return results.slice(0, 40);
+    }
+
+    const qEl = document.getElementById("q");
+    const resultsEl = document.getElementById("results");
+    const countEl = document.getElementById("count");
+
+    function render() {
+      const raw = qEl.value;
+      if (!raw.trim()) {
+        resultsEl.innerHTML = "";
+        countEl.textContent = `Índice: ${index.length} entradas técnicas + ${concepts.length} conceptos.`;
+        return;
+      }
+      const results = search(raw);
+      countEl.textContent = results.length ? `${results.length} resultado(s)` : "";
+      if (!results.length) {
+        resultsEl.innerHTML = '<p class="empty">Sin resultados. Probá con otra palabra (ej. el nombre de una pestaña, un color, "botón", "guardar"…).</p>';
+        return;
+      }
+      resultsEl.innerHTML = results
+        .map((r, i) => {
+          const badgeClass = r.type === "concepto" ? "badge--concepto" : BADGE[r.type] === "CSS" ? "badge--css" : BADGE[r.type] === "JS" ? "badge--js" : "badge--html";
+          const badgeLabel = r.type === "concepto" ? "IDEA" : BADGE[r.type];
+          const loc = r.line ? `${r.file}:${r.line}` : r.file;
+          return `<div class="result" data-idx="${i}">
+            <span class="badge ${badgeClass}">${badgeLabel}</span>
+            <div class="r-main">
+              <div class="r-name">${r.type === "concepto" ? escapeHtml(r.desc) : escapeHtml(r.name)}</div>
+              <div class="r-desc">${r.type === "concepto" ? "" : escapeHtml(r.desc || "")}</div>
+            </div>
+            <div class="r-loc">${escapeHtml(loc)}</div>
+          </div>`;
+        })
+        .join("");
+
+      resultsEl.querySelectorAll(".result").forEach((el, i) => {
+        el.addEventListener("click", () => {
+          const r = results[i];
+          const loc = r.line ? `${r.file}:${r.line}` : r.file;
+          navigator.clipboard?.writeText(loc).catch(() => {});
+          el.classList.add("copied");
+          setTimeout(() => el.classList.remove("copied"), 700);
+        });
+      });
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    qEl.addEventListener("input", render);
+    render();
+  </script>
+</body>
+</html>

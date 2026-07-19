@@ -2,6 +2,8 @@
 
 Referencia para vos (no hace falta que la lea Claude — es para que vos sepas más o menos dónde vive cada cosa antes de pedir un cambio, o para entender qué archivo te va a decir que tocó). Para el detalle técnico completo de cada archivo, ver [`Arquitectura y Mapa de Código`](Arquitectura%20y%20Mapa%20de%20C%C3%B3digo%20%E2%80%94%20Foresee%202.0.md).
 
+> 🔍 **¿Preferís buscar vos mismo en vez de leer tablas?** Abrí `herramientas/buscador.html` en el navegador (doble clic, no hace falta servidor) — escribís algo como "tamaño de fuentes" o el nombre de un botón y te devuelve archivo + línea exacta. Si el código cambió mucho desde la última vez, pedile a Claude que corra `node herramientas/build-index.js` para refrescarlo.
+
 ## Regla general, en una frase
 - **¿Es sobre cómo se ve algo?** (tamaño, color, espacio, forma) → **CSS** → `css/base.css` o `css/secciones.css`.
 - **¿Es sobre cómo se comporta algo?** (qué pasa al tocar un botón, cómo se calcula un número, qué se guarda) → **JS** → `js/lib/` o `js/secciones/`.
