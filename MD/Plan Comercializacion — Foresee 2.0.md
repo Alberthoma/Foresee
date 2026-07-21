@@ -30,7 +30,7 @@ Este posicionamiento decide el precio, qué features priorizar, y qué mensaje d
 3. **(Seguridad)** ✅ Firebase App Check agregado en `js/firebase.js` (ReCaptchaV3Provider, V F2 0006) — modo monitor, sin bloquear. Pendiente que Alberto active "Enforce" en Firebase Console tras unos días sin problemas.
 4. **(Seguridad)** ✅ Recordatorio de verificación de email (V F2 0007) — correo automático al registrarse + aviso descartable en el dashboard, sin bloquear el uso de la app (se eligió el recordatorio suave en vez de bloqueo duro, para no agregar fricción al onboarding).
 5. **(Producto)** ✅ Metas de ahorro (V F2 0008) — nueva pestaña "Metas de Ahorro": monto objetivo, fecha opcional, barra de progreso, aportes manuales (edición inline del monto ahorrado). Reutiliza la familia de clases `.cc-card-*` de Tarjetas en vez de crear una nueva.
-6. **(Producto)** Deudas y préstamos (pendiente desde el proyecto original, nunca se construyó).
+6. **(Producto)** ✅ Deudas y préstamos (V F2 0011) — resuelto sin sección nueva: la pestaña "Tarjetas de Crédito" se renombró a "Tarjetas y Préstamos", los mismos campos (deuda, tasa, cuotas, día de pago) sirven para un préstamo tal cual están.
 7. **(Producto)** Voz en inglés — parser de NLP nuevo, separado y más grande que la traducción de interfaz. Después de validar demanda en inglés.
 8. **(Distribución)** Landing page de ventas (hoy no existe — la app va directo al login).
 9. **(Distribución)** Analítica de producto — con una herramienta que respete la promesa de privacidad ya hecha en los Términos.

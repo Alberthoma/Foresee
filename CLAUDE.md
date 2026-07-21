@@ -53,12 +53,12 @@ No hay comandos de build, lint, ni tests automatizados. La verificación se hace
 
 ## Estado actual
 
-- **Versión activa:** `V F2 0010` (2026-07-19) — backup JSON de Configuración ahora incluye `gastosComunes` y `currency`
-- **Próxima versión:** `V F2 0011`
+- **Versión activa:** `V F2 0011` (2026-07-19) — pestaña renombrada a "Tarjetas y Préstamos" (Deudas y préstamos del plan resuelto sin código nuevo); fix del botón de filtro en Proyección/Reportes
+- **Próxima versión:** `V F2 0012`
 - **Archivo de entrada:** `index.html` (raíz) — carga `css/base.css`, `css/secciones.css` y `js/main.js`
 - **Último informe de sesión:** `MD/Sesion 2026-07-19 — Firebase App Check y Verificacion de Email.md`
-- **Último informe de actualización:** `Informes de actualización/V F2 0010 — 2026-07-19.md`
-- **Último respaldo:** `Respaldos/V F2 0010 — 2026-07-19/`
+- **Último informe de actualización:** `Informes de actualización/V F2 0011 — 2026-07-19.md`
+- **Último respaldo:** `Respaldos/V F2 0011 — 2026-07-19/`
 
 > Nomenclatura `V F2 XXXX` (Foresee **2**) para no confundirla con `V FSA XXXX` del proyecto anterior — son dos apps distintas en dos repos distintos.
 
@@ -369,6 +369,7 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 | V F2 0008 | 2026-07-19 | Nueva pestaña "Metas de Ahorro" (`js/secciones/metas.js`, primera pestaña nueva desde la reconstrucción): monto objetivo, fecha opcional, barra de progreso, aportes manuales — reutiliza casi toda la familia de clases CSS `.cc-card-*` de Tarjetas. Nueva colección Firestore `savingsGoals`. Bump de `CACHE_NAME` (v9→v10). |
 | V F2 0009 | 2026-07-19 | Fix: Chrome ofrecía guardar como contraseña los campos numéricos "Ahorrado"/"Objetivo" (Metas) y los 4 campos inline de Tarjetas — 2 campos numéricos adyacentes sin `autocomplete` calzan con el patrón que Chrome usa para detectar un login. Se agrega `autocomplete="off"` a los 6 inputs. Solo toca `index.html` (sin CSS/JS), no requiere bump de `CACHE_NAME`. |
 | V F2 0010 | 2026-07-19 | El backup JSON de Configuración (exportar/importar) ahora incluye `gastosComunes` y `currency` — faltaban comparado con todo lo que guarda `appState`. `gastosComunes` se restaura aparte (es un documento único, no una colección, no encaja en el helper `importCol` existente). Bump de `CACHE_NAME` (v10→v11). |
+| V F2 0011 | 2026-07-19 | Pestaña "Tarjetas de Crédito" renombrada a "Tarjetas y Préstamos" (Deudas y Préstamos del plan de comercialización resuelto sin sección nueva — los mismos campos de una tarjeta sirven para un préstamo). Fix: el botón "⚙ Filtros" de Proyección y Reportes no tenía ningún listener (solo Registros lo tenía, scopeado a sí mismo) — se centralizó en `js/main.js` para cubrir los tres. Bump de `CACHE_NAME` (v11→v12). |
 
 ---
 
@@ -377,4 +378,4 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 - **Sin tests automatizados** — verificación manual + Playwright ad-hoc, igual que el origen
 - **Repo de GitHub** trae de más `Proyecto-Anterior/` completo (imágenes, videos, backups del app viejo) y una carpeta `backup/` con documentos de planificación — no rompe nada pero infla el tamaño del repo (~6MB); queda como está a pedido del usuario
 - **"Reinicio" de la app al cambiar de pestaña del navegador** — sospecha fuerte de que es un artefacto de Live Server (recarga al reconectar su WebSocket), no un bug de la app (no hay ningún listener de `visibilitychange`/`focus`/`reload` en el código). Falta confirmar probando en `alberthoma.github.io/Foresee` fuera de Live Server. Ver detalle en `MD/Sesion 2026-07-18 — Fixes de UI-PWA y Plan de Comercializacion.md`.
-- **Comercialización en marcha** — checklist de 21 pasos en `MD/Plan Comercializacion — Foresee 2.0.md` (también como [checklist interactivo](https://claude.ai/code/artifact/70baf7d7-8d72-45a1-b20f-071318d3e7f0)). Firebase App Check ya inicializado (V F2 0006), pendiente que el usuario active "Enforce" en Firebase Console tras confirmar unos días sin problemas. Recordatorio de verificación de email (V F2 0007) y Metas de Ahorro (V F2 0008) ya agregados. Próximo ítem: deudas y préstamos.
+- **Comercialización en marcha** — checklist de 21 pasos en `MD/Plan Comercializacion — Foresee 2.0.md` (también como [checklist interactivo](https://claude.ai/code/artifact/70baf7d7-8d72-45a1-b20f-071318d3e7f0)). Firebase App Check ya inicializado (V F2 0006), pendiente que el usuario active "Enforce" en Firebase Console tras confirmar unos días sin problemas. Recordatorio de verificación de email (V F2 0007) y Metas de Ahorro (V F2 0008) ya agregados. Próximo ítem: voz en inglés (o saltarlo e ir directo a landing page/analítica — ver orden en el plan).

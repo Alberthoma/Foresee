@@ -1,0 +1,21 @@
+{
+  "name": "Foresee - Gestor Financiero",
+  "short_name": "Foresee",
+  "description": "Tu panel de control financiero Foresee, moderno y eficiente.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#1f2937",
+  "icons": [
+    {
+      "src": "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto,c_scale,w_192/v1782545519/Logotipo_Foresee2_vqou8q.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto,c_scale,w_512/v1782545519/Logotipo_Foresee2_vqou8q.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
