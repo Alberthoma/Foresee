@@ -126,7 +126,26 @@ Al usar `object-fit: cover` (el valor original) para los posters de video, la ca
 - Recorrido completo dark/light/mobile (390px) — sin errores de consola, sin overflow horizontal.
 - `grep` de voseo sobre todo el archivo — sin coincidencias.
 
-## Estado final
+## Estado final (tercera ronda)
 - `landing.html`, `firestore.rules` y la carpeta nueva `capturas-app/` (12 archivos PNG) listos y subidos a git.
 - **Pendiente de acción del usuario:** publicar las reglas actualizadas de Firestore en Firebase Console (ver ronda anterior).
+
+---
+
+## Actualización — mismo día, cuarta ronda: el usuario mueve la landing a su propia carpeta
+
+El usuario reorganizó los archivos manualmente: `landing.html`, `land.html` y `capturas-app/` pasaron de la raíz del repo a una carpeta nueva, `landing/`. Al publicar este cambio se detectó y corrigió lo necesario para que la página siguiera funcionando desde su nueva ubicación:
+- Los 6 links de `landing.html` que apuntaban a `index.html` (nav, hero, CTA final, footer) usaban una ruta relativa que asumía que `landing.html` vivía junto a `index.html` en la raíz. Al moverse un nivel más adentro, esa ruta ya no resolvía. Se corrigieron los 6 a `../index.html`.
+- Las referencias a `capturas-app/capture-*.png` (19 en total) no necesitaron cambios — esa carpeta se movió junto con `landing.html`, así que la ruta relativa entre ambos se mantiene igual.
+- `land.html` no tiene ninguna referencia local (ni a `index.html` ni a `capturas-app/`), así que no requirió ningún cambio.
+- Se actualizaron las referencias de ruta en `CLAUDE.md` (de `landing.html` a `landing/landing.html`).
+
+**Nota aparte, no relacionada con la landing:** al revisar el estado de git para este commit, se encontraron también borrados (hechos por el usuario, no por mí) 6 archivos `Temporales/1.jpeg` … `6.jpeg` — contenido que ya se había identificado en una sesión anterior como clutter sin relación con el código (imágenes sueltas). Se incluyeron en este mismo commit como parte de la limpieza, ya que el usuario los había borrado directamente del disco antes de pedir la publicación.
+
+### Verificación
+- Playwright: recorrido completo (scroll de la página completa) en desktop y mobile desde la nueva ruta `landing/landing.html`, verificando que los 6 links a `index.html` resuelvan a la ruta absoluta correcta y que ninguna de las 12 capturas ni el resto de recursos fallen al cargar (0 requests fallidos, 0 errores de consola).
+
+## Estado final
+- `landing/landing.html`, `landing/land.html`, `landing/capturas-app/` y `CLAUDE.md` actualizados y subidos a git, reflejando la nueva ubicación.
+- **Pendiente de acción del usuario:** publicar las reglas actualizadas de Firestore en Firebase Console (sin cambios respecto a la ronda anterior).
 - Pendiente (fuera del alcance de este informe): continuar el checklist de comercialización más allá del ítem de landing page — ver `MD/Plan Comercializacion — Foresee 2.0.md`.
