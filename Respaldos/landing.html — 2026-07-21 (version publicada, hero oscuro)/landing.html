@@ -63,43 +63,27 @@
     text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
-  .btn-primary { position: relative; overflow: hidden; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; border: none; box-shadow: 0 12px 32px rgba(79,143,255,0.3); }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; border: none; box-shadow: 0 12px 32px rgba(79,143,255,0.3); }
   .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(79,143,255,0.4); }
-  .btn-primary::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%); transform: translateX(-120%); transition: transform 0.6s ease; }
-  .btn-primary:hover::after { transform: translateX(120%); }
   .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
   /* ── HERO ────────────────────────────────────────────────────────── */
-  .hero { position: relative; isolation: isolate; padding: 76px 0 70px; overflow: hidden; }
-  .hero::before { content: ""; position: absolute; inset: -20% -10% auto auto; width: 60%; height: 90%; background: radial-gradient(circle, color-mix(in srgb, var(--warm) 22%, transparent) 0%, transparent 68%); z-index: -1; pointer-events: none; }
-  .hero-inner { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center; }
+  .hero { position: relative; isolation: isolate; padding: 84px 0 70px; overflow: hidden; }
+  .hero-bg { position: absolute; inset: -10% -10% auto -10%; height: 130%; background: url('https://res.cloudinary.com/datwdagbf/image/upload/v1759021626/6_un_sistema_que_te_guie_y_Te_de_un_mapa_a_seguir_paso_a_paso_ielw9k.png') center 20%/cover no-repeat; opacity: 0.16; filter: saturate(1.15); mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 95%); z-index: -1; }
+  .hero-inner { max-width: 760px; }
   .hero .eyebrow { margin-bottom: 18px; }
-  .hero h1 { font-size: clamp(2.2rem, 4.4vw, 3.2rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; }
+  .hero h1 { font-size: clamp(2.3rem, 5vw, 3.4rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; }
   .hero h1 .hl { color: var(--accent); }
-  .hero-sub { margin-top: 22px; font-size: 1.1rem; color: var(--text-muted); max-width: 52ch; line-height: 1.65; }
-  .stat-row { display: flex; gap: 0; margin-top: 34px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 0; }
+  .hero-sub { margin-top: 22px; font-size: 1.14rem; color: var(--text-muted); max-width: 56ch; line-height: 1.65; }
+  .stat-row { display: flex; gap: 0; margin-top: 38px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 22px 0; }
   .stat { flex: 1; padding: 0 22px; border-left: 1px solid var(--border); }
   .stat:first-child { border-left: none; padding-left: 0; }
-  .stat b { font-family: var(--font-display); font-size: 1.8rem; color: var(--warm); display: block; line-height: 1; }
-  .stat span { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; display: block; }
-  .hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
-  .hero-trust { margin-top: 24px; font-size: 0.87rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+  .stat b { font-family: var(--font-display); font-size: 1.9rem; color: var(--warm); display: block; line-height: 1; }
+  .stat span { font-size: 0.82rem; color: var(--text-muted); margin-top: 6px; display: block; }
+  .hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+  .hero-trust { margin-top: 26px; font-size: 0.87rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
   .hero-trust b { color: var(--text); }
-
-  /* ── hero visual (imagen de la meditación) ───────────────────────── */
-  .hero-visual { position: relative; }
-  .hero-visual-glow { position: absolute; inset: -12%; background: radial-gradient(circle, color-mix(in srgb, var(--warm) 38%, transparent) 0%, transparent 70%); filter: blur(6px); z-index: -1; animation: glow-pulse 6s ease-in-out infinite; }
-  .hero-visual-card { position: relative; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 30px 70px rgba(0,0,0,0.4); animation: float-card 6s ease-in-out infinite; }
-  .hero-visual-card img { width: 100%; display: block; }
-  .sparkle { position: absolute; color: var(--warm); font-size: 1.1rem; animation: twinkle 3.2s ease-in-out infinite; pointer-events: none; }
-  .sparkle.s1 { top: -6%; left: -4%; animation-delay: 0s; }
-  .sparkle.s2 { top: 18%; right: -6%; font-size: 0.85rem; animation-delay: 1.1s; }
-  .sparkle.s3 { bottom: 10%; left: -7%; font-size: 0.9rem; animation-delay: 2s; }
-  @keyframes float-card { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-  @keyframes glow-pulse { 0%, 100% { opacity: 0.7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
-  @keyframes twinkle { 0%, 100% { opacity: 0.25; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.1); } }
-  @media (max-width: 900px) { .hero-inner { grid-template-columns: 1fr; } .hero-visual { max-width: 420px; margin: 0 auto; order: -1; } }
 
   /* ── SECTION shared ──────────────────────────────────────────────── */
   section { padding: 78px 0; }
@@ -116,9 +100,8 @@
   .story-copy h2 { font-size: clamp(1.7rem, 3vw, 2.3rem); }
   .story-copy p { margin-top: 18px; color: var(--text-muted); font-size: 1.03rem; line-height: 1.7; max-width: 48ch; }
   .story-copy .btn-primary, .story-copy .btn-secondary { margin-top: 26px; }
-  .story-img { position: relative; overflow: hidden; border-radius: 20px; }
-  .story-img img { border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 30px 70px rgba(0,0,0,0.35); transition: transform 0.5s ease; }
-  .story-img:hover img { transform: scale(1.035); }
+  .story-img { position: relative; }
+  .story-img img { border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 30px 70px rgba(0,0,0,0.35); }
   @media (max-width: 860px) {
     .story, .story.reverse { grid-template-columns: 1fr; text-align: center; }
     .story.reverse .story-copy, .story.reverse .story-img { order: unset; }
@@ -127,8 +110,8 @@
 
   /* ── VIDEO STEPS ─────────────────────────────────────────────────── */
   .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-  .step-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
-  .step-card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(79,143,255,0.18); }
+  .step-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; transition: transform 0.2s ease, border-color 0.2s ease; }
+  .step-card:hover { transform: translateY(-4px); border-color: var(--accent); }
   .step-card video { width: 100%; display: block; aspect-ratio: 16/10; object-fit: cover; background: #000; }
   .step-body { padding: 18px 20px 22px; }
   .step-num { font-family: var(--font-display); color: var(--accent); font-weight: 700; font-size: 0.85rem; opacity: 0.8; }
@@ -174,30 +157,10 @@
   /* ── TRUST STRIP ─────────────────────────────────────────────────── */
   .trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
   .trust-card { text-align: center; padding: 8px; }
-  .trust-icon { font-size: 2rem; margin-bottom: 12px; display: inline-block; transition: transform 0.3s ease; }
-  .trust-card:hover .trust-icon { transform: scale(1.2) rotate(-6deg); }
+  .trust-icon { font-size: 2rem; margin-bottom: 12px; }
   .trust-card h3 { font-family: var(--font-body); font-weight: 700; font-size: 1rem; }
   .trust-card p { margin-top: 8px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.55; }
   @media (max-width: 760px) { .trust-grid { grid-template-columns: 1fr; gap: 32px; } }
-
-  /* ── LEAD CAPTURE (paso 1 — un solo campo) ──────────────────────────── */
-  .lead-box { max-width: 560px; margin: 0 auto 30px; background: var(--surface); border: 1px solid var(--border); border-radius: 22px; padding: 36px; text-align: center; }
-  .lead-form { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-  .lead-form input { flex: 1; min-width: 220px; padding: 13px 18px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg-2); color: var(--text); font-family: inherit; font-size: 0.95rem; }
-  .lead-form input:focus { outline: none; border-color: var(--accent); }
-  .lead-form button { border-radius: 999px; white-space: nowrap; font-family: inherit; }
-  .lead-form button:disabled { opacity: 0.55; cursor: not-allowed; }
-  .form-status { margin-top: 14px; font-size: 0.87rem; color: var(--text-muted); min-height: 1.3em; }
-  .form-status.ok { color: var(--success); }
-  .form-status.err { color: var(--danger); }
-
-  /* ── survey toggle (paso 2 — opcional) ──────────────────────────────── */
-  .survey-toggle { max-width: 720px; margin: 0 auto; }
-  .survey-toggle summary { cursor: pointer; list-style: none; font-weight: 600; color: var(--accent); text-align: center; padding: 16px; border: 1px dashed var(--border); border-radius: 14px; transition: background 0.15s ease; }
-  .survey-toggle summary::-webkit-details-marker { display: none; }
-  .survey-toggle summary:hover { background: var(--surface); }
-  .survey-toggle[open] summary { margin-bottom: 22px; }
-  .survey-toggle .survey-box { margin: 0; }
 
   /* ── SURVEY ──────────────────────────────────────────────────────── */
   .survey-box { background: var(--surface); border: 1px solid var(--border); border-radius: 22px; padding: 40px; max-width: 720px; margin: 0 auto; }
@@ -214,8 +177,6 @@
   .field { margin: 14px 0; }
   .field label { display: block; margin-bottom: 6px; font-size: 0.88rem; color: var(--text-muted); }
   .survey-fine { font-size: 0.8rem; color: var(--text-muted); margin-top: 16px; line-height: 1.6; }
-  .survey-fine.ok { color: var(--success); }
-  .survey-fine.err { color: var(--danger); }
   .survey-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
   button.btn-primary { font-family: inherit; border: none; }
 
@@ -238,7 +199,6 @@
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1; transform: none; transition: none; }
     html { scroll-behavior: auto; }
-    .hero-visual-card, .hero-visual-glow, .sparkle { animation: none; }
   }
 
   @media (max-width: 520px) {
@@ -267,31 +227,21 @@
   </header>
 
   <section class="hero">
+    <div class="hero-bg"></div>
     <div class="wrap hero-inner">
-      <div class="hero-copy">
-        <span class="eyebrow">Tu guía hacia la estabilidad financiera</span>
-        <h1>Convierte el caos financiero en <span class="hl">claridad</span> y control</h1>
-        <p class="hero-sub">Deja atrás el peso de las deudas. Anticípate al mes, elimina recargos por olvido y toma decisiones con confianza — hablando en español, con una foto, o a mano. Sin darle tu banco a nadie.</p>
-        <div class="stat-row">
-          <div class="stat"><b>$0</b><span>Vinculado a tu banco</span></div>
-          <div class="stat"><b>100%</b><span>Tus datos, en tu cuenta</span></div>
-          <div class="stat"><b>0</b><span>Contratos ni tarjetas</span></div>
-        </div>
-        <div class="hero-ctas">
-          <a class="btn-primary" href="index.html">Empezar gratis →</a>
-          <a class="btn-secondary" href="#como-funciona">Ver cómo funciona</a>
-        </div>
-        <p class="hero-trust"><span>🔒</span><span>Nunca vinculamos tu cuenta bancaria a nadie — tus datos quedan en <b>tu</b> cuenta.</span></p>
+      <span class="eyebrow">Tu guía hacia la estabilidad financiera</span>
+      <h1>Convierte el caos financiero en <span class="hl">claridad</span> y control</h1>
+      <p class="hero-sub">Deja atrás el peso de las deudas. Anticípate al mes, elimina recargos por olvido y toma decisiones con confianza — hablando en español, con una foto, o a mano. Sin darle tu banco a nadie.</p>
+      <div class="stat-row">
+        <div class="stat"><b>1</b><span>Centro financiero unificado</span></div>
+        <div class="stat"><b>7</b><span>Pasos guiados, en video</span></div>
+        <div class="stat"><b>∞</b><span>Tranquilidad</span></div>
       </div>
-      <div class="hero-visual">
-        <div class="hero-visual-glow"></div>
-        <span class="sparkle s1">✦</span>
-        <span class="sparkle s2">✦</span>
-        <span class="sparkle s3">✦</span>
-        <div class="hero-visual-card">
-          <img src="https://res.cloudinary.com/datwdagbf/image/upload/v1759021617/10_v1xmfj.png" alt="El verdadero tesoro es la tranquilidad emocional y control" />
-        </div>
+      <div class="hero-ctas">
+        <a class="btn-primary" href="index.html">Empezar gratis →</a>
+        <a class="btn-secondary" href="#como-funciona">Ver cómo funciona</a>
       </div>
+      <p class="hero-trust"><span>🔒</span><span>Nunca vinculamos tu cuenta bancaria a nadie — tus datos quedan en <b>tu</b> cuenta.</span></p>
     </div>
   </section>
 
@@ -409,9 +359,9 @@
         <h2>Confianza, no letra chica</h2>
       </div>
       <div class="trust-grid">
-        <div class="trust-card reveal"><div class="trust-icon">🔒</div><h3>Tu banco es tuyo</h3><p>Foresee no se conecta a tu banco ni a un agregador externo — tú registras tus movimientos, nadie más los toca.</p></div>
-        <div class="trust-card reveal"><div class="trust-icon">🔐</div><h3>Aislamiento real, no una promesa</h3><p>Reglas de seguridad de Firestore garantizan, a nivel de base de datos, que cada cuenta solo puede leer y escribir sus propios datos.</p></div>
-        <div class="trust-card reveal"><div class="trust-icon">🛡️</div><h3>Protección contra bots</h3><p>Firebase App Check verifica que cada solicitud venga de la app real, no de un script automatizado.</p></div>
+        <div class="trust-card reveal"><div class="trust-icon">🔒</div><h3>Tu banco es tuyo</h3><p>Nunca te pedimos vincular tu cuenta bancaria a un tercero.</p></div>
+        <div class="trust-card reveal"><div class="trust-icon">🔐</div><h3>Datos aislados</h3><p>Tu información vive en tu cuenta, separada del resto de los usuarios.</p></div>
+        <div class="trust-card reveal"><div class="trust-icon">🚫</div><h3>Sin rastreo</h3><p>No usamos cookies de seguimiento ni vendemos tu información a nadie.</p></div>
       </div>
     </div>
   </section>
@@ -419,73 +369,82 @@
   <section id="encuesta">
     <div class="wrap">
       <div class="section-head reveal">
-        <span class="eyebrow">Sé de los primeros</span>
-        <h2>Únete a la lista de acceso anticipado</h2>
-        <p>Déjanos tu correo y te avisamos apenas Foresee esté listo para ti.</p>
+        <span class="eyebrow">Queremos conocerte mejor</span>
+        <h2>10 preguntas, tu experiencia real</h2>
       </div>
-
-      <div class="lead-box reveal">
-        <form id="lead-form" class="lead-form">
-          <input type="email" name="email" placeholder="tu@correo.com" required aria-label="Correo electrónico" autocomplete="email" />
-          <button class="btn-primary" type="submit">Quiero probarlo →</button>
+      <div class="survey-box reveal">
+        <p class="survey-quote">"Imagina que cada pregunta es una pequeña conversación sobre tu experiencia personal. No hay respuestas correctas o incorrectas, solo tu realidad."</p>
+        <form action="mailto:albertomatosgil@gmail.com" method="post" enctype="text/plain">
+          <fieldset>
+            <legend>1. El peso de las deudas</legend>
+            <label class="opt"><input type="radio" name="1_control_deudas" value="control_claro" /> Sí, tengo control claro</label>
+            <label class="opt"><input type="radio" name="1_control_deudas" value="a_veces_evito" /> No, a veces lo evito</label>
+            <label class="opt"><input type="radio" name="1_control_deudas" value="dificil_responder" /> Me resulta difícil responder</label>
+          </fieldset>
+          <fieldset>
+            <legend>2. Tu manera de organizarte (marca varias)</legend>
+            <label class="opt"><input type="checkbox" name="2_org" value="no_organizo" /> No lo organizo</label>
+            <label class="opt"><input type="checkbox" name="2_org" value="memoria" /> Lo llevo en la memoria</label>
+            <label class="opt"><input type="checkbox" name="2_org" value="notas_excel" /> Uso notas, libretas o Excel</label>
+            <label class="opt"><input type="checkbox" name="2_org" value="banco" /> Consulto el estado de cuenta del banco</label>
+            <div class="field"><label>Otra forma</label><input type="text" name="2_org_otra" /></div>
+          </fieldset>
+          <fieldset>
+            <legend>3. Los olvidos que cuestan</legend>
+            <label class="opt"><input type="radio" name="3_olvidos" value="nunca" /> Nunca</label>
+            <label class="opt"><input type="radio" name="3_olvidos" value="rara_vez" /> Muy rara vez (1 vez al año)</label>
+            <label class="opt"><input type="radio" name="3_olvidos" value="a_veces" /> A veces (cada 3–4 meses)</label>
+            <label class="opt"><input type="radio" name="3_olvidos" value="mensual" /> Con frecuencia (una vez al mes)</label>
+            <label class="opt"><input type="radio" name="3_olvidos" value="varias" /> Muy seguido (varias veces al mes)</label>
+          </fieldset>
+          <fieldset>
+            <legend>4. Imagina tenerlo todo junto</legend>
+            <div class="field"><select name="4_valor"><option>Nada valioso</option><option>Poco valioso</option><option>Valioso</option><option>Muy valioso</option><option>Imprescindible</option></select></div>
+          </fieldset>
+          <fieldset>
+            <legend>5. Lo que más te ayudaría (elige hasta 3)</legend>
+            <label class="opt"><input type="checkbox" name="5_func" value="recordatorios" /> Recordatorios automáticos antes de pagar</label>
+            <label class="opt"><input type="checkbox" name="5_func" value="pago_exact" /> Saber el pago exacto para liquidar una deuda</label>
+            <label class="opt"><input type="checkbox" name="5_func" value="limites" /> Poner límites de gasto por categoría</label>
+            <label class="opt"><input type="checkbox" name="5_func" value="proyeccion" /> Proyección del mes: disponible/ahorro</label>
+            <label class="opt"><input type="checkbox" name="5_func" value="tablas" /> Tablas claras con historial</label>
+            <label class="opt"><input type="checkbox" name="5_func" value="registro_rapido" /> Registrar rápido ingresos o gastos</label>
+            <label class="opt"><input type="checkbox" name="5_func" value="graficos" /> Ver gastos en gráficos simples</label>
+          </fieldset>
+          <fieldset>
+            <legend>6. Claridad total en segundos</legend>
+            <div class="field"><select name="6_utilidad"><option>Nada útil</option><option>Poco útil</option><option>Útil</option><option>Muy útil</option><option>Imprescindible</option></select></div>
+          </fieldset>
+          <fieldset>
+            <legend>7. La preocupación principal</legend>
+            <label class="opt"><input type="radio" name="7_preocupacion" value="cuanto_pagar" /> No sé cuánto pagar para salir de deudas</label>
+            <label class="opt"><input type="radio" name="7_preocupacion" value="olvidos" /> Olvidar fechas de pago</label>
+            <label class="opt"><input type="radio" name="7_preocupacion" value="no_se_va" /> No darme cuenta en qué se me va el dinero</label>
+            <label class="opt"><input type="radio" name="7_preocupacion" value="pasarme" /> Pasarme de lo que había planeado</label>
+            <label class="opt"><input type="radio" name="7_preocupacion" value="no_disponible" /> No saber cuánto tendré disponible el próximo mes</label>
+          </fieldset>
+          <fieldset>
+            <legend>8. El cambio en tu organización</legend>
+            <div class="field"><select name="8_cambio"><option>Nada</option><option>Poco</option><option>Bastante</option><option>Mucho</option><option>Cambiaría totalmente</option></select></div>
+          </fieldset>
+          <fieldset>
+            <legend>9. Evitar perder dinero</legend>
+            <div class="field"><select name="9_inversion"><option>Nada, solo si es gratis</option><option>Entre $2 y $5</option><option>Entre $6 y $10</option><option>Más de $10</option><option>Prefiero pago anual con descuento</option></select></div>
+          </fieldset>
+          <fieldset>
+            <legend>10. Lo recomendarías (0 a 10)</legend>
+            <div class="field"><input type="text" name="10_nps" placeholder="0–10" /></div>
+          </fieldset>
+          <div class="field"><label>Nombre</label><input type="text" name="nombre" required /></div>
+          <div class="field"><label>Email</label><input type="email" name="email" required /></div>
+          <div class="field"><label>Teléfono (opcional)</label><input type="tel" name="telefono" /></div>
+          <div class="survey-actions">
+            <button class="btn-primary" type="submit">Enviar respuestas</button>
+            <a class="btn-secondary" href="index.html">Empezar gratis en vez</a>
+          </div>
+          <p class="survey-fine">Tus respuestas se envían por correo a albertomatosgil@gmail.com. Al enviarlas, aceptas que te contactemos para seguir mejorando Foresee.</p>
         </form>
-        <p class="form-status" id="lead-status" aria-live="polite"></p>
       </div>
-
-      <details class="survey-toggle reveal">
-        <summary>¿Tienes 2 minutos más? Ayúdanos a mejorar Foresee</summary>
-        <div class="survey-box">
-          <p class="survey-quote">"Imagina que cada pregunta es una pequeña conversación sobre tu experiencia personal. No hay respuestas correctas o incorrectas, solo tu realidad."</p>
-          <form id="survey-form">
-            <fieldset>
-              <legend>1. El peso de las deudas</legend>
-              <label class="opt"><input type="radio" name="1_control_deudas" value="control_claro" /> Sí, tengo control claro</label>
-              <label class="opt"><input type="radio" name="1_control_deudas" value="a_veces_evito" /> No, a veces lo evito</label>
-              <label class="opt"><input type="radio" name="1_control_deudas" value="dificil_responder" /> Me resulta difícil responder</label>
-            </fieldset>
-            <fieldset>
-              <legend>2. Tu manera de organizarte hoy (marca varias)</legend>
-              <label class="opt"><input type="checkbox" name="2_org" value="no_organizo" /> No lo organizo</label>
-              <label class="opt"><input type="checkbox" name="2_org" value="memoria" /> Lo llevo en la memoria</label>
-              <label class="opt"><input type="checkbox" name="2_org" value="notas_excel" /> Uso notas, libretas o Excel</label>
-              <label class="opt"><input type="checkbox" name="2_org" value="banco" /> Consulto el estado de cuenta del banco</label>
-              <div class="field"><label>Otra forma</label><input type="text" name="2_org_otra" /></div>
-            </fieldset>
-            <fieldset>
-              <legend>3. Tu preocupación principal</legend>
-              <label class="opt"><input type="radio" name="3_preocupacion" value="cuanto_pagar" /> No sé cuánto pagar para salir de deudas</label>
-              <label class="opt"><input type="radio" name="3_preocupacion" value="olvidos" /> Olvidar fechas de pago</label>
-              <label class="opt"><input type="radio" name="3_preocupacion" value="no_se_va" /> No darme cuenta en qué se me va el dinero</label>
-              <label class="opt"><input type="radio" name="3_preocupacion" value="pasarme" /> Pasarme de lo que había planeado</label>
-              <label class="opt"><input type="radio" name="3_preocupacion" value="no_disponible" /> No saber cuánto tendré disponible el próximo mes</label>
-            </fieldset>
-            <fieldset>
-              <legend>4. Lo que más te ayudaría (elige hasta 3)</legend>
-              <label class="opt"><input type="checkbox" name="4_func" value="recordatorios" /> Recordatorios automáticos antes de pagar</label>
-              <label class="opt"><input type="checkbox" name="4_func" value="pago_exact" /> Saber el pago exacto para liquidar una deuda</label>
-              <label class="opt"><input type="checkbox" name="4_func" value="limites" /> Poner límites de gasto por categoría</label>
-              <label class="opt"><input type="checkbox" name="4_func" value="proyeccion" /> Proyección del mes: disponible/ahorro</label>
-              <label class="opt"><input type="checkbox" name="4_func" value="tablas" /> Tablas claras con historial</label>
-              <label class="opt"><input type="checkbox" name="4_func" value="registro_rapido" /> Registrar rápido ingresos o gastos</label>
-              <label class="opt"><input type="checkbox" name="4_func" value="graficos" /> Ver gastos en gráficos simples</label>
-            </fieldset>
-            <fieldset>
-              <legend>5. Cuánto pagarías por evitar perder dinero</legend>
-              <div class="field"><select name="5_inversion"><option>Nada, solo si es gratis</option><option>Entre $2 y $5</option><option>Entre $6 y $10</option><option>Más de $10</option><option>Prefiero pago anual con descuento</option></select></div>
-            </fieldset>
-            <fieldset>
-              <legend>6. ¿Qué tan probable es que la pruebes este mes?</legend>
-              <div class="field"><select name="6_intencion"><option>Nada probable</option><option>Poco probable</option><option>Probable</option><option>Muy probable</option><option>Ya quiero empezar</option></select></div>
-            </fieldset>
-            <div class="field"><label>Nombre (opcional si ya dejaste tu correo arriba)</label><input type="text" name="nombre" /></div>
-            <div class="field"><label>Email (opcional si ya dejaste tu correo arriba)</label><input type="email" name="email" /></div>
-            <div class="survey-actions">
-              <button class="btn-primary" type="submit">Enviar respuestas</button>
-            </div>
-            <p class="survey-fine" id="survey-status" aria-live="polite">Tus respuestas nos ayudan a mejorar Foresee — no las compartimos con nadie.</p>
-          </form>
-        </div>
-      </details>
     </div>
   </section>
 
@@ -508,73 +467,6 @@
       </div>
     </div>
   </footer>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app-check.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    const firebaseApp = initializeApp({
-      apiKey: "AIzaSyCTicX5tqqVr3pK_RFqgvqpRavsUuTvS2g",
-      authDomain: "wittfinances-282f1.firebaseapp.com",
-      projectId: "wittfinances-282f1",
-      storageBucket: "wittfinances-282f1.firebasestorage.app",
-      messagingSenderId: "998192322959",
-      appId: "1:998192322959:web:e2afcdd7f47da3767853fa",
-    });
-    initializeAppCheck(firebaseApp, {
-      provider: new ReCaptchaV3Provider("6Lew4FotAAAAABNZIUZKyBsjJyaVJkvf8VDfrN5-"),
-      isTokenAutoRefreshEnabled: true,
-    });
-    const db = getFirestore(firebaseApp);
-
-    function setStatus(el, msg, kind) {
-      el.textContent = msg;
-      el.className = el.className.replace(/\s*(ok|err)\b/g, "") + (kind ? " " + kind : "");
-    }
-
-    const leadForm = document.getElementById("lead-form");
-    const leadStatus = document.getElementById("lead-status");
-    leadForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const btn = leadForm.querySelector("button");
-      btn.disabled = true;
-      try {
-        await addDoc(collection(db, "landing_leads"), {
-          email: leadForm.email.value.trim(),
-          createdAt: serverTimestamp(),
-        });
-        leadForm.reset();
-        setStatus(leadStatus, "¡Listo! Te avisamos apenas esté disponible.", "ok");
-      } catch (err) {
-        setStatus(leadStatus, "No pudimos guardarlo — escríbenos a albertomatosgil@gmail.com y te anotamos a mano.", "err");
-      } finally {
-        btn.disabled = false;
-      }
-    });
-
-    const surveyForm = document.getElementById("survey-form");
-    const surveyStatus = document.getElementById("survey-status");
-    surveyForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const btn = surveyForm.querySelector("button[type=submit]");
-      btn.disabled = true;
-      const payload = { createdAt: serverTimestamp() };
-      for (const [key, value] of new FormData(surveyForm).entries()) {
-        if (!value) continue;
-        payload[key] = key in payload ? [].concat(payload[key], value) : value;
-      }
-      try {
-        await addDoc(collection(db, "landing_survey"), payload);
-        surveyForm.reset();
-        setStatus(surveyStatus, "¡Gracias por tu tiempo! Tus respuestas nos ayudan a mejorar Foresee.", "ok");
-      } catch (err) {
-        setStatus(surveyStatus, "No pudimos enviarlo — escríbenos a albertomatosgil@gmail.com.", "err");
-      } finally {
-        btn.disabled = false;
-      }
-    });
-  </script>
 
   <script>
     (function () {

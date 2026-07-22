@@ -59,7 +59,12 @@ No hay comandos de build, lint, ni tests automatizados. La verificación se hace
 - **Último informe de sesión:** `MD/Sesion 2026-07-19 — Firebase App Check y Verificacion de Email.md`
 - **Último informe de actualización:** `Informes de actualización/V F2 0011 — 2026-07-19.md`
 - **Último respaldo:** `Respaldos/V F2 0011 — 2026-07-19/`
-- **Landing page (marketing):** `landing.html` en la raíz del repo — página de captación de clientes, **independiente del versionado `V F2 XXXX`** (no se carga desde `index.html`, no toca `css/`/`js/`/`sw.js`, no lleva footer de versión ni respaldo en `Respaldos/`). Terminada, aprobada por el usuario y publicada el 2026-07-21 — ver `Informes de actualización/Landing Page — 2026-07-21.md`. `land.html` es la landing anterior que sirvió de referencia de estructura/activos; se conserva sin tocar.
+- **Landing page (marketing):** `landing.html` en la raíz del repo — página de captación de clientes, **independiente del versionado `V F2 XXXX`** (no se carga desde `index.html`, no toca `css/`/`js/`/`sw.js`, no lleva footer de versión ni respaldo en `Respaldos/`). Ver `Informes de actualización/Landing Page — 2026-07-21.md` (dos rondas de cambios documentadas ahí). `land.html` es la landing anterior que sirvió de referencia de estructura/activos; se conserva sin tocar.
+  - Hero con la ilustración de "El verdadero tesoro" (mujer meditando), animaciones de flotación/resplandor/destellos, y efectos de hover en botones/tarjetas/imágenes en toda la página.
+  - Stat-row, sección de confianza y encuesta rediseñados a partir de una comparativa real (`WebFetch`) contra YNAB, Fintonic y Goodbudget — ver el informe para el detalle de qué se comparó y por qué.
+  - La encuesta ahora es un flujo de 2 pasos: captura de correo (un solo campo, CTA principal) + encuesta opcional de 6 preguntas (recortada de las 10 originales) detrás de un `<details>` colapsable.
+  - Ambos formularios escriben a Firestore (colecciones nuevas `landing_leads` y `landing_survey`, solo `create`, ver `firestore.rules`) en vez del `mailto:` original, que era poco confiable en mobile.
+  - ⚠️ **Pendiente de acción del usuario:** las reglas nuevas de `firestore.rules` (colecciones `landing_leads`/`landing_survey`) están editadas en el repo pero **no publicadas en Firebase Console todavía** — hace falta pegarlas ahí (Firestore Database → Reglas → Publicar), igual que se hizo con App Check en V F2 0006, para que los formularios de la landing empiecen a guardar datos de verdad. Mientras tanto, muestran un mensaje de error de respaldo sin romper la página.
 
 > Nomenclatura `V F2 XXXX` (Foresee **2**) para no confundirla con `V FSA XXXX` del proyecto anterior — son dos apps distintas en dos repos distintos.
 

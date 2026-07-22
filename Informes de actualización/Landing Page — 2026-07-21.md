@@ -48,8 +48,49 @@ Al adaptar el copy de `land.html`, se reintrodujeron sin querer expresiones de v
   - Recorrido completo de scroll en desktop-dark, desktop-light y mobile (390px) — sin errores de consola ni `pageerror`.
   - Sección "Explora Foresee" en tema claro — contraste y legibilidad correctos.
 
-## Estado final
+## Estado final (primera parte)
 - `landing.html` queda terminado, revisado y aprobado por el usuario para publicar.
 - No se tocó `index.html`, `css/`, `js/` ni `sw.js` — la app en producción no se ve afectada por este cambio.
 - `land.html` (la landing anterior que sirvió de referencia) se mantiene en el repo sin cambios, como archivo de origen/inspiración.
+
+---
+
+## Actualización — mismo día, segunda ronda de cambios
+
+### 1. Hero — imagen de la meditación + más efectos
+El usuario prefirió la estética de la ilustración "El verdadero tesoro" (mujer meditando en un jardín, `10_v1xmfj.png` de `land.html`) sobre el hero original (imagen de fondo desvanecida del "camino al tesoro"). Se rehizo el hero como layout de dos columnas (texto + tarjeta de imagen), con resplandor dorado detrás de la tarjeta, animación de flotación suave, y destellos ✦ decorativos — todo respetando `prefers-reduced-motion`. Se agregaron además efectos en el resto de la página: brillo que atraviesa los botones primarios al pasar el mouse, zoom suave en las imágenes narrativas, resplandor azul en las tarjetas de video al pasar el mouse, y rebote/giro en los íconos de confianza.
+
+**Respaldo antes de este cambio:** `Respaldos/landing.html — 2026-07-21 (version publicada, hero oscuro)/landing.html`.
+
+### 2. Comparativa real contra 3 landing pages de la competencia
+A pedido explícito del usuario ("no te solo copies y pegues... analiza bien"), se hizo `WebFetch` real (no memoria ni suposición) de YNAB, Fintonic y Goodbudget, analizando: mensaje del hero, prueba social, CTA, manejo de precio, mecanismos de captura de leads, y cómo explican la seguridad de datos bancarios. Hallazgos clave:
+- Ninguna de las tres tiene una encuesta de investigación en su landing — todas van directo a un signup de un solo campo.
+- YNAB y Fintonic ganan credibilidad con números de impacto reales (que Foresee no puede reclamar aún, al no tener usuarios activos) o con especificidad regulatoria concreta (número de licencia, norma PSD2) en vez de reassurance genérico.
+- Ninguna de las tres muestra precio en la landing principal.
+
+### 3. Cuatro cambios aplicados a partir de la comparativa
+1. **Stat-row honesto** — se reemplazaron los stats autorreferenciales ("7 pasos guiados") por hechos estructurales verdaderos que Foresee sí puede reclamar hoy sin datos de adopción: `$0 vinculado a tu banco`, `100% tus datos, en tu cuenta`, `0 contratos ni tarjetas`.
+2. **Sección de confianza con hechos técnicos concretos** (`.trust-grid`) — se reemplazó el copy genérico ("datos aislados", "sin rastreo") por las protecciones reales ya implementadas en el proyecto: reglas de seguridad de Firestore con aislamiento por usuario, y Firebase App Check contra bots.
+3. **Encuesta rediseñada en 2 pasos** — el formulario de 10 preguntas obligatorias antes de dejar el contacto se reemplazó por: (a) una tarjeta principal de un solo campo (correo) como CTA primario ("Quiero probarlo →"), estilo YNAB/Fintonic/Goodbudget, y (b) un bloque `<details>` opcional ("¿Tienes 2 minutos más? Ayúdanos a mejorar Foresee") con la encuesta recortada de 10 a 6 preguntas: se eliminaron 3 preguntas que medían esencialmente lo mismo ("¿qué tan valioso/útil/cuánto cambiaría?" — sesgo conocido de preguntas hipotéticas), y el NPS ("¿lo recomendarías, 0-10?", inválido antes de usar el producto) se reemplazó por intención de prueba ("¿qué tan probable es que la pruebes este mes?").
+4. **Reemplazo del envío por `mailto:`** — poco confiable en varios navegadores (falla en silencio, sobre todo mobile sin cliente de correo configurado). Ambos formularios (captura de correo y encuesta) ahora escriben directo a Firestore (mismo proyecto `wittfinances-282f1` que usa la app) vía el SDK modular de Firebase, con manejo de error que degrada con gracia a un mensaje pidiendo escribir por correo si la escritura falla.
+
+### 4. Cambio en `firestore.rules` — requiere acción del usuario
+Se agregaron dos colecciones nuevas de nivel raíz con permiso de **solo `create`** (nunca `read`/`update`/`delete` desde el cliente), con validación de campos como mitigación básica de abuso:
+- `landing_leads` — captura de correo del paso 1.
+- `landing_survey` — respuestas de la encuesta opcional del paso 2.
+
+**Estas reglas están editadas en el archivo local `firestore.rules` pero no están publicadas todavía** — igual que con Firebase App Check en V F2 0006, hace falta que el usuario pegue el contenido actualizado en Firebase Console → Firestore Database → Reglas, y publique. Mientras no se haga, los formularios de la landing van a mostrar el mensaje de error de respaldo (probado y confirmado que no rompe nada, solo no guarda el dato).
+
+## Verificación (segunda ronda)
+- `node --check` sobre el script de módulo de Firebase extraído — sintaxis válida.
+- Playwright: recorrido completo dark/light/mobile sin errores de consola.
+- Captura de hero (dark, light, mobile) con la imagen de la meditación — sin superposición de texto.
+- Sección de confianza y stat-row — capturas verificadas.
+- Encuesta: captura colapsada y expandida (clic real en `<summary>`), sin errores.
+- Prueba real de envío del formulario de correo contra las reglas **actuales** (todavía no actualizadas) — confirma que falla con el mensaje de respaldo esperado (no rompe la página) y que el botón se reactiva correctamente después del error.
+- `grep` exhaustivo de voseo sobre todo el archivo — sin coincidencias.
+
+## Estado final
+- `landing.html` y `firestore.rules` listos y subidos a git.
+- **Pendiente de acción del usuario:** publicar las reglas actualizadas de Firestore en Firebase Console para que los formularios de la landing empiecen a guardar datos de verdad (instrucciones arriba).
 - Pendiente (fuera del alcance de este informe): continuar el checklist de comercialización más allá del ítem de landing page — ver `MD/Plan Comercializacion — Foresee 2.0.md`.
