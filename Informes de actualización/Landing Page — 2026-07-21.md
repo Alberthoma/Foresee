@@ -90,7 +90,43 @@ Se agregaron dos colecciones nuevas de nivel raíz con permiso de **solo `create
 - Prueba real de envío del formulario de correo contra las reglas **actuales** (todavía no actualizadas) — confirma que falla con el mensaje de respaldo esperado (no rompe la página) y que el botón se reactiva correctamente después del error.
 - `grep` exhaustivo de voseo sobre todo el archivo — sin coincidencias.
 
-## Estado final
+## Estado final (segunda ronda)
 - `landing.html` y `firestore.rules` listos y subidos a git.
 - **Pendiente de acción del usuario:** publicar las reglas actualizadas de Firestore en Firebase Console para que los formularios de la landing empiecen a guardar datos de verdad (instrucciones arriba).
+
+---
+
+## Actualización — mismo día, tercera ronda: capturas reales de las 12 secciones
+
+### El problema señalado por el usuario
+El usuario marcó, con razón, dos fallas concretas que las dos rondas anteriores no habían resuelto:
+1. La sección "Cómo funciona" seguía diciendo **"Un mapa claro, en 7 pasos"** — una frase que databa de cuando la app tenía menos herramientas. Hoy tiene 12, no 7.
+2. **Las imágenes se repetían.** Solo existían 7 ilustraciones genéricas (`1`, `2`, `3`, `5`, `6`, `7`, `10` de Cloudinary) para cubrir hero + 2 secciones narrativas + beneficios + 7 tarjetas de video — matemáticamente insuficiente, así que 3 de las 7 tarjetas de "Cómo funciona" repetían poster con otra.
+
+El usuario preguntó explícitamente si yo podía generar o mandar a crear imágenes nuevas y diferentes.
+
+### La respuesta: no generación de imágenes — capturas reales de la app
+No tengo una herramienta de generación de imágenes disponible en este entorno. En vez de eso, se tomó una vía mejor y más honesta: **capturar la interfaz real de la app** (`index.html`) con datos de ejemplo, en vez de seguir dependiendo del pool limitado de 7 ilustraciones de IA.
+
+**Cómo se hizo:** con Playwright, sirviendo la app localmente, se importó `js/state.js` directo en el navegador y se asignaron datos de muestra realistas (transacciones, tarjetas, metas, gastos recurrentes, categorías con íconos reales, etc.) al `appState` — sin tocar Firebase Auth ni Firestore, sin loguearse con una cuenta real. Se fuerza la vista a `view-content`, se oculta el modal de login y los toasts, y se captura cada una de las 12 secciones (`data-section`) por separado. Resultado: 12 capturas reales, únicas, de la interfaz de verdad — no maquetas ni arte genérico.
+
+Las 12 capturas quedan en `capturas-app/` en la raíz del repo (`capture-registros.png`, `capture-voz.png`, ... `capture-importar.png`).
+
+### Cambios aplicados
+1. **"Cómo funciona" reescrito**: encabezado ahora dice "El corazón del flujo, en 7 pasos", con una línea aclarando que Foresee tiene 12 herramientas en total y un link directo a "Explora las 12 →" (la sección de abajo). Los 7 posters de video se reemplazaron por 7 capturas reales, cada una distinta y correspondiente a su paso real (sin repetir ninguna).
+2. **"Explora Foresee" (panel interactivo de 12 funciones)**: se agregó `feat-detail-shot`, una imagen grande con la captura real de cada sección, mostrada junto a la descripción cuando se hace clic en cada una de las 12 — antes solo mostraba un ícono pequeño de 26-56px.
+
+### Un bug encontrado y corregido en el camino
+Al usar `object-fit: cover` (el valor original) para los posters de video, la captura de "Gastos Comunes" (con una relación de aspecto inusualmente ancha, 1248×225) se recortaba exactamente en una franja vacía del centro de la imagen — se veía en negro, no por un error de carga sino por un mal recorte. Se cambió `.step-card video` de `object-fit: cover` a `object-fit: contain` (con fondo `var(--bg-2)`) para que las 7 capturas, con relaciones de aspecto muy distintas entre sí, se muestren siempre completas sin recortes accidentales.
+
+### Verificación
+- Las 12 capturas se revisaron una por una — datos de muestra coherentes (categorías con íconos reales del proyecto, bancos reales BoA/Chase/Wells Fargo, tarjetas con barra de progreso, metas de ahorro, gráficos reales de Chart.js en Reportes, etc.), sin errores de página.
+- Clic real (Playwright) en los 12 botones del panel "Explora Foresee", uno por uno — sin errores de consola, cada uno actualiza correctamente ícono + título + descripción + captura grande.
+- Las 7 tarjetas de "Cómo funciona" verificadas visualmente después del fix de `object-fit` — las 7 muestran contenido real y distinto, ninguna repetida.
+- Recorrido completo dark/light/mobile (390px) — sin errores de consola, sin overflow horizontal.
+- `grep` de voseo sobre todo el archivo — sin coincidencias.
+
+## Estado final
+- `landing.html`, `firestore.rules` y la carpeta nueva `capturas-app/` (12 archivos PNG) listos y subidos a git.
+- **Pendiente de acción del usuario:** publicar las reglas actualizadas de Firestore en Firebase Console (ver ronda anterior).
 - Pendiente (fuera del alcance de este informe): continuar el checklist de comercialización más allá del ítem de landing page — ver `MD/Plan Comercializacion — Foresee 2.0.md`.

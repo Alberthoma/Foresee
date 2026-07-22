@@ -129,7 +129,7 @@
   .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
   .step-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
   .step-card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(79,143,255,0.18); }
-  .step-card video { width: 100%; display: block; aspect-ratio: 16/10; object-fit: cover; background: #000; }
+  .step-card video { width: 100%; display: block; aspect-ratio: 16/10; object-fit: contain; background: var(--bg-2); }
   .step-body { padding: 18px 20px 22px; }
   .step-num { font-family: var(--font-display); color: var(--accent); font-weight: 700; font-size: 0.85rem; opacity: 0.8; }
   .step-body h3 { font-size: 1.04rem; font-weight: 700; margin-top: 6px; }
@@ -150,6 +150,8 @@
   .feat-detail-icon .feat-emoji { font-size: 2.3rem; display: block; }
   .feat-detail-title { font-family: var(--font-display); font-size: 1.5rem; }
   .feat-detail-desc { margin-top: 14px; color: var(--text-muted); font-size: 1.03rem; line-height: 1.7; max-width: 52ch; }
+  .feat-detail-shot { margin-top: 22px; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 20px 45px rgba(0,0,0,0.3); background: var(--bg-2); }
+  .feat-detail-shot img { width: 100%; display: block; }
   @media (max-width: 760px) {
     .feat-explorer { grid-template-columns: 1fr; }
     .feat-list { flex-direction: row; overflow-x: auto; max-height: none; border-right: none; border-bottom: 1px solid var(--border); -webkit-overflow-scrolling: touch; }
@@ -311,36 +313,36 @@
     <div class="wrap">
       <div class="section-head reveal">
         <span class="eyebrow">Cómo funciona</span>
-        <h2>Un mapa claro, en 7 pasos</h2>
-        <p>Cada paso es un video real de la app — no una demo genérica. Así se ve Foresee de verdad.</p>
+        <h2>El corazón del flujo, en 7 pasos</h2>
+        <p>Cada paso es un video real de la app, con la interfaz real — no una demo genérica. Foresee tiene 12 herramientas en total; estas son las que usarás cada semana. <a href="#funciones">Explora las 12 →</a></p>
       </div>
       <div class="steps-grid">
         <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512589/Paso_1_Bienvenida_y_Gestion_de_Categoria_y_Bancos_plya2u.mp4" poster="https://res.cloudinary.com/datwdagbf/image/upload/v1759021619/5_que_te_ayuden_a_armar_ese_rompecabezas_financiero_i8jm3x.png"></video>
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512589/Paso_1_Bienvenida_y_Gestion_de_Categoria_y_Bancos_plya2u.mp4" poster="capturas-app/capture-configuracion.png"></video>
           <div class="step-body"><div class="step-num">01</div><h3>Construye tu universo financiero</h3><p>Configura categorías, registra bancos y define descripciones clave. Un mapa listo en minutos.</p></div>
         </div>
         <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512570/Paso_2_Gastos_Recurrentes_mboofi.mp4" poster="https://res.cloudinary.com/datwdagbf/image/upload/v1759021617/1_gextto.png"></video>
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512570/Paso_2_Gastos_Recurrentes_mboofi.mp4" poster="capturas-app/capture-recurrentes.png"></video>
           <div class="step-body"><div class="step-num">02</div><h3>Automatiza tu tranquilidad</h3><p>Registra una vez tus gastos fijos. Se repiten cada mes, con aviso antes del vencimiento.</p></div>
         </div>
         <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512577/Paso_3_Targetas_de_Credito_krqk9f.mp4" poster="https://res.cloudinary.com/datwdagbf/image/upload/v1759021618/3_lr3t0q.png"></video>
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512577/Paso_3_Targetas_de_Credito_krqk9f.mp4" poster="capturas-app/capture-tarjetas.png"></video>
           <div class="step-body"><div class="step-num">03</div><h3>De monstruo a herramienta</h3><p>Registra tarjetas y préstamos, define el plazo, y recibe tu pago mensual sugerido + alertas.</p></div>
         </div>
         <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512590/Paso_4_Registro_Diaro_cujs8c.mp4" poster="https://res.cloudinary.com/datwdagbf/image/upload/v1759021619/5_que_te_ayuden_a_armar_ese_rompecabezas_financiero_i8jm3x.png"></video>
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512590/Paso_4_Registro_Diaro_cujs8c.mp4" poster="capturas-app/capture-registros.png"></video>
           <div class="step-body"><div class="step-num">04</div><h3>El hábito que lo cambia todo</h3><p>Registra en segundos con botones de ingreso/gasto, tabla detallada, o hablando por voz 🎙️.</p></div>
         </div>
         <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512588/Paso_5_Reportes_Presupuesto_y_Tablas_p0zj9b.mp4" poster="https://res.cloudinary.com/datwdagbf/image/upload/v1759021626/6_un_sistema_que_te_guie_y_Te_de_un_mapa_a_seguir_paso_a_paso_ielw9k.png"></video>
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512588/Paso_5_Reportes_Presupuesto_y_Tablas_p0zj9b.mp4" poster="capturas-app/capture-reportes.png"></video>
           <div class="step-body"><div class="step-num">05</div><h3>Reportes, presupuesto y tablas</h3><p>Mira porcentajes consumidos, saldos disponibles, y un historial claro para decidir.</p></div>
         </div>
         <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758514065/Paso_6_Proyeccion_bhrr1a.mp4" poster="https://res.cloudinary.com/datwdagbf/image/upload/v1759021626/6_un_sistema_que_te_guie_y_Te_de_un_mapa_a_seguir_paso_a_paso_ielw9k.png"></video>
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758514065/Paso_6_Proyeccion_bhrr1a.mp4" poster="capturas-app/capture-proyeccion.png"></video>
           <div class="step-body"><div class="step-num">06</div><h3>Proyección — la esencia</h3><p>Anticipa ingresos, gastos y ahorro real. Si el mes viene corto, prioriza antes de que sea tarde.</p></div>
         </div>
         <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1759005488/Gastos_comunes_kvozqf.mp4" poster="https://res.cloudinary.com/datwdagbf/image/upload/v1759021618/3_lr3t0q.png"></video>
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1759005488/Gastos_comunes_kvozqf.mp4" poster="capturas-app/capture-gastos-comunes.png"></video>
           <div class="step-body"><div class="step-num">07</div><h3>Gastos comunes</h3><p>Reúne la parte de cada persona y cierra el total, sin enredos ni planillas aparte.</p></div>
         </div>
       </div>
@@ -360,6 +362,7 @@
           <div class="feat-detail-icon" id="feat-detail-icon"></div>
           <h3 class="feat-detail-title" id="feat-detail-title"></h3>
           <p class="feat-detail-desc" id="feat-detail-desc"></p>
+          <div class="feat-detail-shot" id="feat-detail-shot"></div>
         </div>
       </div>
     </div>
@@ -579,18 +582,18 @@
   <script>
     (function () {
       const FEATURES = [
-        { id: "registros", name: "Registros", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514689/registro_mc8ed8.png", desc: "Anota cada ingreso y gasto con categoría, banco, fecha y descripción. Elige cómo cargarlo: con la calculadora integrada, o hablando — tú decides." },
-        { id: "voz", name: "Voz", icon: "https://res.cloudinary.com/datwdagbf/image/upload/v1757199087/voz_w5ctvq.png", desc: "Habla y Foresee arma el registro sola. Entiende fechas, montos y categorías dichas en español natural, sin comandos fijos que memorizar." },
-        { id: "proyeccion", name: "Proyección", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514685/proyeccion_hh3xyt.png", desc: "Mira cómo va a quedar tu saldo en los próximos días, combinando tus movimientos reales con tus gastos recurrentes. Así sabes si el mes viene corto antes de que sea tarde." },
-        { id: "recurrentes", name: "Gastos Recurrentes", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514673/gastos-recurrentes2_udrbey.png", desc: "Carga una vez tus pagos fijos — streaming, renta, seguros — y Foresee los registra sola cada mes, con aviso antes del vencimiento." },
-        { id: "comunes", name: "Gastos Comunes", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756767509/comunes_xjuxxt.png", desc: "Divide cualquier gasto compartido entre varias personas y lleva la cuenta de quién debe qué, sin armar una planilla aparte." },
-        { id: "tarjetas", name: "Tarjetas y Préstamos", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514697/tarjetas2_z3jokx.png", desc: "Controla el saldo de tus tarjetas y préstamos, con alerta automática al acercarte al límite y el pago mensual sugerido para salir de la deuda a tiempo." },
-        { id: "metas", name: "Metas de Ahorro", icon: "https://res.cloudinary.com/datwdagbf/image/upload/v1756514663/ahorro_vhwhw7.png", desc: "Define una meta — un viaje, un auto, un fondo de emergencia — con monto y fecha, y mira tu progreso en una barra que se llena a medida que ahorras." },
-        { id: "saldos", name: "Saldos", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514692/saldos_lntcfz.png", desc: "Un vistazo al saldo real de cada uno de tus bancos y al total combinado, siempre actualizado con cada movimiento que registras." },
-        { id: "reportes", name: "Reportes", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514690/reportes_qisw3e.png", desc: "Gráficos claros de en qué se te va el dinero: por categoría, por mes, y la evolución de tu saldo en el tiempo." },
-        { id: "presupuesto", name: "Presupuesto", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514684/presupuesto_r7qkr9.png", desc: "Pon un límite de gasto por categoría y mira, en tiempo real, cuánto llevas consumido de cada una — antes de pasarte." },
-        { id: "configuracion", name: "Configuración", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514668/configuracion_puo2ap.png", desc: "Personaliza tus categorías, bancos y moneda, activa o desactiva notificaciones, y exporta una copia de tus datos cuando quieras." },
-        { id: "importar", name: "Importar", emoji: "⬇", desc: "Sube el CSV o Excel de tu banco, o hasta una foto del extracto o de un recibo — Foresee arma los registros sola y detecta duplicados." },
+        { id: "registros", name: "Registros", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514689/registro_mc8ed8.png", shot: "capturas-app/capture-registros.png", desc: "Anota cada ingreso y gasto con categoría, banco, fecha y descripción. Elige cómo cargarlo: con la calculadora integrada, o hablando — tú decides." },
+        { id: "voz", name: "Voz", icon: "https://res.cloudinary.com/datwdagbf/image/upload/v1757199087/voz_w5ctvq.png", shot: "capturas-app/capture-voz.png", desc: "Habla y Foresee arma el registro sola. Entiende fechas, montos y categorías dichas en español natural, sin comandos fijos que memorizar." },
+        { id: "proyeccion", name: "Proyección", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514685/proyeccion_hh3xyt.png", shot: "capturas-app/capture-proyeccion.png", desc: "Mira cómo va a quedar tu saldo en los próximos días, combinando tus movimientos reales con tus gastos recurrentes. Así sabes si el mes viene corto antes de que sea tarde." },
+        { id: "recurrentes", name: "Gastos Recurrentes", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514673/gastos-recurrentes2_udrbey.png", shot: "capturas-app/capture-recurrentes.png", desc: "Carga una vez tus pagos fijos — streaming, renta, seguros — y Foresee los registra sola cada mes, con aviso antes del vencimiento." },
+        { id: "comunes", name: "Gastos Comunes", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756767509/comunes_xjuxxt.png", shot: "capturas-app/capture-gastos-comunes.png", desc: "Divide cualquier gasto compartido entre varias personas y lleva la cuenta de quién debe qué, sin armar una planilla aparte." },
+        { id: "tarjetas", name: "Tarjetas y Préstamos", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514697/tarjetas2_z3jokx.png", shot: "capturas-app/capture-tarjetas.png", desc: "Controla el saldo de tus tarjetas y préstamos, con alerta automática al acercarte al límite y el pago mensual sugerido para salir de la deuda a tiempo." },
+        { id: "metas", name: "Metas de Ahorro", icon: "https://res.cloudinary.com/datwdagbf/image/upload/v1756514663/ahorro_vhwhw7.png", shot: "capturas-app/capture-metas.png", desc: "Define una meta — un viaje, un auto, un fondo de emergencia — con monto y fecha, y mira tu progreso en una barra que se llena a medida que ahorras." },
+        { id: "saldos", name: "Saldos", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514692/saldos_lntcfz.png", shot: "capturas-app/capture-saldos.png", desc: "Un vistazo al saldo real de cada uno de tus bancos y al total combinado, siempre actualizado con cada movimiento que registras." },
+        { id: "reportes", name: "Reportes", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514690/reportes_qisw3e.png", shot: "capturas-app/capture-reportes.png", desc: "Gráficos claros de en qué se te va el dinero: por categoría, por mes, y la evolución de tu saldo en el tiempo." },
+        { id: "presupuesto", name: "Presupuesto", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514684/presupuesto_r7qkr9.png", shot: "capturas-app/capture-presupuesto.png", desc: "Pon un límite de gasto por categoría y mira, en tiempo real, cuánto llevas consumido de cada una — antes de pasarte." },
+        { id: "configuracion", name: "Configuración", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514668/configuracion_puo2ap.png", shot: "capturas-app/capture-configuracion.png", desc: "Personaliza tus categorías, bancos y moneda, activa o desactiva notificaciones, y exporta una copia de tus datos cuando quieras." },
+        { id: "importar", name: "Importar", emoji: "⬇", shot: "capturas-app/capture-importar.png", desc: "Sube el CSV o Excel de tu banco, o hasta una foto del extracto o de un recibo — Foresee arma los registros sola y detecta duplicados." },
       ];
 
       function iconHTML(f) {
@@ -601,6 +604,7 @@
       const detailIcon = document.getElementById("feat-detail-icon");
       const detailTitle = document.getElementById("feat-detail-title");
       const detailDesc = document.getElementById("feat-detail-desc");
+      const detailShot = document.getElementById("feat-detail-shot");
 
       function selectFeature(f, btn) {
         list.querySelectorAll(".feat-btn").forEach((b) => b.classList.remove("active"));
@@ -608,6 +612,7 @@
         detailIcon.innerHTML = iconHTML(f);
         detailTitle.textContent = f.name;
         detailDesc.textContent = f.desc;
+        detailShot.innerHTML = `<img src="${f.shot}" alt="Captura real de la sección ${f.name} en Foresee" />`;
       }
 
       FEATURES.forEach((f, i) => {
