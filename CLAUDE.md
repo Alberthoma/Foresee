@@ -53,12 +53,12 @@ No hay comandos de build, lint, ni tests automatizados. La verificación se hace
 
 ## Estado actual
 
-- **Versión activa:** `V F2 0011` (2026-07-19) — pestaña renombrada a "Tarjetas y Préstamos" (Deudas y préstamos del plan resuelto sin código nuevo); fix del botón de filtro en Proyección/Reportes
-- **Próxima versión:** `V F2 0012`
+- **Versión activa:** `V F2 0012` (2026-07-22) — botón "❓ Cómo funciona" agregado en la barra de acciones (visible en las 12 secciones), abre un modal con explicación paso a paso + simulacro de la sección activa, contenido centralizado en `js/lib/section-help.js` — material de apoyo al tutorial en video existente
+- **Próxima versión:** `V F2 0013`
 - **Archivo de entrada:** `index.html` (raíz) — carga `css/base.css`, `css/secciones.css` y `js/main.js`
 - **Último informe de sesión:** `MD/Sesion 2026-07-19 — Firebase App Check y Verificacion de Email.md`
-- **Último informe de actualización:** `Informes de actualización/V F2 0011 — 2026-07-19.md`
-- **Último respaldo:** `Respaldos/V F2 0011 — 2026-07-19/`
+- **Último informe de actualización:** `Informes de actualización/V F2 0012 — 2026-07-22.md`
+- **Último respaldo:** `Respaldos/V F2 0012 — 2026-07-22/`
 - **Landing page (marketing):** `landing/landing.html` (movida por el usuario desde la raíz del repo a su propia carpeta `landing/`) — página de captación de clientes, **independiente del versionado `V F2 XXXX`** (no se carga desde `index.html`, no toca `css/`/`js/`/`sw.js`, no lleva footer de versión ni respaldo en `Respaldos/`). Sus links a la app usan `../index.html` (relativo, porque vive un nivel más adentro que antes). Ver `Informes de actualización/Landing Page — 2026-07-21.md` (tres rondas de cambios documentadas ahí). `landing/land.html` es la landing anterior que sirvió de referencia de estructura/activos; se conserva sin tocar. `landing/capturas-app/` se movió junto con `landing.html`.
   - Hero con la ilustración de "El verdadero tesoro" (mujer meditando), animaciones de flotación/resplandor/destellos, y efectos de hover en botones/tarjetas/imágenes en toda la página.
   - Stat-row, sección de confianza y encuesta rediseñados a partir de una comparativa real (`WebFetch`) contra YNAB, Fintonic y Goodbudget — ver el informe para el detalle de qué se comparó y por qué.
@@ -377,6 +377,7 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 | V F2 0009 | 2026-07-19 | Fix: Chrome ofrecía guardar como contraseña los campos numéricos "Ahorrado"/"Objetivo" (Metas) y los 4 campos inline de Tarjetas — 2 campos numéricos adyacentes sin `autocomplete` calzan con el patrón que Chrome usa para detectar un login. Se agrega `autocomplete="off"` a los 6 inputs. Solo toca `index.html` (sin CSS/JS), no requiere bump de `CACHE_NAME`. |
 | V F2 0010 | 2026-07-19 | El backup JSON de Configuración (exportar/importar) ahora incluye `gastosComunes` y `currency` — faltaban comparado con todo lo que guarda `appState`. `gastosComunes` se restaura aparte (es un documento único, no una colección, no encaja en el helper `importCol` existente). Bump de `CACHE_NAME` (v10→v11). |
 | V F2 0011 | 2026-07-19 | Pestaña "Tarjetas de Crédito" renombrada a "Tarjetas y Préstamos" (Deudas y Préstamos del plan de comercialización resuelto sin sección nueva — los mismos campos de una tarjeta sirven para un préstamo). Fix: el botón "⚙ Filtros" de Proyección y Reportes no tenía ningún listener (solo Registros lo tenía, scopeado a sí mismo) — se centralizó en `js/main.js` para cubrir los tres. Bump de `CACHE_NAME` (v11→v12). |
+| V F2 0012 | 2026-07-22 | Botón "❓ Cómo funciona" agregado una sola vez en `#action-bar` (visible en las 12 secciones) — abre un modal genérico (`#section-help-modal`) con para-qué-sirve + paso a paso + simulacro de la sección activa. Contenido nuevo en `js/lib/section-help.js` (separado de `index.html`/`main.js`, mismo patrón que `js/lib/icons.js`), adaptado de la guía de usuario redactada en esta sesión (`MD/Guia de Usuario — Foresee 2.0.md`). Bump de `CACHE_NAME` (v12→v13). |
 
 ---
 
