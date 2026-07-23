@@ -116,16 +116,6 @@
   .story p { margin: 18px auto 0; color: var(--text-muted); font-size: 1.06rem; line-height: 1.7; max-width: 52ch; }
   .story .btn-primary, .story .btn-secondary { margin-top: 26px; }
 
-  /* ── VIDEO STEPS ─────────────────────────────────────────────────── */
-  .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-  .step-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
-  .step-card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(79,143,255,0.18); }
-  .step-card video { width: 100%; display: block; aspect-ratio: 16/10; object-fit: contain; background: var(--bg-2); }
-  .step-body { padding: 18px 20px 22px; }
-  .step-num { font-family: var(--font-display); color: var(--accent); font-weight: 700; font-size: 0.85rem; opacity: 0.8; }
-  .step-body h3 { font-size: 1.04rem; font-weight: 700; margin-top: 6px; }
-  .step-body p { margin-top: 8px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.55; }
-
   /* ── FEATURE EXPLORER ────────────────────────────────────────────── */
   .feat-explorer { display: grid; grid-template-columns: 300px 1fr; background: var(--surface); border: 1px solid var(--border); border-radius: 22px; overflow: hidden; min-height: 360px; }
   .feat-list { display: flex; flex-direction: column; border-right: 1px solid var(--border); max-height: 500px; overflow-y: auto; }
@@ -282,7 +272,6 @@
         <span>Foresee</span>
       </div>
       <nav class="nav-links">
-        <a href="#como-funciona">Cómo funciona</a>
         <a href="#funciones">Funciones</a>
         <a href="#beneficios">Beneficios</a>
         <a href="como-funciona.html">Guía completa</a>
@@ -305,7 +294,7 @@
       </div>
       <div class="hero-ctas">
         <a class="btn-primary" href="../index.html">Empezar gratis →</a>
-        <a class="btn-secondary" href="#como-funciona">Ver cómo funciona</a>
+        <a class="btn-secondary" href="#funciones">Ver cómo funciona</a>
       </div>
       <p class="hero-trust"><span>🔒</span><span>Nunca vinculamos tu cuenta bancaria a nadie — tus datos quedan en <b>tu</b> cuenta.</span></p>
     </div>
@@ -317,49 +306,10 @@
       <span class="eyebrow">Del peso a la salida</span>
       <h2>El verdadero problema no son los números</h2>
       <p>Las deudas pueden abrumar. Pero lo que de verdad pesa es sentir que no hay salida. En Foresee trazas un camino concreto, paso a paso, con resultados que ves — no una promesa vacía.</p>
-      <a class="btn-secondary" href="#como-funciona">Ver el camino →</a>
+      <a class="btn-secondary" href="#funciones">Ver el camino →</a>
     </div>
   </section>
 
-  <section id="como-funciona">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Cómo funciona</span>
-        <h2>El corazón del flujo, en 7 pasos</h2>
-        <p>Cada paso es un video real de la app, con la interfaz real — no una demo genérica. Foresee tiene 12 herramientas en total; estas son las que usarás cada semana. <a href="#funciones">Explora las 12 →</a></p>
-      </div>
-      <div class="steps-grid">
-        <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512589/Paso_1_Bienvenida_y_Gestion_de_Categoria_y_Bancos_plya2u.mp4" poster="capturas-app/capture-configuracion.png"></video>
-          <div class="step-body"><div class="step-num">01</div><h3>Construye tu universo financiero</h3><p>Configura categorías, registra bancos y define descripciones clave. Un mapa listo en minutos.</p></div>
-        </div>
-        <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512570/Paso_2_Gastos_Recurrentes_mboofi.mp4" poster="capturas-app/capture-recurrentes.png"></video>
-          <div class="step-body"><div class="step-num">02</div><h3>Automatiza tu tranquilidad</h3><p>Registra una vez tus gastos fijos. Se repiten cada mes, con aviso antes del vencimiento.</p></div>
-        </div>
-        <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512577/Paso_3_Targetas_de_Credito_krqk9f.mp4" poster="capturas-app/capture-tarjetas.png"></video>
-          <div class="step-body"><div class="step-num">03</div><h3>De monstruo a herramienta</h3><p>Registra tarjetas y préstamos, define el plazo, y recibe tu pago mensual sugerido + alertas.</p></div>
-        </div>
-        <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512590/Paso_4_Registro_Diaro_cujs8c.mp4" poster="capturas-app/capture-registros.png"></video>
-          <div class="step-body"><div class="step-num">04</div><h3>El hábito que lo cambia todo</h3><p>Registra en segundos con botones de ingreso/gasto, tabla detallada, o hablando por voz 🎙️.</p></div>
-        </div>
-        <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512588/Paso_5_Reportes_Presupuesto_y_Tablas_p0zj9b.mp4" poster="capturas-app/capture-reportes.png"></video>
-          <div class="step-body"><div class="step-num">05</div><h3>Reportes, presupuesto y tablas</h3><p>Mira porcentajes consumidos, saldos disponibles, y un historial claro para decidir.</p></div>
-        </div>
-        <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758514065/Paso_6_Proyeccion_bhrr1a.mp4" poster="capturas-app/capture-proyeccion.png"></video>
-          <div class="step-body"><div class="step-num">06</div><h3>Proyección — la esencia</h3><p>Anticipa ingresos, gastos y ahorro real. Si el mes viene corto, prioriza antes de que sea tarde.</p></div>
-        </div>
-        <div class="step-card reveal">
-          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1759005488/Gastos_comunes_kvozqf.mp4" poster="capturas-app/capture-gastos-comunes.png"></video>
-          <div class="step-body"><div class="step-num">07</div><h3>Gastos comunes</h3><p>Reúne la parte de cada persona y cierra el total, sin enredos ni planillas aparte.</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <section id="funciones">
     <div class="wrap">

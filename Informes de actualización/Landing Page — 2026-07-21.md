@@ -226,3 +226,43 @@ Se descargaron y revisaron las 3 ilustraciones de Cloudinary usadas en hero + lo
 - `landing/landing.html` con el hero y los dos bloques narrativos fundidos al fondo (sin tarjetas ni bordes), efectos genéricos removidos, listo para revisión del usuario.
 - Sigue pendiente la misma acción de rondas anteriores: publicar las reglas de Firestore en Firebase Console.
 - Pendiente de confirmar con el usuario: si "estructura/orden del contenido" se refería a algo más allá del tratamiento visual ya corregido.
+
+---
+
+## Actualización — 2026-07-22, séptima ronda: la opacidad de las imágenes de fondo era demasiado baja
+
+El usuario probó la sexta ronda en el sitio real y avisó que las imágenes "no se ven, están muy borrosas oscuras detrás de una capa poco transparente" — la combinación de opacidad 0.24 + `brightness(0.85)` + un degradado bastante opaco aplastaba demasiado la imagen, sobre todo porque las 3 ilustraciones tienen zonas oscuras (bosque nocturno, atardecer) que ese oscurecimiento adicional volvía casi negras.
+
+**Ajuste** en `.atmosphere-bg`: opacidad 0.24→0.42 (oscuro) y 0.16→0.3 (claro); filtro de `saturate(0.85) brightness(0.85)` a `saturate(1.05) brightness(1.15) contrast(1.05)` (aclara en vez de oscurecer); degradado de `.atmosphere::after` aligerado (la "ventana" central pasa de 65% transparente a 88% transparente); `background-position` ajustado a `center 30%` para encuadrar mejor la parte más luminosa/interesante de cada imagen.
+
+**Verificación:** capturas de las 3 secciones atmosféricas en oscuro y claro — las tres escenas (mujer meditando, hombre con la bola y cadena, hombre con el mapa del tesoro) se distinguen con claridad, texto legible en ambos temas, sin errores de consola, sin overflow en mobile (390px).
+
+## Estado final
+- `landing/landing.html` con las imágenes de fondo claramente visibles, texto legible, publicado.
+
+---
+
+## Actualización — 2026-07-22, octava ronda: los 7 videos del tutorial se mudan a la guía
+
+### El problema
+El usuario preguntó si los 7 videos de la sección "El corazón del flujo, en 7 pasos" eran adecuados para una landing. Se le respondió que no del todo: son videos tutoriales completos (mismo contenido que el modal de tutorial dentro de la app, confirmado por el usuario), que le piden a un visitante frío un compromiso alto (darle play a un video instructivo) antes de haber decidido probar la app — y ya generan redundancia con el explorador interactivo "Explora Foresee" y con la guía completa, que explican lo mismo con menos fricción. El usuario eligió la opción recomendada: mover los 7 videos a `como-funciona.html` como material de apoyo, y sacarlos de la landing.
+
+### Modificaciones realizadas
+
+**`landing/landing.html`** (REEMPLAZO/ELIMINACIÓN):
+- Se eliminó la sección `#como-funciona` completa (7 tarjetas de video) y su CSS asociado (`.steps-grid`, `.step-card`, `.step-body`, `.step-num`).
+- Se quitó el ítem de nav "Cómo funciona" (apuntaba a la sección eliminada; "Funciones" ya cubre el mismo destino `#funciones`).
+- Los dos links que apuntaban a `#como-funciona` (CTA secundario del hero "Ver cómo funciona", y "Ver el camino →" del bloque narrativo "Del peso a la salida") se redirigieron a `#funciones` (el explorador interactivo), que pasa a ser el único "cómo funciona" dentro de la landing.
+
+**`landing/como-funciona.html`** (INSERCIÓN):
+- Se agregó un campo `video: { src, poster }` a las 7 herramientas que tenían un video correspondiente en la landing (mapeo: Paso 1→Configuración, Paso 2→Recurrentes, Paso 3→Tarjetas, Paso 4→Registros, Paso 5→Reportes, Paso 6→Proyección, Paso 7→Gastos Comunes — Voz, Metas, Saldos, Presupuesto e Importar no tenían video propio en la landing y no lo tienen aquí tampoco).
+- El bucle de render arma un `<video controls preload="none">` con su poster (misma captura real usada como poster en la landing) y lo inserta entre el "lede" y el "Cómo se usa" de cada herramienta, dentro de una nueva clase `.tool-video`.
+
+### Verificación
+- Playwright: confirmado que `#como-funciona` ya no existe en `landing.html` (0 coincidencias), que los 2 links reapuntan a `#funciones`, y que `como-funciona.html` renderiza 7 `<video>` dentro de sus 12 secciones `.tool` sin errores de consola.
+- Captura de la sección "Registros" de la guía con su video y poster real insertados correctamente.
+
+## Estado final
+- `landing/landing.html` sin la sección de videos (más liviana, sin duplicar contenido instructivo).
+- `landing/como-funciona.html` con los 7 videos como material de apoyo, en el lugar temático que corresponde a cada uno.
+- **Pendiente de decisión del usuario** (pregunta hecha en la misma conversación, con la misma lógica que los videos): si el desplegable "Descubre cómo funciona" (paso a paso + simulacro) dentro del explorador de la landing también debería recortarse o moverse solo a la guía, dejando el explorador de la landing únicamente con ícono + descripción corta + captura.
