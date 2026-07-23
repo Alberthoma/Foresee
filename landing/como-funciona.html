@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cómo funciona Foresee — Guía de las 12 herramientas</title>
+<meta name="description" content="Guía completa de las 12 herramientas de Foresee: para qué sirve cada una, cómo se usa paso a paso, y un simulacro con datos de ejemplo." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>" />
+<style>
+  :root {
+    --bg: #0a0c11;
+    --bg-2: #11141d;
+    --surface: #171b26;
+    --surface-2: #1e2330;
+    --border: #2a3040;
+    --text: #f2f3f7;
+    --text-muted: #9aa2bd;
+    --accent: #4f8fff;
+    --warm: #f0b84f;
+    --warm-2: #d99a2b;
+    --success: #22c97a;
+    --font-display: Georgia, Cambria, "Times New Roman", serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --font-mono: "SF Mono", "Cascadia Code", Consolas, "Roboto Mono", monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f0f2f5; --bg-2: #e7eaf0; --surface: #ffffff; --surface-2: #f5f7fa;
+      --border: #dde1e9; --text: #1a1d23; --text-muted: #5a6070;
+      --accent: #1d4ed8; --warm: #a66a06; --warm-2: #8a5705; --success: #15803d;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  img { display: block; max-width: 100%; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+  p { margin: 0 0 1em; max-width: 68ch; }
+  a { color: var(--accent); }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--warm); display: inline-block; }
+
+  header.nav { position: sticky; top: 0; z-index: 30; background: color-mix(in srgb, var(--bg) 80%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; gap: 20px; max-width: 1180px; margin: 0 auto; }
+  .nav-brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; }
+  .nav-brand img { width: 30px; height: 30px; object-fit: contain; border-radius: 6px; }
+  .nav-cta { font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; background: var(--accent); color: #fff; border-radius: 999px; padding: 9px 18px; text-decoration: none; white-space: nowrap; }
+  .nav-back { font-size: 0.88rem; color: var(--text-muted); text-decoration: none; }
+  .nav-back:hover { color: var(--text); }
+
+  .hero { padding: 60px 0 48px; border-bottom: 1px solid var(--border); }
+  .hero h1 { font-size: clamp(2rem, 4.4vw, 2.9rem); line-height: 1.12; margin: 16px 0 18px; }
+  .hero p.lede { font-size: 1.08rem; color: var(--text-muted); max-width: 62ch; }
+
+  .toc-wrap { border-bottom: 1px solid var(--border); background: var(--bg-2); }
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; padding: 18px 0; }
+  .toc a {
+    display: inline-flex; align-items: center; gap: 7px; font-size: 0.82rem; font-weight: 600;
+    color: var(--text-muted); text-decoration: none; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border);
+  }
+  .toc a:hover { color: var(--text); border-color: var(--tocaccent, var(--accent)); }
+  .toc-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--tocaccent, var(--accent)); flex: none; }
+
+  main { padding: 56px 0 40px; }
+  .tool { padding: 34px 0; border-bottom: 1px solid var(--border); border-left: 3px solid var(--tool-accent, var(--accent)); padding-left: 26px; }
+  .tool:last-child { border-bottom: none; }
+  .tool-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
+  .tool-badge { width: 42px; height: 42px; border-radius: 10px; flex: none; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; background: color-mix(in srgb, var(--tool-accent, var(--accent)) 18%, transparent); }
+  .tool-eyebrow { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tool-accent, var(--accent)); font-weight: 700; display: block; margin-bottom: 2px; }
+  .tool h2 { font-size: clamp(1.35rem, 2.4vw, 1.7rem); }
+  .tool .lede { font-size: 1.02rem; color: var(--text-muted); margin: 14px 0 20px; }
+  .tool h3.sub { font-size: 0.72rem; font-family: var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 10px; }
+  .tool ol { margin: 0 0 0; padding-left: 1.3em; }
+  .tool ol li { font-size: 0.96rem; color: var(--text-muted); margin-bottom: 8px; }
+  .tool ol li:last-child { margin-bottom: 0; }
+
+  .simulacro { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin-top: 20px; position: relative; }
+  .simulacro::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 14px 14px 0 0; background: repeating-linear-gradient(90deg, var(--tool-accent, var(--accent)) 0 10px, transparent 10px 18px); }
+  .simulacro-tag { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tool-accent, var(--accent)); font-weight: 700; display: inline-block; margin-bottom: 8px; }
+  .simulacro p { margin: 0; font-size: 0.95rem; color: var(--text-muted); }
+
+  .conexiones { margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--border); }
+  .conexiones-tag { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; display: inline-block; margin-bottom: 8px; }
+  .conexiones p { margin: 0; font-size: 0.9rem; color: var(--text-muted); }
+
+  .final-cta { text-align: center; padding: 64px 0; border-top: 1px solid var(--border); background: var(--bg-2); }
+  .final-cta h2 { font-size: clamp(1.7rem, 3.4vw, 2.2rem); }
+  .final-cta p { margin: 14px auto 26px; color: var(--text-muted); }
+  .btn-primary {
+    display: inline-flex; font-weight: 600; font-size: 1rem; padding: 13px 26px; border-radius: 999px;
+    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, black));
+    color: #fff; text-decoration: none; box-shadow: 0 12px 30px color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+
+  footer { border-top: 1px solid var(--border); padding: 30px 0; }
+  .foot-inner { max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 0.85rem; color: var(--text-muted); }
+  .foot-inner a { text-decoration: underline; color: inherit; }
+
+  .to-top { position: fixed; right: 20px; bottom: 20px; width: 44px; height: 44px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: var(--text); display: flex; align-items: center; justify-content: center; text-decoration: none; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .to-top.show { opacity: 1; pointer-events: auto; }
+
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  @media (max-width: 640px) { .tool { padding-left: 18px; } }
+</style>
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto,c_scale,w_64/v1782545519/Logotipo_Foresee2_vqou8q.png" alt="Foresee" />
+        <span>Foresee</span>
+      </div>
+      <a class="nav-back" href="landing.html">← Volver a la landing</a>
+      <a class="nav-cta" href="../index.html">Empezar gratis</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Guía completa</span>
+      <h1>Cómo funciona Foresee, herramienta por herramienta</h1>
+      <p class="lede">12 secciones, cada una resolviendo una necesidad distinta pero todas conectadas entre sí. Acá va el para-qué-sirve, el paso a paso, y un simulacro con datos de ejemplo de cada una — el mismo material de apoyo que encuentras dentro de la app tocando "❓ Cómo funciona" en cualquier pestaña.</p>
+    </div>
+  </section>
+
+  <div class="toc-wrap">
+    <div class="wrap toc" id="toc">
+      <a href="#registros" style="--tocaccent:#4f8fff"><span class="toc-dot" style="--tocaccent:#4f8fff"></span>Registros</a>
+      <a href="#voz" style="--tocaccent:#4f8fff"><span class="toc-dot" style="--tocaccent:#4f8fff"></span>Voz</a>
+      <a href="#proyeccion" style="--tocaccent:#06b6d4"><span class="toc-dot" style="--tocaccent:#06b6d4"></span>Proyección</a>
+      <a href="#recurrentes" style="--tocaccent:#22c97a"><span class="toc-dot" style="--tocaccent:#22c97a"></span>Recurrentes</a>
+      <a href="#comunes" style="--tocaccent:#f59e0b"><span class="toc-dot" style="--tocaccent:#f59e0b"></span>Gastos Comunes</a>
+      <a href="#tarjetas" style="--tocaccent:#f05252"><span class="toc-dot" style="--tocaccent:#f05252"></span>Tarjetas/Préstamos</a>
+      <a href="#metas" style="--tocaccent:#4f8fff"><span class="toc-dot" style="--tocaccent:#4f8fff"></span>Metas</a>
+      <a href="#saldos" style="--tocaccent:#a78bfa"><span class="toc-dot" style="--tocaccent:#a78bfa"></span>Saldos</a>
+      <a href="#reportes" style="--tocaccent:#a78bfa"><span class="toc-dot" style="--tocaccent:#a78bfa"></span>Reportes</a>
+      <a href="#presupuesto" style="--tocaccent:#7c5cfc"><span class="toc-dot" style="--tocaccent:#7c5cfc"></span>Presupuesto</a>
+      <a href="#configuracion" style="--tocaccent:#64748b"><span class="toc-dot" style="--tocaccent:#64748b"></span>Configuración</a>
+      <a href="#importar" style="--tocaccent:#06b6d4"><span class="toc-dot" style="--tocaccent:#06b6d4"></span>Importar</a>
+    </div>
+  </div>
+
+  <main>
+    <div class="wrap" id="tools"></div>
+  </main>
+
+  <section class="final-cta">
+    <div class="wrap">
+      <h2>¿Listo para probarlo tú mismo?</h2>
+      <p>Gratis para empezar, sin vincular tu banco a nadie.</p>
+      <a class="btn-primary" href="../index.html">Empezar gratis →</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-inner">
+      <p>© 2025 Foresee Finances · <a href="mailto:albertomatosgil@gmail.com">albertomatosgil@gmail.com</a></p>
+      <p><a href="landing.html">Volver a la landing</a></p>
+    </div>
+  </footer>
+
+  <a href="#top" class="to-top" id="toTop" aria-label="Volver arriba">↑</a>
+
+  <script>
+    const TOOLS = [
+      { id: "registros", accent: "#4f8fff", emoji: "📝", title: "Registros",
+        lede: "El libro diario de ingresos y gastos reales — el corazón de toda la app. Todo lo demás (saldo, reportes, presupuesto, proyección) se construye a partir de lo que registras aquí.",
+        steps: ["Presiona “+ Registrar” para abrir la calculadora.", "Elige Ingreso o Gasto.", "Escribe el monto (admite operaciones simples como “12+8”) y una descripción.", "Elige la fecha y el banco donde ocurrió el movimiento.", "Si tienes el recibo a mano, usa “📷 Escanear recibo” en vez de escribir a mano.", "Presiona “✓ Listo” y elige la categoría — es obligatoria."],
+        simulacro: "Gastaste $45 en el supermercado con “Cuenta Corriente”: + Registrar → Gasto → 45 → “Supermercado” → hoy → Cuenta Corriente → ✓ Listo → categoría “Alimentación” → Guardar. Tu saldo corrido baja $45 al instante.",
+        conexiones: "Alimenta el Dashboard, Saldos, Reportes, Presupuesto y Proyección — la fuente de la que beben las otras 11 secciones." },
+      { id: "voz", accent: "#4f8fff", emoji: "🎙️", title: "Voz",
+        lede: "La forma más rápida de registrar algo cuando tienes las manos ocupadas: le hablas a la app en español normal y ella entiende qué fue, cuánto costó y en qué categoría entra.",
+        steps: ["Presiona el botón del micrófono (funciona mejor en Chrome de escritorio).", "Habla con naturalidad: “Gasté 15 dólares con 45 centavos en gasolina ayer”.", "Di “guardar” al terminar — detiene la grabación y dispara el análisis.", "Revisa el panel con lo que entendió — todo editable.", "Presiona “Guardar”, o “Nueva” para dictar otra."],
+        simulacro: "Dices “Pagué 20 dólares en Netflix guardar”. La app detecta el gasto, el monto $20, y asocia “Netflix” con tu categoría “Entretenimiento”. Ajustas el banco si hace falta y guardas.",
+        conexiones: "Guarda en el mismo lugar que Registros — comparte tus categorías, bancos y descripciones." },
+      { id: "proyeccion", accent: "#06b6d4", emoji: "📈", title: "Proyección",
+        lede: "Responde la pregunta que de verdad importa: si nada cambia, ¿cómo va a terminar mi mes? Combina tus transacciones reales con estimaciones tuyas y con los recurrentes que aún no llegan a su fecha.",
+        steps: ["La tabla mezcla filas reales, estimaciones tuyas y filas “virtuales” generadas de tus recurrentes.", "Presiona “+ Proyección” para agregar una estimación — guarda aparte, no en tus transacciones reales.", "Activa “Ver también el mes siguiente” si quieres mirar más adelante."],
+        simulacro: "Sabes que en dos semanas viene un gasto médico de $200. Lo agregas como proyección — si el saldo final da negativo, ya lo sabes con anticipación, no cuando sea tarde.",
+        conexiones: "Usa el mismo motor de saldo que Registros y Saldos, y lee tus Gastos Recurrentes para las filas virtuales." },
+      { id: "recurrentes", accent: "#22c97a", emoji: "🔁", title: "Gastos Recurrentes",
+        lede: "Para los pagos que se repiten mes a mes: una suscripción, el alquiler, un servicio. Los defines una sola vez y la app los registra sola cada mes, además de avisarte antes de que venzan.",
+        steps: ["Presiona “+ Añadir”.", "Completa descripción, categoría, banco, monto y el día del mes en que se cobra.", "Si es un gasto compartido, completa el campo opcional “Monto total cobrado por el banco”.", "Guarda — el resto es automático."],
+        simulacro: "Configuras “Alquiler”, $800, día de pago 1. Cada mes aparece solo en Registros “Alquiler ®”. Tres días antes, ves “Alquiler vence en 3 días”.",
+        conexiones: "Sus registros automáticos aparecen en Registros, Saldos y Reportes, y alimentan las filas proyectadas de Proyección." },
+      { id: "comunes", accent: "#f59e0b", emoji: "🤝", title: "Gastos Comunes",
+        lede: "Para cuando un gasto se paga entre varias personas — alquiler compartido, una cena de grupo — y necesitas saber cuánto le toca a cada quien y quién ya pagó.",
+        steps: ["Presiona “+ Añadir Ítem”: nombre del gasto y monto total.", "Agrega a las personas involucradas.", "Elige cómo se calcula la parte de cada una: iguales, porcentaje o monto fijo — el cálculo es en cascada.", "Cuando alguien paga, marca el día y el banco — se crea un ingreso automático en Registros."],
+        simulacro: "La renta de julio es $900, compartida con Ana y Luis. Cuando Ana transfiere su parte, marcas el pago — aparece un ingreso de $270 en Registros como “Ana - Renta julio”, sin registrarlo a mano.",
+        conexiones: "Los pagos se vuelven ingresos reales en Registros, Saldos y Reportes." },
+      { id: "tarjetas", accent: "#f05252", emoji: "💳", title: "Tarjetas y Préstamos",
+        lede: "Control de cualquier deuda con cuotas e interés — tarjetas o préstamos. Sabes cuánto te costaría pagarla en el plazo que elijas y cuánto te queda disponible antes del límite.",
+        steps: ["Presiona “+ Añadir Tarjeta”: monto adeudado, línea de crédito, día de pago, interés anual y meses para saldarla.", "Cada campo es editable directamente en la tarjeta.", "La app calcula tu Pago Mensual Estimado con el interés incluido.", "Marca “Excluir” si una tarjeta no debe contar en tus totales generales."],
+        simulacro: "$3,000 de deuda, línea de $5,000, interés 24%, 12 meses: la app sugiere ~$283 al mes. Al llegar al 80% de uso de tu línea, el Dashboard te avisa.",
+        conexiones: "Si eliminas un banco con tarjeta asociada en Configuración, esa tarjeta se elimina con él. Sus alertas aparecen en el Dashboard." },
+      { id: "metas", accent: "#4f8fff", emoji: "🎯", title: "Metas de Ahorro",
+        lede: "Convierte un objetivo de ahorro (“quiero juntar $2,000 para un viaje”) en algo visible, con progreso y fecha, en vez de una intención que se diluye con el tiempo.",
+        steps: ["Presiona “+ Nueva Meta”: nombre, monto objetivo, ahorrado (opcional) y fecha opcional.", "Cada vez que ahorres algo, actualiza el campo “Ahorrado”.", "Mira tu progreso en la barra, y cuántos días quedan."],
+        simulacro: "Meta “Fondo de emergencia”, objetivo $3,000. Apartas $150 este mes y actualizas el ahorrado — la barra pasa a 5%.",
+        conexiones: "No se conecta con ninguna otra sección — actualizar “Ahorrado” es un dato manual, no crea transacciones." },
+      { id: "saldos", accent: "#a78bfa", emoji: "🏦", title: "Saldos",
+        lede: "Cuánto dinero tienes en cada banco por separado, no solo el total general — útil si manejas varias cuentas.",
+        steps: ["Es de solo lectura, no hay nada que crear aquí.", "Ves una tarjeta por banco, con su saldo neto y sus movimientos.", "Al final, el Balance Total suma tu saldo inicial más el neto de todos los bancos."],
+        simulacro: "Transfieres $200 entre tus dos cuentas: una baja $200 y la otra sube $200 — el Balance Total no cambia, porque el dinero solo se movió de lugar.",
+        conexiones: "Usa el mismo motor de cálculo que Registros y Proyección, así que el número siempre coincide entre secciones." },
+      { id: "reportes", accent: "#a78bfa", emoji: "📊", title: "Reportes",
+        lede: "Entender de un vistazo visual hacia dónde se va tu dinero. Aquí los datos que registraste se convierten en información útil para decidir.",
+        steps: ["Filtra por mes y aparecen siete bloques: Tasa de Ahorro, Gastos por Categoría, Flujo de Caja, Evolución del Saldo, Recurrentes vs. Variables, Gasto por Día, y Comparativa vs. Mes Anterior.", "Toca una porción del gráfico de categorías para ver el detalle de cada transacción.", "Más abajo, un Resumen Anual muestra ingresos y gastos mes a mes."],
+        simulacro: "Tu tasa de ahorro fue 12%. En el gráfico, “Alimentación” es el 35% del gasto — tocas esa porción y ves tres pedidos a domicilio que explican el salto.",
+        conexiones: "Lee tus Registros y Recurrentes, y los meses archivados con “Iniciar Nuevo Mes”." },
+      { id: "presupuesto", accent: "#7c5cfc", emoji: "📐", title: "Presupuesto",
+        lede: "Ponle un límite a cuánto quieres gastar por categoría cada mes, y ve en tiempo real cuánto llevas gastado y cuánto te queda — antes de que sea tarde para frenar.",
+        steps: ["Escribe el monto que quieres presupuestar en cada categoría.", "Mira cuánto ya gastaste, cuánto te queda, y la barra que se pone amarilla al 80% y roja al 100%.", "Recibe un aviso al cruzar el 80% y el 90% — una sola vez por categoría por mes."],
+        simulacro: "Le pones $300 a “Alimentación”. A mitad de mes ya llevas $250 (83%) — la barra se pone amarilla y te avisa antes de pasarte del límite.",
+        conexiones: "Depende de las categorías de Configuración y de tus transacciones reales en Registros." },
+      { id: "configuracion", accent: "#64748b", emoji: "⚙️", title: "Configuración",
+        lede: "El centro de administración de toda tu cuenta: catálogos base que usan las demás secciones, seguridad, notificaciones, y respaldo/exportación de tus datos.",
+        steps: ["Categorías y Bancos/Cuentas — la base que usan Registros, Voz, Recurrentes, Tarjetas y Presupuesto.", "Tu nombre, contraseña, Saldo Inicial y Divisa.", "Notificaciones (navegador, correo, push) y Apariencia.", "Iniciar Nuevo Mes, Exportar/Importar, y Zona de Peligro."],
+        simulacro: "Terminas de explorar con datos de ejemplo: reinicias el período, cargas tus categorías y bancos reales, y activas notificaciones — listo para tu vida financiera real.",
+        conexiones: "Es la base de la que dependen casi todas las secciones." },
+      { id: "importar", accent: "#06b6d4", emoji: "📥", title: "Importar",
+        lede: "Para no tipear a mano decenas de movimientos de un extracto bancario: subes el archivo (o una foto) y la app hace la mayor parte del trabajo, dejándote revisar antes de confirmar.",
+        steps: ["Arrastra o selecciona el archivo — CSV, Excel, o una foto del extracto (beta).", "La app detecta el banco por el nombre del archivo o por el contenido de la foto.", "Revisa la vista previa editable — tú asignas la categoría, nunca se elige sola.", "Presiona “Guardar en Registros” — reemplaza recurrentes ya auto-registrados por el dato real."],
+        simulacro: "Subes el extracto de julio: 40 movimientos, 3 ya registrados a mano. Descartas los duplicados y guardas — “34 importadas, 3 omitidas”.",
+        conexiones: "Escribe en el mismo lugar que Registros y Voz, y coordina con Recurrentes para no duplicar." },
+    ];
+
+    const container = document.getElementById("tools");
+    TOOLS.forEach((t) => {
+      const section = document.createElement("section");
+      section.className = "tool";
+      section.id = t.id;
+      section.style.setProperty("--tool-accent", t.accent);
+
+      const head = document.createElement("div");
+      head.className = "tool-head";
+      const badge = document.createElement("div");
+      badge.className = "tool-badge";
+      badge.textContent = t.emoji;
+      const titleWrap = document.createElement("div");
+      const eyebrow = document.createElement("span");
+      eyebrow.className = "tool-eyebrow";
+      eyebrow.textContent = "Herramienta";
+      const h2 = document.createElement("h2");
+      h2.textContent = t.title;
+      titleWrap.append(eyebrow, h2);
+      head.append(badge, titleWrap);
+
+      const lede = document.createElement("p");
+      lede.className = "lede";
+      lede.textContent = t.lede;
+
+      const subHeading = document.createElement("h3");
+      subHeading.className = "sub";
+      subHeading.textContent = "Cómo se usa";
+
+      const ol = document.createElement("ol");
+      t.steps.forEach((step) => {
+        const li = document.createElement("li");
+        li.textContent = step;
+        ol.appendChild(li);
+      });
+
+      const sim = document.createElement("div");
+      sim.className = "simulacro";
+      const simTag = document.createElement("span");
+      simTag.className = "simulacro-tag";
+      simTag.textContent = "Simulacro";
+      const simP = document.createElement("p");
+      simP.textContent = t.simulacro;
+      sim.append(simTag, simP);
+
+      const con = document.createElement("div");
+      con.className = "conexiones";
+      const conTag = document.createElement("span");
+      conTag.className = "conexiones-tag";
+      conTag.textContent = "Se conecta con";
+      const conP = document.createElement("p");
+      conP.textContent = t.conexiones;
+      con.append(conTag, conP);
+
+      section.append(head, lede, subHeading, ol, sim, con);
+      container.appendChild(section);
+    });
+
+    const toTop = document.getElementById("toTop");
+    window.addEventListener("scroll", () => {
+      toTop.classList.toggle("show", window.scrollY > 600);
+    }, { passive: true });
+  </script>
+</body>
+</html>

@@ -149,3 +149,48 @@ El usuario reorganizó los archivos manualmente: `landing.html`, `land.html` y `
 - `landing/landing.html`, `landing/land.html`, `landing/capturas-app/` y `CLAUDE.md` actualizados y subidos a git, reflejando la nueva ubicación.
 - **Pendiente de acción del usuario:** publicar las reglas actualizadas de Firestore en Firebase Console (sin cambios respecto a la ronda anterior).
 - Pendiente (fuera del alcance de este informe): continuar el checklist de comercialización más allá del ítem de landing page — ver `MD/Plan Comercializacion — Foresee 2.0.md`.
+
+---
+
+## Actualización — 2026-07-22, quinta ronda: color por herramienta, "Descubre cómo funciona" y página secundaria
+
+### Contexto
+En la misma sesión se había redactado una guía de usuario nueva (`MD/Guia de Usuario — Foresee 2.0.md`, con versión HTML/PDF) explicando las 12 herramientas de la app en detalle (para-qué-sirve + paso a paso + simulacro), pensada para reemplazar el material del tutorial existente. A partir de esa guía, el usuario pidió tres cosas relacionadas:
+1. Un botón **dentro de la app** (no en la landing) que muestre ese contenido por sección — resuelto aparte como `V F2 0012` (ver informe de esa versión).
+2. Rediseñar la landing reutilizando la identidad visual de la guía.
+3. Convertir la guía en una página secundaria enlazada desde la landing.
+
+Se decidió no relanzar `landing.html` desde cero (ya había pasado por 4 rondas de ajuste con el usuario) sino aplicar la identidad de la guía de forma dirigida: color real por herramienta (los mismos valores de `--color-accent` que usa cada `#section-X` en `css/base.css`) en la única parte de la landing que mapea 1 a 1 con las 12 secciones — el explorador interactivo — más una tipografía monoespaciada para etiquetas/eyebrows, ya usada en la guía para ese mismo propósito.
+
+### Modificaciones realizadas
+
+#### 1. Color real por herramienta en "Explora Foresee" (`landing/landing.html`)
+- Cada entrada de `FEATURES` (script al final del archivo) ahora incluye `accent` con el hex exacto que esa sección tiene en la app real (ej. Tarjetas `#f05252`, Recurrentes `#22c97a`, Presupuesto `#7c5cfc`).
+- Al seleccionar una herramienta, `selectFeature()` fija `--feat-accent` en `.feat-explorer`; ese custom property tiñe el punto de color en la lista, el borde activo, el fondo del ícono, y (nuevo) el botón y panel de "Descubre cómo funciona".
+- Se agregó un punto de color (`.feat-dot`) delante de cada ítem de la lista, visible en desktop (oculto en la fila horizontal de mobile para no saturar).
+
+#### 2. Botón "Descubre cómo funciona" en el panel de detalle (INSERCIÓN)
+Debajo de la descripción corta de cada herramienta (que ya existía), un botón desplegable revela paso a paso + un simulacro con datos de ejemplo — contenido adaptado de la guía de usuario, uno por cada una de las 12 herramientas, embebido en el mismo array `FEATURES`. Se colapsa automáticamente al cambiar de herramienta. Incluye un link final ("Ver la guía completa de esta herramienta →") a la página nueva, con ancla a la sección correspondiente.
+
+#### 3. Página secundaria nueva `landing/como-funciona.html` (INSERCIÓN)
+Versión de la guía restyleada con la identidad de `landing.html` (mismo `:root` de colores navy/dorado, mismo Georgia serif, mismo nav con logo y CTA) en vez de la paleta azul-primaria que usa el Artifact original de la guía — para que se sienta parte del mismo sitio, no un documento aparte. Incluye: hero corto, un TOC de chips con punto de color por herramienta, y las 12 secciones con borde de color real, para-qué-sirve, paso a paso, simulacro y "se conecta con" — generadas por JS desde un array `TOOLS` (mismo patrón de datos que `FEATURES`, sin `innerHTML`, con `createElement`/`textContent`). CTA final a `../index.html` y footer con vuelta a la landing.
+
+#### 4. Nav actualizado (`landing/landing.html`)
+Se agregó el link "Guía completa" → `como-funciona.html`, entre "Beneficios" y "Encuesta".
+
+#### 5. Token tipográfico nuevo
+`--font-mono` agregado al `:root` de ambos archivos, aplicado a `.eyebrow` (ya existente) y a las nuevas etiquetas mono ("SIMULACRO", "HERRAMIENTA") — el mismo lenguaje de "etiqueta tipo ficha" que ya usaba la guía.
+
+### Verificación
+- Playwright, sirviendo el repo completo localmente (`python -m http.server` desde la raíz, para que las rutas relativas `../index.html` y `capturas-app/` resuelvan igual que en producción):
+  - Nav: el link "Guía completa" apunta a `como-funciona.html`.
+  - Explorador: el color (`--feat-accent`) cambia correctamente al seleccionar distintas herramientas (verificado Registros `#4f8fff` → Tarjetas `#f05252`).
+  - El botón "Descubre cómo funciona" abre/cierra el panel (`hidden` se quita/pone), los 3 pasos y el simulacro de Tarjetas se renderizan correctos, y el link de "ver guía completa" apunta a `como-funciona.html#tarjetas`.
+  - `como-funciona.html`: las 12 secciones (`.tool`) se generan sin errores de consola ni `pageerror`.
+  - Capturas en modo oscuro y claro (desktop) — el color por herramienta se ve consistente en ambos temas, buen contraste.
+  - Mobile (390px) en ambas páginas: `scrollWidth === clientWidth` en las dos, sin overflow horizontal.
+- No se tocó `firestore.rules`, ni la lógica de los formularios de leads/encuesta — siguen intactos.
+
+## Estado final
+- `landing/landing.html` (explorador con color real + desplegable) y `landing/como-funciona.html` (página nueva) listos y verificados.
+- Sigue pendiente la misma acción del usuario de rondas anteriores: publicar las reglas de Firestore en Firebase Console.
