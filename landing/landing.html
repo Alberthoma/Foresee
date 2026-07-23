@@ -117,54 +117,56 @@
   .story .btn-primary, .story .btn-secondary { margin-top: 26px; }
 
   /* ── FEATURE EXPLORER ────────────────────────────────────────────── */
-  .feat-explorer { display: grid; grid-template-columns: 300px 1fr; background: var(--surface); border: 1px solid var(--border); border-radius: 22px; overflow: hidden; min-height: 360px; }
-  .feat-list { display: flex; flex-direction: column; border-right: 1px solid var(--border); max-height: 500px; overflow-y: auto; }
-  .feat-btn { display: flex; align-items: center; gap: 12px; padding: 13px 18px; background: none; border: none; border-bottom: 1px solid var(--border); text-align: left; cursor: pointer; font-family: inherit; font-size: 0.92rem; font-weight: 600; color: var(--text-muted); transition: background 0.15s, color 0.15s; }
-  .feat-btn:last-child { border-bottom: none; }
-  .feat-btn img { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
-  .feat-btn .feat-emoji { width: 26px; font-size: 1.3rem; text-align: center; flex-shrink: 0; }
-  .feat-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot, var(--accent)); flex-shrink: 0; }
-  .feat-btn:hover { background: var(--surface-2); color: var(--text); }
-  .feat-btn.active { background: var(--surface-2); color: var(--text); box-shadow: inset 3px 0 0 var(--feat-accent, var(--accent)); }
-  .feat-btn.active .feat-emoji, .feat-btn.active img { filter: drop-shadow(0 0 0 transparent); }
+  .feat-explorer { display: grid; grid-template-columns: 580px 1fr; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: 22px; overflow: hidden; min-height: 360px; }
+
+  /* Rueda: los 12 íconos orbitan sobre un anillo que gira solo; cada
+     ícono se contra-rota a la misma velocidad para quedar siempre
+     derecho — solo cambia su posición, nunca su orientación. Íconos
+     104px (75% más grandes que los 60px originales) — el radio de la
+     órbita y el contenedor crecen a la par para que no se superpongan. */
+  .feat-wheel { position: relative; width: 550px; height: 550px; margin: 32px auto; flex-shrink: 0; }
+  .feat-wheel-glow {
+    position: absolute; inset: 10%; border-radius: 50%; z-index: 0;
+    background: radial-gradient(circle, color-mix(in srgb, var(--feat-accent, var(--accent)) 30%, transparent) 0%, transparent 72%);
+    filter: blur(4px); transition: background 0.4s ease;
+  }
+  .feat-wheel-ring { position: absolute; inset: 0; animation: wheel-spin 100s linear infinite; }
+  .feat-wheel:hover .feat-wheel-ring, .feat-wheel:hover .feat-node-icon { animation-play-state: paused; }
+  .feat-node { position: absolute; top: 50%; left: 50%; width: 0; height: 0; }
+  .feat-node-icon {
+    position: absolute; top: -52px; left: -52px; width: 104px; height: 104px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--surface); border: 1px solid var(--border); cursor: pointer;
+    animation: wheel-counter-spin 100s linear infinite;
+    transition: border-color 0.15s, transform 0.15s, background 0.15s;
+  }
+  .feat-node-icon:hover { transform: scale(1.1); border-color: var(--dot, var(--accent)); z-index: 2; }
+  .feat-node-icon.active { background: color-mix(in srgb, var(--dot, var(--accent)) 20%, var(--surface)); border-color: var(--dot, var(--accent)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--dot, var(--accent)) 30%, transparent); }
+  .feat-node-icon img { width: 52px; height: 52px; object-fit: contain; pointer-events: none; }
+  .feat-node-icon .feat-emoji { font-size: 2.6rem; pointer-events: none; }
+  @keyframes wheel-spin { to { transform: rotate(360deg); } }
+  @keyframes wheel-counter-spin { to { transform: rotate(-360deg); } }
+
   .feat-detail { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
   .feat-detail-icon { margin-bottom: 18px; width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--feat-accent, var(--accent)) 16%, transparent); }
   .feat-detail-icon img { width: 30px; height: 30px; object-fit: contain; }
   .feat-detail-icon .feat-emoji { font-size: 1.5rem; display: block; }
   .feat-detail-title { font-family: var(--font-display); font-size: 1.5rem; }
   .feat-detail-desc { margin-top: 14px; color: var(--text-muted); font-size: 1.03rem; line-height: 1.7; max-width: 52ch; }
-  .feat-howto-toggle {
-    display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; padding: 10px 18px;
-    border-radius: 999px; border: 1px solid var(--border); background: var(--surface);
-    color: var(--feat-accent, var(--accent)); font-family: inherit; font-weight: 600; font-size: 0.88rem;
-    cursor: pointer; transition: border-color 0.15s, transform 0.15s; align-self: flex-start;
-  }
-  .feat-howto-toggle:hover { border-color: var(--feat-accent, var(--accent)); }
-  .feat-howto-chevron { transition: transform 0.25s ease; }
-  .feat-howto-toggle[aria-expanded="true"] .feat-howto-chevron { transform: rotate(180deg); }
-  .feat-howto-panel {
-    margin-top: 18px; padding: 20px 22px; border-radius: 16px; background: var(--surface);
-    border: 1px solid var(--border); border-left: 3px solid var(--feat-accent, var(--accent));
-  }
-  .feat-howto-steps { margin: 0; padding-left: 1.2em; }
-  .feat-howto-steps li { font-size: 0.92rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 8px; }
-  .feat-howto-steps li:last-child { margin-bottom: 0; }
-  .feat-howto-sim { margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border); }
-  .feat-howto-tag {
-    display: block; font-family: var(--font-mono, monospace); font-size: 0.68rem; font-weight: 700;
-    letter-spacing: 0.1em; text-transform: uppercase; color: var(--feat-accent, var(--accent)); margin-bottom: 8px;
-  }
-  .feat-howto-sim p { margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-muted); }
-  .feat-howto-link { display: inline-block; margin-top: 14px; font-size: 0.86rem; font-weight: 600; color: var(--feat-accent, var(--accent)); text-decoration: none; }
+  .feat-howto-link { display: inline-block; margin-top: 18px; font-size: 0.9rem; font-weight: 600; color: var(--feat-accent, var(--accent)); text-decoration: none; }
   .feat-howto-link:hover { text-decoration: underline; }
   .feat-detail-shot { margin-top: 22px; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 20px 45px rgba(0,0,0,0.3); background: var(--bg-2); }
   .feat-detail-shot img { width: 100%; display: block; }
   @media (max-width: 760px) {
     .feat-explorer { grid-template-columns: 1fr; }
-    .feat-list { flex-direction: row; overflow-x: auto; max-height: none; border-right: none; border-bottom: 1px solid var(--border); -webkit-overflow-scrolling: touch; }
-    .feat-btn { flex-direction: column; gap: 6px; text-align: center; border-bottom: none; border-right: 1px solid var(--border); flex-shrink: 0; width: 88px; font-size: 0.7rem; padding: 14px 8px; }
-    .feat-btn .feat-dot { display: none; }
-    .feat-btn.active { box-shadow: inset 0 -3px 0 var(--feat-accent, var(--accent)); }
+    .feat-wheel {
+      width: 100%; height: auto; margin: 0; padding: 10px 4px 16px; display: flex; gap: 10px;
+      overflow-x: auto; -webkit-overflow-scrolling: touch; border-bottom: 1px solid var(--border);
+    }
+    .feat-wheel-glow { display: none; }
+    .feat-wheel-ring { position: static; display: flex; gap: 10px; animation: none; }
+    .feat-node { position: static; width: auto; height: auto; }
+    .feat-node-icon { position: static; animation: none; flex-shrink: 0; }
     .feat-detail { padding: 26px 22px; }
   }
 
@@ -254,6 +256,7 @@
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1; transform: none; transition: none; }
     html { scroll-behavior: auto; }
+    .feat-wheel-ring, .feat-node-icon { animation: none; }
   }
 
   @media (max-width: 520px) {
@@ -319,23 +322,15 @@
         <p>Toca cada una y mira, en simple, qué hace por ti.</p>
       </div>
       <div class="feat-explorer reveal">
-        <div class="feat-list" id="feat-list"></div>
+        <div class="feat-wheel" id="feat-wheel">
+          <div class="feat-wheel-glow" id="feat-wheel-glow"></div>
+          <div class="feat-wheel-ring" id="feat-wheel-ring"></div>
+        </div>
         <div class="feat-detail">
           <div class="feat-detail-icon" id="feat-detail-icon"></div>
           <h3 class="feat-detail-title" id="feat-detail-title"></h3>
           <p class="feat-detail-desc" id="feat-detail-desc"></p>
-          <button type="button" class="feat-howto-toggle" id="feat-howto-toggle" aria-expanded="false">
-            <span>Descubre cómo funciona</span>
-            <svg class="feat-howto-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6" /></svg>
-          </button>
-          <div class="feat-howto-panel" id="feat-howto-panel" hidden>
-            <ol class="feat-howto-steps" id="feat-howto-steps"></ol>
-            <div class="feat-howto-sim">
-              <span class="feat-howto-tag">Simulacro</span>
-              <p id="feat-howto-sim-text"></p>
-            </div>
-            <a class="feat-howto-link" id="feat-howto-link" href="como-funciona.html">Ver la guía completa de esta herramienta →</a>
-          </div>
+          <a class="feat-howto-link" id="feat-howto-link" href="como-funciona.html">Ver la guía completa de esta herramienta →</a>
           <div class="feat-detail-shot" id="feat-detail-shot"></div>
         </div>
       </div>
@@ -554,42 +549,18 @@
   <script>
     (function () {
       const FEATURES = [
-        { id: "registros", name: "Registros", accent: "#4f8fff", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514689/registro_mc8ed8.png", shot: "capturas-app/capture-registros.png", desc: "Anota cada ingreso y gasto con categoría, banco, fecha y descripción. Elige cómo cargarlo: con la calculadora integrada, o hablando — tú decides.",
-          steps: ["Presiona “+ Registrar” y elige Ingreso o Gasto.", "Escribe el monto y una descripción — la app sugiere las que ya usaste.", "Elige fecha y banco, o escanea el recibo y deja que la app lo complete.", "Confirma la categoría y listo — tu saldo se actualiza al instante."],
-          simulacro: "Gastaste $45 en el supermercado: Gasto → 45 → “Supermercado” → hoy → tu banco → categoría “Alimentación” → Guardar. Tu saldo baja $45 al instante, y ya cuenta en tus Reportes de este mes." },
-        { id: "voz", name: "Voz", accent: "#4f8fff", icon: "https://res.cloudinary.com/datwdagbf/image/upload/v1757199087/voz_w5ctvq.png", shot: "capturas-app/capture-voz.png", desc: "Habla y Foresee arma el registro sola. Entiende fechas, montos y categorías dichas en español natural, sin comandos fijos que memorizar.",
-          steps: ["Presiona el micrófono y habla con naturalidad.", "Di “guardar” al terminar la frase para procesarla.", "Revisa el panel con lo que entendió — todo editable antes de confirmar."],
-          simulacro: "Dices “Pagué 20 dólares en Netflix guardar”. La app detecta el gasto, el monto y la categoría “Entretenimiento” sola. Ajustas el banco si hace falta y guardas." },
-        { id: "proyeccion", name: "Proyección", accent: "#06b6d4", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514685/proyeccion_hh3xyt.png", shot: "capturas-app/capture-proyeccion.png", desc: "Mira cómo va a quedar tu saldo en los próximos días, combinando tus movimientos reales con tus gastos recurrentes. Así sabes si el mes viene corto antes de que sea tarde.",
-          steps: ["La tabla combina tus movimientos reales con tus recurrentes aún no pagados.", "Agrega tus propias estimaciones para lo que sabes que se viene.", "Mira el saldo proyectado acumulado, día a día, hasta fin de mes."],
-          simulacro: "Sabes que en dos semanas viene un gasto médico de $200. Lo agregas como proyección — si el saldo final da negativo, ya lo sabes con anticipación, no cuando sea tarde." },
-        { id: "recurrentes", name: "Gastos Recurrentes", accent: "#22c97a", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514673/gastos-recurrentes2_udrbey.png", shot: "capturas-app/capture-recurrentes.png", desc: "Carga una vez tus pagos fijos — streaming, renta, seguros — y Foresee los registra sola cada mes, con aviso antes del vencimiento.",
-          steps: ["Agrega el gasto una sola vez: monto, banco, categoría y día de pago.", "La app lo registra sola cada mes cuando llega la fecha.", "Recibe un aviso unos días antes del vencimiento."],
-          simulacro: "Configuras “Alquiler”, $800, día 1. Cada mes aparece solo en tus Registros — y tres días antes ves “Alquiler vence en 3 días”." },
-        { id: "comunes", name: "Gastos Comunes", accent: "#f59e0b", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756767509/comunes_xjuxxt.png", shot: "capturas-app/capture-gastos-comunes.png", desc: "Divide cualquier gasto compartido entre varias personas y lleva la cuenta de quién debe qué, sin armar una planilla aparte.",
-          steps: ["Crea el gasto y agrega a las personas involucradas.", "Elige cómo se reparte cada parte: iguales, porcentaje o monto fijo.", "Cuando alguien paga, márcalo — se registra como ingreso real."],
-          simulacro: "La renta de $900 la compartes con dos roommates. A cada uno le asignas su parte; cuando te pagan, marcas el pago y aparece como ingreso en tus Registros — sin planilla aparte." },
-        { id: "tarjetas", name: "Tarjetas y Préstamos", accent: "#f05252", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514697/tarjetas2_z3jokx.png", shot: "capturas-app/capture-tarjetas.png", desc: "Controla el saldo de tus tarjetas y préstamos, con alerta automática al acercarte al límite y el pago mensual sugerido para salir de la deuda a tiempo.",
-          steps: ["Carga deuda, línea de crédito, interés anual y en cuántos meses quieres saldarla.", "Foresee calcula tu cuota mensual estimada.", "Recibe alerta apenas uses el 80% de tu línea."],
-          simulacro: "$3,000 de deuda, interés 24%, 12 meses: la app sugiere ~$283 al mes. Si tu deuda sube y usas el 82% de tu línea, te avisa apenas entres a la app." },
-        { id: "metas", name: "Metas de Ahorro", accent: "#4f8fff", icon: "https://res.cloudinary.com/datwdagbf/image/upload/v1756514663/ahorro_vhwhw7.png", shot: "capturas-app/capture-metas.png", desc: "Define una meta — un viaje, un auto, un fondo de emergencia — con monto y fecha, y mira tu progreso en una barra que se llena a medida que ahorras.",
-          steps: ["Crea la meta con nombre, monto objetivo y fecha opcional.", "Cada vez que ahorres algo, actualiza el monto ahorrado.", "Mira tu progreso en una barra que se llena hasta el 100%."],
-          simulacro: "Meta “Fondo de emergencia”, objetivo $3,000. Apartas $150 este mes y actualizas el ahorrado — la barra pasa a 5%, y sigue subiendo cada mes que aportas." },
-        { id: "saldos", name: "Saldos", accent: "#a78bfa", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514692/saldos_lntcfz.png", shot: "capturas-app/capture-saldos.png", desc: "Un vistazo al saldo real de cada uno de tus bancos y al total combinado, siempre actualizado con cada movimiento que registras.",
-          steps: ["Es de solo lectura — el saldo se calcula solo con lo que ya registraste.", "Ves una tarjeta por banco, con su saldo neto y sus movimientos.", "Al final, el Balance Total suma todo."],
-          simulacro: "Transfieres $200 entre tus dos cuentas: una baja $200 y la otra sube $200 — el Balance Total no cambia, porque el dinero solo se movió de lugar." },
-        { id: "reportes", name: "Reportes", accent: "#a78bfa", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514690/reportes_qisw3e.png", shot: "capturas-app/capture-reportes.png", desc: "Gráficos claros de en qué se te va el dinero: por categoría, por mes, y la evolución de tu saldo en el tiempo.",
-          steps: ["Filtra por mes y mira tu tasa de ahorro, gastos por categoría y flujo de caja.", "Toca una categoría en el gráfico para ver el detalle de cada transacción.", "Compara contra el mes anterior y contra el año en curso."],
-          simulacro: "Tu tasa de ahorro fue 12%. En el gráfico, “Alimentación” es el 35% del gasto — más de lo esperado. Tocas esa porción y ves tres pedidos a domicilio que explican el salto." },
-        { id: "presupuesto", name: "Presupuesto", accent: "#7c5cfc", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514684/presupuesto_r7qkr9.png", shot: "capturas-app/capture-presupuesto.png", desc: "Pon un límite de gasto por categoría y mira, en tiempo real, cuánto llevas consumido de cada una — antes de pasarte.",
-          steps: ["Escribe el límite mensual que quieres por categoría.", "Mira en tiempo real cuánto llevas gastado y cuánto te queda.", "Recibe aviso al cruzar el 80% y el 90% del límite."],
-          simulacro: "Le pones $300 a “Alimentación”. A mitad de mes ya llevas $250 (83%) — la barra se pone amarilla y te avisa antes de que te pases del límite." },
-        { id: "configuracion", name: "Configuración", accent: "#64748b", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514668/configuracion_puo2ap.png", shot: "capturas-app/capture-configuracion.png", desc: "Personaliza tus categorías, bancos y moneda, activa o desactiva notificaciones, y exporta una copia de tus datos cuando quieras.",
-          steps: ["Carga tus categorías, bancos y saldo inicial real.", "Activa notificaciones y elige tu divisa.", "Exporta un respaldo completo en JSON, PDF o Excel cuando quieras."],
-          simulacro: "Terminas de explorar con datos de ejemplo: reinicias el período, cargas tus categorías y bancos reales, y activas notificaciones — listo para tu vida financiera real." },
-        { id: "importar", name: "Importar", accent: "#06b6d4", emoji: "⬇", shot: "capturas-app/capture-importar.png", desc: "Sube el CSV o Excel de tu banco, o hasta una foto del extracto o de un recibo — Foresee arma los registros sola y detecta duplicados.",
-          steps: ["Arrastra el CSV, Excel o una foto del extracto.", "Revisa la vista previa editable — tú asignas la categoría.", "Guarda en Registros — la app descarta los duplicados sola."],
-          simulacro: "Subes el extracto de julio: 40 movimientos, 3 ya registrados a mano. Descartas los duplicados y guardas — “34 importadas, 3 omitidas” y ya están en tus Registros." },
+        { id: "registros", name: "Registros", accent: "#4f8fff", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514689/registro_mc8ed8.png", shot: "capturas-app/capture-registros.png", desc: "Anota cada ingreso y gasto con categoría, banco, fecha y descripción. Elige cómo cargarlo: con la calculadora integrada, o hablando — tú decides." },
+        { id: "voz", name: "Voz", accent: "#4f8fff", icon: "https://res.cloudinary.com/datwdagbf/image/upload/v1757199087/voz_w5ctvq.png", shot: "capturas-app/capture-voz.png", desc: "Habla y Foresee arma el registro sola. Entiende fechas, montos y categorías dichas en español natural, sin comandos fijos que memorizar." },
+        { id: "proyeccion", name: "Proyección", accent: "#06b6d4", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514685/proyeccion_hh3xyt.png", shot: "capturas-app/capture-proyeccion.png", desc: "Mira cómo va a quedar tu saldo en los próximos días, combinando tus movimientos reales con tus gastos recurrentes. Así sabes si el mes viene corto antes de que sea tarde." },
+        { id: "recurrentes", name: "Gastos Recurrentes", accent: "#22c97a", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514673/gastos-recurrentes2_udrbey.png", shot: "capturas-app/capture-recurrentes.png", desc: "Carga una vez tus pagos fijos — streaming, renta, seguros — y Foresee los registra sola cada mes, con aviso antes del vencimiento." },
+        { id: "comunes", name: "Gastos Comunes", accent: "#f59e0b", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756767509/comunes_xjuxxt.png", shot: "capturas-app/capture-gastos-comunes.png", desc: "Divide cualquier gasto compartido entre varias personas y lleva la cuenta de quién debe qué, sin armar una planilla aparte." },
+        { id: "tarjetas", name: "Tarjetas y Préstamos", accent: "#f05252", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514697/tarjetas2_z3jokx.png", shot: "capturas-app/capture-tarjetas.png", desc: "Controla el saldo de tus tarjetas y préstamos, con alerta automática al acercarte al límite y el pago mensual sugerido para salir de la deuda a tiempo." },
+        { id: "metas", name: "Metas de Ahorro", accent: "#4f8fff", icon: "https://res.cloudinary.com/datwdagbf/image/upload/v1756514663/ahorro_vhwhw7.png", shot: "capturas-app/capture-metas.png", desc: "Define una meta — un viaje, un auto, un fondo de emergencia — con monto y fecha, y mira tu progreso en una barra que se llena a medida que ahorras." },
+        { id: "saldos", name: "Saldos", accent: "#a78bfa", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514692/saldos_lntcfz.png", shot: "capturas-app/capture-saldos.png", desc: "Un vistazo al saldo real de cada uno de tus bancos y al total combinado, siempre actualizado con cada movimiento que registras." },
+        { id: "reportes", name: "Reportes", accent: "#a78bfa", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514690/reportes_qisw3e.png", shot: "capturas-app/capture-reportes.png", desc: "Gráficos claros de en qué se te va el dinero: por categoría, por mes, y la evolución de tu saldo en el tiempo." },
+        { id: "presupuesto", name: "Presupuesto", accent: "#7c5cfc", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514684/presupuesto_r7qkr9.png", shot: "capturas-app/capture-presupuesto.png", desc: "Pon un límite de gasto por categoría y mira, en tiempo real, cuánto llevas consumido de cada una — antes de pasarte." },
+        { id: "configuracion", name: "Configuración", accent: "#64748b", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514668/configuracion_puo2ap.png", shot: "capturas-app/capture-configuracion.png", desc: "Personaliza tus categorías, bancos y moneda, activa o desactiva notificaciones, y exporta una copia de tus datos cuando quieras." },
+        { id: "importar", name: "Importar", accent: "#06b6d4", emoji: "⬇", shot: "capturas-app/capture-importar.png", desc: "Sube el CSV o Excel de tu banco, o hasta una foto del extracto o de un recibo — Foresee arma los registros sola y detecta duplicados." },
       ];
 
       function iconHTML(f) {
@@ -597,58 +568,45 @@
       }
 
       const explorer = document.querySelector(".feat-explorer");
-      const list = document.getElementById("feat-list");
+      const wheelRing = document.getElementById("feat-wheel-ring");
       const detailIcon = document.getElementById("feat-detail-icon");
       const detailTitle = document.getElementById("feat-detail-title");
       const detailDesc = document.getElementById("feat-detail-desc");
       const detailShot = document.getElementById("feat-detail-shot");
-      const howtoToggle = document.getElementById("feat-howto-toggle");
-      const howtoPanel = document.getElementById("feat-howto-panel");
-      const howtoSteps = document.getElementById("feat-howto-steps");
-      const howtoSimText = document.getElementById("feat-howto-sim-text");
       const howtoLink = document.getElementById("feat-howto-link");
 
-      function closeHowto() {
-        howtoPanel.hidden = true;
-        howtoToggle.setAttribute("aria-expanded", "false");
-      }
-
-      function selectFeature(f, btn) {
-        list.querySelectorAll(".feat-btn").forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
+      function selectFeature(f, iconEl) {
+        wheelRing.querySelectorAll(".feat-node-icon").forEach((b) => b.classList.remove("active"));
+        iconEl.classList.add("active");
         explorer.style.setProperty("--feat-accent", f.accent);
         detailIcon.innerHTML = iconHTML(f);
         detailTitle.textContent = f.name;
         detailDesc.textContent = f.desc;
         detailShot.innerHTML = `<img src="${f.shot}" alt="Captura real de la sección ${f.name} en Foresee" />`;
-
-        howtoSteps.textContent = "";
-        f.steps.forEach((step) => {
-          const li = document.createElement("li");
-          li.textContent = step;
-          howtoSteps.appendChild(li);
-        });
-        howtoSimText.textContent = f.simulacro;
         howtoLink.href = `como-funciona.html#${f.id}`;
-        closeHowto();
       }
 
-      howtoToggle.addEventListener("click", () => {
-        const isOpen = howtoToggle.getAttribute("aria-expanded") === "true";
-        howtoPanel.hidden = isOpen;
-        howtoToggle.setAttribute("aria-expanded", isOpen ? "false" : "true");
-      });
-
+      const ORBIT_RADIUS = 220;
       FEATURES.forEach((f, i) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "feat-btn" + (i === 0 ? " active" : "");
-        btn.innerHTML = `<span class="feat-dot" style="--dot:${f.accent}"></span>` + iconHTML(f) + `<span>${f.name}</span>`;
-        btn.addEventListener("click", () => selectFeature(f, btn));
-        list.appendChild(btn);
+        const angle = (360 / FEATURES.length) * i;
+        const node = document.createElement("div");
+        node.className = "feat-node";
+        node.style.transform = `rotate(${angle}deg) translate(${ORBIT_RADIUS}px) rotate(${-angle}deg)`;
+
+        const iconEl = document.createElement("button");
+        iconEl.type = "button";
+        iconEl.className = "feat-node-icon" + (i === 0 ? " active" : "");
+        iconEl.style.setProperty("--dot", f.accent);
+        iconEl.title = f.name;
+        iconEl.setAttribute("aria-label", f.name);
+        iconEl.innerHTML = iconHTML(f);
+        iconEl.addEventListener("click", () => selectFeature(f, iconEl));
+
+        node.appendChild(iconEl);
+        wheelRing.appendChild(node);
       });
 
-      selectFeature(FEATURES[0], list.firstElementChild);
+      selectFeature(FEATURES[0], wheelRing.querySelector(".feat-node-icon"));
     })();
 
     (function () {

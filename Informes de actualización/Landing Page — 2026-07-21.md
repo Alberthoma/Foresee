@@ -266,3 +266,49 @@ El usuario preguntó si los 7 videos de la sección "El corazón del flujo, en 7
 - `landing/landing.html` sin la sección de videos (más liviana, sin duplicar contenido instructivo).
 - `landing/como-funciona.html` con los 7 videos como material de apoyo, en el lugar temático que corresponde a cada uno.
 - **Pendiente de decisión del usuario** (pregunta hecha en la misma conversación, con la misma lógica que los videos): si el desplegable "Descubre cómo funciona" (paso a paso + simulacro) dentro del explorador de la landing también debería recortarse o moverse solo a la guía, dejando el explorador de la landing únicamente con ícono + descripción corta + captura.
+
+---
+
+## Actualización — 2026-07-22, novena ronda: se recorta el desplegable del explorador y se agrega una rueda giratoria
+
+### Recorte del desplegable "Descubre cómo funciona"
+El usuario aprobó aplicar al desplegable la misma lógica que a los videos (misma conversación, pregunta simétrica): es contenido instructivo (paso a paso + simulacro) que ya vive completo en `como-funciona.html`, y en la landing solo agregaba fricción/redundancia. Se quitó por completo del panel de detalle del explorador:
+- **`landing/landing.html`**: se eliminó el botón `feat-howto-toggle`, el panel `feat-howto-panel` (lista de pasos + simulacro) y su CSS asociado. En su lugar queda un link simple y siempre visible, "Ver la guía completa de esta herramienta →", con el mismo color de acento de la herramienta activa, apuntando a `como-funciona.html#<id>`.
+- Se limpiaron los campos `steps`/`simulacro` del array `FEATURES` (ya no los usa ningún elemento del DOM).
+
+### Rueda giratoria en vez de la lista vertical
+El usuario pidió, además, hacer los íconos de las 12 herramientas más grandes y "artísticos" — con dos opciones posibles (collage disperso o rueda girando lento); eligió la rueda, reemplazando la lista vertical de botones.
+
+**Implementación** (`landing/landing.html`):
+- Los 12 íconos (60px, el doble que antes) se distribuyen en un círculo de 300px mediante `transform: rotate(ángulo) translate(radio) rotate(-ángulo)` por nodo — la técnica estándar de "órbita" en CSS.
+- El anillo completo (`.feat-wheel-ring`) gira sin parar con una animación CSS de 100s por vuelta (`linear`, `infinite`); cada ícono se contra-rota a la misma velocidad (`wheel-counter-spin`, dirección opuesta, misma duración) para quedar siempre derecho — solo cambia de posición, nunca de orientación.
+- Un resplandor de fondo (`.feat-wheel-glow`) reutiliza `--feat-accent` (el color real de la herramienta activa), reforzando el mismo lenguaje visual ya usado en el resto de la página.
+- **Al pasar el mouse por la rueda, la animación se pausa por completo** (anillo + contra-rotación) — así se puede apuntar y hacer clic con precisión sin perseguir un ícono en movimiento; sigue girando sola en cuanto se aleja el mouse.
+- En mobile (≤760px) la rueda se abandona por completo: los mismos 12 botones se reordenan en una fila horizontal con scroll, sin animación — un carrusel circular no es un patrón usable en pantallas táctiles chicas.
+- Respeta `prefers-reduced-motion: reduce` (ambas animaciones se desactivan).
+
+### Verificación
+- Playwright: 12 nodos en el DOM: clic en un nodo (ej. "Gastos Recurrentes") actualiza correctamente el ícono activo, el color de acento (glow + anillo + link), el título/descripción/captura del panel de detalle.
+- Confirmado con `getComputedStyle` que `animation-play-state` pasa a `paused` al mover el mouse sobre un nodo y vuelve a `running` al salir.
+- Capturas en oscuro, claro y mobile (390px) — la rueda se ve y funciona en los tres casos; en mobile cae correctamente al listado horizontal (12 nodos, sin overflow).
+- Sin errores de consola ni `pageerror` en ninguna prueba. Se verificó que no quedaran referencias sueltas a las clases/ids eliminados (`feat-list`, `feat-btn`, `feat-dot`, `feat-howto-*`) — cero coincidencias.
+
+## Estado final
+- `landing/landing.html` con el explorador recortado a lo esencial (ícono + descripción + captura + link a la guía) y una rueda giratoria interactiva en vez de la lista plana, publicado.
+
+---
+
+## Actualización — 2026-07-22, décima ronda: íconos de la rueda un 75% más grandes
+
+El usuario pidió agrandar los íconos de la rueda un 75% más. Ajustes en `landing/landing.html`:
+- `.feat-node-icon`: 60px → 104px (el 75% más), con la imagen/emoji interior escalado en la misma proporción (30px→52px / 1.5rem→2.6rem).
+- Para que los 12 íconos no se superpongan al ser más grandes, se recalculó la geometría: radio de la órbita (`ORBIT_RADIUS` en JS) de 120px a 220px, y el contenedor `.feat-wheel` de 300px a 550px — la columna del explorador (`grid-template-columns`) pasó de 340px a 580px para darle espacio.
+- El resplandor de fondo (`.feat-wheel-glow`) y el fallback de mobile (fila horizontal) no necesitaron cambios — ambos son proporcionales/independientes del tamaño fijo.
+
+**Verificación:** Playwright, oscuro y mobile — los 12 íconos se ven claramente más grandes, sin superposición entre ellos, sin overflow horizontal en mobile (390px), sin errores de consola.
+
+**Nota de flujo de trabajo:** a partir de esta ronda, el usuario pidió que durante los ajustes de la landing solo se documente cada cambio (como este) sin hacer commit/push automático — se publica todo junto cuando el usuario lo indique explícitamente.
+
+## Estado final
+- `landing/landing.html` con los íconos de la rueda agrandados, verificado localmente.
+- **Pendiente de publicar** (commit + push) — a la espera de la instrucción explícita del usuario, según lo acordado en esta ronda.
