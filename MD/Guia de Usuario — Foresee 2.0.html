@@ -1,0 +1,717 @@
+<title>Guía de Usuario — Foresee 2.0</title>
+<style>
+  :root{
+    --color-bg:#0f1117; --color-surface:#1a1d27; --color-surface-2:#22253a;
+    --color-border:#2a2d3a; --color-text:#e8eaf0; --color-text-muted:#bcbfd2;
+    --color-primary:#4f8fff; --color-success:#22c97a; --color-warning:#f59e0b; --color-danger:#f05252;
+    --font-display:Georgia,'Iowan Old Style','Apple Garamond',Baskerville,'Times New Roman',serif;
+    --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    --font-mono:'SF Mono','Cascadia Code',Consolas,'Roboto Mono',monospace;
+    --fs-hero:clamp(2.1rem,5vw,3.3rem);
+    --fs-h2:clamp(1.5rem,2.6vw,1.95rem);
+    --fs-h3:1.28rem;
+    --fs-lede:1.14rem;
+    --fs-tag:.7rem;
+    --content-w:700px;
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){ :root{
+    --color-bg:#0f1117; --color-surface:#1a1d27; --color-surface-2:#22253a;
+    --color-border:#2a2d3a; --color-text:#e8eaf0; --color-text-muted:#bcbfd2;
+    --color-primary:#4f8fff;
+  }}
+  @media (prefers-color-scheme: light){ :root{
+    --color-bg:#f0f2f5; --color-surface:#ffffff; --color-surface-2:#f5f7fa;
+    --color-border:#dde1e9; --color-text:#1a1d23; --color-text-muted:#5a6070;
+    --color-primary:#1d4ed8; --color-success:#15803d; --color-warning:#b45309; --color-danger:#b91c1c;
+  }}
+  :root[data-theme="dark"]{
+    --color-bg:#0f1117; --color-surface:#1a1d27; --color-surface-2:#22253a;
+    --color-border:#2a2d3a; --color-text:#e8eaf0; --color-text-muted:#bcbfd2;
+    --color-primary:#4f8fff; --color-success:#22c97a; --color-warning:#f59e0b; --color-danger:#f05252;
+  }
+  :root[data-theme="light"]{
+    --color-bg:#f0f2f5; --color-surface:#ffffff; --color-surface-2:#f5f7fa;
+    --color-border:#dde1e9; --color-text:#1a1d23; --color-text-muted:#5a6070;
+    --color-primary:#1d4ed8; --color-success:#15803d; --color-warning:#b45309; --color-danger:#b91c1c;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:.01ms !important; transition-duration:.01ms !important;} }
+
+  body{margin:0;}
+  .page{
+    background:var(--color-bg); color:var(--color-text); font-family:var(--font-body);
+    font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--color-primary);}
+  h1,h2,h3{font-family:var(--font-display); text-wrap:balance; font-weight:700; margin:0;}
+  p{margin:0 0 1em; max-width:65ch;}
+  ul,ol{margin:0 0 1.1em; padding-left:1.35em;}
+  li{margin-bottom:.5em; max-width:62ch;}
+  li:last-child{margin-bottom:0;}
+  strong{color:var(--color-text); font-weight:700;}
+
+  /* ---------- HERO / BIENVENIDA ---------- */
+  .hero{
+    padding:4.5rem 1.5rem 3.5rem;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, color-mix(in srgb, var(--color-primary) 20%, transparent), transparent),
+      var(--color-bg);
+    border-bottom:1px solid var(--color-border);
+  }
+  .hero-inner{max-width:var(--content-w); margin:0 auto;}
+  .eyebrow{
+    font-family:var(--font-mono); font-size:var(--fs-tag); letter-spacing:.14em; text-transform:uppercase;
+    color:var(--color-primary); font-weight:600; margin-bottom:1rem; display:block;
+  }
+  .hero h1{font-size:var(--fs-hero); line-height:1.08; margin-bottom:1.1rem;}
+  .hero .lede{font-size:var(--fs-lede); color:var(--color-text-muted); max-width:60ch; margin-bottom:0;}
+
+  .intro-block{max-width:var(--content-w); margin:0 auto; padding:2.8rem 1.5rem 0;}
+  .intro-block h2{font-size:var(--fs-h2); margin-bottom:.9rem;}
+
+  .benefits{
+    max-width:var(--content-w); margin:2.6rem auto 0; padding:0 1.5rem;
+    display:grid; grid-template-columns:repeat(2,1fr); gap:.9rem;
+  }
+  @media (max-width:560px){ .benefits{grid-template-columns:1fr;} }
+  .benefit-card{
+    background:var(--color-surface); border:1px solid var(--color-border);
+    border-left:3px solid var(--bcolor,var(--color-primary));
+    border-radius:10px; padding:1rem 1.1rem; break-inside:avoid;
+  }
+  .benefit-card h3{font-family:var(--font-body); font-size:.98rem; font-weight:700; margin-bottom:.3rem;}
+  .benefit-card p{font-size:.9rem; color:var(--color-text-muted); margin:0;}
+
+  /* ---------- LAYOUT: TOC + CONTENT ---------- */
+  .layout{
+    max-width:1180px; margin:0 auto; padding:3.2rem 1.5rem 5rem;
+    display:grid; grid-template-columns:230px minmax(0,var(--content-w)); gap:3.6rem; justify-content:center;
+  }
+  @media (max-width:960px){ .layout{grid-template-columns:1fr; padding-top:1.6rem;} .toc-desktop{display:none;} }
+
+  .toc-desktop{position:sticky; top:2.2rem; align-self:start; max-height:calc(100vh - 4rem); overflow-y:auto;}
+  .toc-desktop .toc-title{font-family:var(--font-mono); font-size:var(--fs-tag); letter-spacing:.1em; text-transform:uppercase; color:var(--color-text-muted); margin-bottom:.9rem; display:block;}
+  .toc-desktop ul{list-style:none; margin:0; padding:0;}
+  .toc-desktop li{margin:0;}
+  .toc-desktop a{
+    display:flex; align-items:center; gap:.55rem; padding:.4rem .5rem; border-radius:7px;
+    color:var(--color-text-muted); text-decoration:none; font-size:.87rem; line-height:1.3;
+  }
+  .toc-desktop a:hover{background:var(--color-surface); color:var(--color-text);}
+  .toc-desktop a.active{background:var(--color-surface-2); color:var(--color-text); font-weight:600;}
+  .toc-dot{width:8px; height:8px; border-radius:50%; flex:none; background:var(--dot,var(--color-primary));}
+
+  .toc-mobile{display:none;}
+  @media (max-width:960px){
+    .toc-mobile{display:block; max-width:var(--content-w); margin:0 auto; padding:0 1.5rem 2rem;}
+    .toc-mobile summary{
+      cursor:pointer; font-family:var(--font-mono); font-size:.8rem; letter-spacing:.08em; text-transform:uppercase;
+      color:var(--color-primary); padding:.8rem 1rem; background:var(--color-surface); border:1px solid var(--color-border); border-radius:10px;
+    }
+    .toc-mobile[open] summary{border-radius:10px 10px 0 0;}
+    .toc-mobile ul{list-style:none; margin:0; padding:.5rem; border:1px solid var(--color-border); border-top:none; border-radius:0 0 10px 10px; background:var(--color-surface);}
+    .toc-mobile a{display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; color:var(--color-text-muted); text-decoration:none; font-size:.88rem; border-radius:6px;}
+    .toc-mobile a:hover{background:var(--color-surface-2);}
+  }
+
+  .content{min-width:0;}
+  .content > section{margin-bottom:3.4rem;}
+  .content > section:last-child{margin-bottom:0;}
+
+  section.plain h2{font-size:var(--fs-h2); margin-bottom:1rem;}
+  section.plain h3{font-size:1.05rem; margin:1.4rem 0 .5rem;}
+
+  .step-list{counter-reset:step;}
+
+  .tip{
+    background:var(--color-surface-2); border:1px solid var(--color-border); border-radius:10px;
+    padding:.9rem 1.1rem; font-size:.92rem; color:var(--color-text-muted); margin:1.2rem 0; break-inside:avoid;
+  }
+  .tip strong{color:var(--color-text);}
+
+  /* ---------- TOOL SECTIONS (1-12) ---------- */
+  .tool{
+    border-left:3px solid var(--accent);
+    padding-left:1.5rem;
+  }
+  @media (max-width:560px){ .tool{padding-left:1.1rem;} }
+  .tool-head{display:flex; align-items:flex-start; gap:.85rem; margin-bottom:.5rem;}
+  .tool-badge{
+    width:2.5rem; height:2.5rem; border-radius:9px; flex:none;
+    background:color-mix(in srgb, var(--accent) 16%, transparent);
+    display:flex; align-items:center; justify-content:center; font-size:1.25rem;
+  }
+  .tool-eyebrow{font-family:var(--font-mono); font-size:var(--fs-tag); letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:700; display:block; margin-bottom:.15rem;}
+  .tool h2{font-size:var(--fs-h2);}
+  .tool .lede{font-size:1.02rem; color:var(--color-text-muted); margin:.9rem 0 1.3rem;}
+  .tool h3.subhead{font-size:.78rem; font-family:var(--font-mono); letter-spacing:.1em; text-transform:uppercase; color:var(--color-text-muted); margin:1.6rem 0 .7rem;}
+
+  .simulacro{
+    background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius);
+    padding:1.3rem 1.4rem; margin-top:1.4rem; position:relative; break-inside:avoid;
+  }
+  .simulacro::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:3px; border-radius:var(--radius) var(--radius) 0 0;
+    background:repeating-linear-gradient(90deg, var(--accent) 0 10px, transparent 10px 18px);
+  }
+  .simulacro-tag{
+    font-family:var(--font-mono); font-size:var(--fs-tag); letter-spacing:.12em; text-transform:uppercase;
+    color:var(--accent); font-weight:700; display:inline-block; margin-bottom:.55rem;
+  }
+  .simulacro p{margin:0; font-size:.96rem;}
+
+  .conexiones{margin-top:1.3rem; padding-top:1.1rem; border-top:1px dashed var(--color-border);}
+  .conexiones-tag{
+    font-family:var(--font-mono); font-size:var(--fs-tag); letter-spacing:.12em; text-transform:uppercase;
+    color:var(--color-text-muted); font-weight:700; display:inline-block; margin-bottom:.5rem;
+  }
+  .conexiones p{margin:0; font-size:.92rem; color:var(--color-text-muted);}
+
+  code.ui{
+    font-family:var(--font-mono); font-size:.85em; background:var(--color-surface-2);
+    border:1px solid var(--color-border); border-radius:5px; padding:.05em .4em;
+  }
+
+  /* dashboard cards */
+  .dash-cards{display:grid; grid-template-columns:repeat(3,1fr); gap:.8rem; margin:1.2rem 0 1.4rem;}
+  @media (max-width:560px){ .dash-cards{grid-template-columns:1fr;} }
+  .dash-card{background:var(--color-surface); border:1px solid var(--color-border); border-radius:10px; padding:.95rem 1rem;}
+  .dash-card b{display:block; font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; color:var(--color-text-muted); font-family:var(--font-mono); margin-bottom:.3rem;}
+  .dash-card span{font-size:.9rem;}
+
+  /* closing */
+  .closing{
+    max-width:var(--content-w); margin:0 auto; padding:0 1.5rem 5rem;
+  }
+  .closing h2{font-size:var(--fs-h2); margin-bottom:1rem;}
+  .routine{list-style:none; margin:0; padding:0; display:grid; gap:.7rem;}
+  .routine li{
+    background:var(--color-surface); border:1px solid var(--color-border); border-radius:10px;
+    padding:.9rem 1.1rem; margin:0; font-size:.95rem;
+  }
+  .routine b{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--color-primary); display:block; margin-bottom:.3rem;}
+  .closing .final{margin-top:1.6rem; font-size:1.02rem; color:var(--color-text-muted);}
+
+  .to-top{
+    position:fixed; right:1.3rem; bottom:1.3rem; width:2.7rem; height:2.7rem; border-radius:50%;
+    background:var(--color-surface); border:1px solid var(--color-border); color:var(--color-text);
+    display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.1rem;
+    box-shadow:0 4px 14px rgba(0,0,0,.25); opacity:0; pointer-events:none; transition:opacity .2s;
+  }
+  .to-top.show{opacity:1; pointer-events:auto;}
+
+  footer.pagefoot{
+    max-width:var(--content-w); margin:0 auto; padding:2rem 1.5rem 3.5rem; color:var(--color-text-muted);
+    font-size:.82rem; border-top:1px solid var(--color-border);
+  }
+
+  @media print{
+    .toc-desktop, .toc-mobile, .to-top{display:none !important;}
+    .layout{grid-template-columns:1fr; padding-top:0;}
+    .page{background:#fff; color:#1a1d23;}
+    .hero{background:#fff; border-bottom:1px solid #dde1e9;}
+    .eyebrow, .tool-eyebrow, .simulacro-tag, .conexiones-tag{color:#1d4ed8 !important;}
+    .benefit-card, .dash-card, .simulacro, .routine li, .tip{background:#f5f7fa; border-color:#dde1e9;}
+    .tool, section, .benefit-card, .simulacro{break-inside:avoid;}
+    h2{break-after:avoid;}
+    a{color:#1d4ed8;}
+  }
+</style>
+
+<div class="page">
+
+  <header class="hero" id="bienvenida">
+    <div class="hero-inner">
+      <span class="eyebrow">Guía de usuario · Foresee 2.0</span>
+      <h1>Toma el control de tu dinero, paso a paso</h1>
+      <p class="lede">Foresee no es una app para "anotar gastos". Es un sistema completo para que sepas, en cualquier momento del mes, tres cosas que la mayoría de las personas no sabe con certeza: cuánto dinero tienes de verdad, hacia dónde se está yendo, y qué va a pasar con tu saldo antes de que pase.</p>
+    </div>
+
+    <div class="intro-block">
+      <h2>Qué vas a encontrar dentro</h2>
+      <p>La app está organizada en 12 herramientas (pestañas), cada una resolviendo una necesidad distinta pero todas conectadas entre sí: registran tus movimientos por texto, por voz o por foto; controlan tus deudas y tus suscripciones antes de que te tomen por sorpresa; reparten gastos compartidos sin discusiones; proyectan tu futuro cercano; y traducen todo eso en gráficos que se entienden de un vistazo. Todo vive en un solo lugar, sincronizado en tiempo real, accesible desde el celular como si fuera una app instalada.</p>
+      <h2 style="margin-top:2.2rem;">Por qué te conviene usarla</h2>
+      <p>La mayoría de la gente maneja su dinero con memoria, la app del banco y, en el mejor de los casos, una hoja de Excel que deja de actualizarse a la segunda semana. Ninguna de esas herramientas fue diseñada para responder la pregunta que de verdad importa: <em>"si sigo gastando así, ¿voy a llegar bien a fin de mes?"</em>. Foresee sí.</p>
+    </div>
+
+    <div class="benefits">
+      <div class="benefit-card" style="--bcolor:#4f8fff"><h3>Registra en segundos</h3><p>Calculadora, voz o foto del recibo — el método más rápido según el momento.</p></div>
+      <div class="benefit-card" style="--bcolor:#f05252"><h3>Nunca te sorprende una deuda</h3><p>Aviso automático apenas una tarjeta llega al 80% de su límite.</p></div>
+      <div class="benefit-card" style="--bcolor:#22c97a"><h3>No se te pasa un pago</h3><p>Suscripciones y pagos fijos se registran solos y avisan antes de vencer.</p></div>
+      <div class="benefit-card" style="--bcolor:#a78bfa"><h3>Sabes cuánto hay en cada banco</h3><p>No solo el total — el desglose real de cada cuenta que manejas.</p></div>
+      <div class="benefit-card" style="--bcolor:#06b6d4"><h3>Ves el futuro, no solo el pasado</h3><p>La Proyección te dice si vas a cerrar el mes en positivo o negativo.</p></div>
+      <div class="benefit-card" style="--bcolor:#f59e0b"><h3>Compartir gastos ya no es incómodo</h3><p>Divide una cuenta entre varias personas y lleva registro de quién pagó.</p></div>
+      <div class="benefit-card" style="--bcolor:#7c5cfc"><h3>Tus metas se vuelven visibles</h3><p>Progreso concreto, no una idea abstracta que nunca se concreta.</p></div>
+      <div class="benefit-card" style="--bcolor:#64748b"><h3>Tus datos siempre son tuyos</h3><p>Exporta a Excel, PDF o un respaldo completo cuando quieras.</p></div>
+    </div>
+  </header>
+
+  <details class="toc-mobile">
+    <summary>Contenido de la guía</summary>
+    <ul>
+      <li><a href="#primeros-pasos"><span class="toc-dot" style="--dot:#4f8fff"></span>Primeros pasos</a></li>
+      <li><a href="#dashboard"><span class="toc-dot" style="--dot:#4f8fff"></span>Pantalla de inicio</a></li>
+      <li><a href="#registros"><span class="toc-dot" style="--dot:#4f8fff"></span>1. Registros</a></li>
+      <li><a href="#voz"><span class="toc-dot" style="--dot:#4f8fff"></span>2. Voz</a></li>
+      <li><a href="#proyeccion"><span class="toc-dot" style="--dot:#06b6d4"></span>3. Proyección</a></li>
+      <li><a href="#recurrentes"><span class="toc-dot" style="--dot:#22c97a"></span>4. Gastos Recurrentes</a></li>
+      <li><a href="#comunes"><span class="toc-dot" style="--dot:#f59e0b"></span>5. Gastos Comunes</a></li>
+      <li><a href="#tarjetas"><span class="toc-dot" style="--dot:#f05252"></span>6. Tarjetas y Préstamos</a></li>
+      <li><a href="#metas"><span class="toc-dot" style="--dot:#4f8fff"></span>7. Metas de Ahorro</a></li>
+      <li><a href="#saldos"><span class="toc-dot" style="--dot:#a78bfa"></span>8. Saldos</a></li>
+      <li><a href="#reportes"><span class="toc-dot" style="--dot:#a78bfa"></span>9. Reportes</a></li>
+      <li><a href="#presupuesto"><span class="toc-dot" style="--dot:#7c5cfc"></span>10. Presupuesto</a></li>
+      <li><a href="#configuracion"><span class="toc-dot" style="--dot:#64748b"></span>11. Configuración</a></li>
+      <li><a href="#importar"><span class="toc-dot" style="--dot:#06b6d4"></span>12. Importar</a></li>
+      <li><a href="#cierre"><span class="toc-dot" style="--dot:#4f8fff"></span>Tu rutina ideal</a></li>
+    </ul>
+  </details>
+
+  <div class="layout">
+    <nav class="toc-desktop" id="tocNav" aria-label="Contenido">
+      <span class="toc-title">Contenido</span>
+      <ul>
+        <li><a href="#primeros-pasos" data-dot="#4f8fff"><span class="toc-dot" style="--dot:#4f8fff"></span>Primeros pasos</a></li>
+        <li><a href="#dashboard" data-dot="#4f8fff"><span class="toc-dot" style="--dot:#4f8fff"></span>Pantalla de inicio</a></li>
+        <li><a href="#registros" data-dot="#4f8fff"><span class="toc-dot" style="--dot:#4f8fff"></span>1. Registros</a></li>
+        <li><a href="#voz" data-dot="#4f8fff"><span class="toc-dot" style="--dot:#4f8fff"></span>2. Voz</a></li>
+        <li><a href="#proyeccion" data-dot="#06b6d4"><span class="toc-dot" style="--dot:#06b6d4"></span>3. Proyección</a></li>
+        <li><a href="#recurrentes" data-dot="#22c97a"><span class="toc-dot" style="--dot:#22c97a"></span>4. Recurrentes</a></li>
+        <li><a href="#comunes" data-dot="#f59e0b"><span class="toc-dot" style="--dot:#f59e0b"></span>5. Gastos Comunes</a></li>
+        <li><a href="#tarjetas" data-dot="#f05252"><span class="toc-dot" style="--dot:#f05252"></span>6. Tarjetas/Préstamos</a></li>
+        <li><a href="#metas" data-dot="#4f8fff"><span class="toc-dot" style="--dot:#4f8fff"></span>7. Metas de Ahorro</a></li>
+        <li><a href="#saldos" data-dot="#a78bfa"><span class="toc-dot" style="--dot:#a78bfa"></span>8. Saldos</a></li>
+        <li><a href="#reportes" data-dot="#a78bfa"><span class="toc-dot" style="--dot:#a78bfa"></span>9. Reportes</a></li>
+        <li><a href="#presupuesto" data-dot="#7c5cfc"><span class="toc-dot" style="--dot:#7c5cfc"></span>10. Presupuesto</a></li>
+        <li><a href="#configuracion" data-dot="#64748b"><span class="toc-dot" style="--dot:#64748b"></span>11. Configuración</a></li>
+        <li><a href="#importar" data-dot="#06b6d4"><span class="toc-dot" style="--dot:#06b6d4"></span>12. Importar</a></li>
+        <li><a href="#cierre" data-dot="#4f8fff"><span class="toc-dot" style="--dot:#4f8fff"></span>Tu rutina ideal</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+
+      <section class="plain" id="primeros-pasos">
+        <h2>Tu primera vez en la app</h2>
+
+        <h3>1. Crear tu cuenta</h3>
+        <p>En la pantalla de entrada escribes tu correo electrónico y una contraseña (mínimo 6 caracteres) y presionas <code class="ui">Registrarse</code>. No te pide nombre en este paso — eso viene después. Apenas te registras, la app te envía automáticamente un correo de verificación. No es obligatorio confirmarlo para empezar a usar Foresee, pero verás un aviso recordándotelo en la pantalla de inicio hasta que lo hagas.</p>
+
+        <h3>2. La bienvenida de tres pasos</h3>
+        <ol class="step-list">
+          <li><strong>Tu nombre.</strong> Cómo quieres que te llame la app — solo personaliza el saludo, no afecta ningún cálculo.</li>
+          <li><strong>Datos de ejemplo.</strong> Puedes empezar con información ficticia ya cargada (categorías, dos bancos, saldo inicial y varias transacciones de muestra) o completamente vacío. Si es tu primera vez, te conviene aceptar los datos de ejemplo para ver la app "en uso" — luego puedes borrar todo desde Configuración cuando quieras empezar con tus datos reales.</li>
+          <li><strong>Cierre.</strong> Te ofrece ver el video-tutorial o explorar por tu cuenta. Puedes saltarte este paso — el tutorial queda siempre disponible después desde un botón flotante.</li>
+        </ol>
+
+        <h3>3. Antes de registrar tu primera transacción real</h3>
+        <p>Foresee no te obliga a configurar nada antes de dejarte usar la app, pero te conviene hacerlo, porque Registros, Voz, Recurrentes, Tarjetas y Presupuesto dependen de que existan categorías y bancos ya creados. Antes de cargar tus datos reales, entra un momento a <strong>Configuración</strong> y:</p>
+        <ul>
+          <li>Agrega los bancos/cuentas que realmente usas.</li>
+          <li>Revisa o ajusta las categorías.</li>
+          <li>Carga tu <strong>Saldo Inicial</strong> real — el monto que tienes hoy, antes de registrar movimientos nuevos. Es la base de todos los cálculos de saldo de la app.</li>
+          <li>Elige tu <strong>Divisa</strong>, si no usas dólares.</li>
+        </ul>
+      </section>
+
+      <section class="plain" id="dashboard">
+        <h2>La pantalla de inicio (Dashboard)</h2>
+        <p>Cada vez que abres Foresee, lo primero que ves no es una tabla — es un resumen ejecutivo de tu situación actual, pensado para que en tres segundos sepas si todo está bien o si algo necesita tu atención.</p>
+        <div class="dash-cards">
+          <div class="dash-card"><b>Saldo actual</b><span>Todos tus bancos sumados. Tócala → vas a Registros.</span></div>
+          <div class="dash-card"><b>Ingresos del mes</b><span>Tócala → abre la calculadora en modo Ingreso.</span></div>
+          <div class="dash-card"><b>Gastos del mes</b><span>Tócala → abre la calculadora en modo Gasto.</span></div>
+        </div>
+        <p>Debajo aparecen, solo si aplican, avisos automáticos: si en los próximos 15 días tus recurrentes van a dejarte en negativo, si tienes el correo sin verificar, si alguna tarjeta llegó al 80% de su límite, o si un recurrente vence hoy o en los próximos días.</p>
+      </section>
+
+      <!-- 1. REGISTROS -->
+      <section class="tool" id="registros" style="--accent:#4f8fff">
+        <div class="tool-head">
+          <div class="tool-badge">📝</div>
+          <div><span class="tool-eyebrow">Herramienta 1 de 12</span><h2>Registros</h2></div>
+        </div>
+        <p class="lede">El libro diario de ingresos y gastos reales — el corazón de toda la app. Todo lo demás (saldo, reportes, presupuesto, proyección) se construye a partir de lo que registras aquí.</p>
+
+        <h3 class="subhead">Cómo se usa, paso a paso</h3>
+        <ol class="step-list">
+          <li>Presiona <code class="ui">+ Registrar</code>. Se abre una calculadora en pantalla.</li>
+          <li>Elige <strong>Ingreso</strong> o <strong>Gasto</strong> con el selector de arriba.</li>
+          <li>Escribe el monto con el teclado en pantalla (admite operaciones simples como "12+8") o tu teclado físico.</li>
+          <li>Escribe una descripción — la app sugiere descripciones que ya usaste antes.</li>
+          <li>Elige la fecha (por defecto hoy) y el banco donde ocurrió el movimiento.</li>
+          <li>Si tienes el recibo a mano, presiona <code class="ui">📷 Escanear recibo</code> en vez de escribir a mano: la app lee la foto y trata de completar monto, fecha y comercio (revísalo antes de guardar).</li>
+          <li>Presiona <code class="ui">✓ Listo</code> y elige la categoría — es obligatorio, porque de ahí se alimentan tus Reportes y tu Presupuesto.</li>
+        </ol>
+        <p>La transacción guardada aparece con el saldo que queda <strong>después</strong> de ese movimiento, para ver la evolución de tu dinero paso a paso. Para mover dinero entre cuentas tuyas usa <code class="ui">⇄ Transferir</code> en vez de cargar un gasto y un ingreso por separado — así no se altera tu saldo total. Puedes filtrar por mes, banco o categoría, editar tocando una fila, o seleccionar varias para borrarlas en bloque.</p>
+
+        <div class="tip"><strong>Un detalle útil:</strong> si dos transacciones comparten fecha, monto, banco y una palabra parecida en la descripción, la app las marca con ⚠️ para que revises si las cargaste dos veces por error. No borra nada sola — solo avisa.</div>
+
+        <div class="simulacro">
+          <span class="simulacro-tag">Simulacro</span>
+          <p>Gastaste $45 en el supermercado con la tarjeta de débito de "Cuenta Corriente". Abres Registros → <code class="ui">+ Registrar</code> → <strong>Gasto</strong> → tecleas <code class="ui">45</code> → "Supermercado" → fecha de hoy → banco "Cuenta Corriente" → <code class="ui">✓ Listo</code> → categoría "Alimentación" → Guardar. En segundos, tu saldo corrido baja $45 — y ese gasto ya cuenta para el Presupuesto de "Alimentación" y para los gráficos de Reportes de este mes.</p>
+        </div>
+
+        <div class="conexiones">
+          <span class="conexiones-tag">Se conecta con</span>
+          <p>Dashboard, Saldos, Reportes, Presupuesto y Proyección. Es la fuente de la que beben las otras 11 secciones.</p>
+        </div>
+      </section>
+
+      <!-- 2. VOZ -->
+      <section class="tool" id="voz" style="--accent:#4f8fff">
+        <div class="tool-head">
+          <div class="tool-badge">🎙️</div>
+          <div><span class="tool-eyebrow">Herramienta 2 de 12</span><h2>Voz</h2></div>
+        </div>
+        <p class="lede">La forma más rápida de registrar algo cuando tienes las manos ocupadas: le hablas a la app en español normal y ella entiende qué fue, cuánto costó y en qué categoría entra.</p>
+
+        <h3 class="subhead">Cómo se usa, paso a paso</h3>
+        <ol class="step-list">
+          <li>Presiona el botón del micrófono (funciona mejor en Chrome de escritorio).</li>
+          <li>Habla con naturalidad: <em>"Gasté 15 dólares con 45 centavos en gasolina ayer"</em>. El texto se transcribe en tiempo real.</li>
+          <li>Di la palabra <strong>"guardar"</strong> al terminar — detiene la grabación y dispara el análisis.</li>
+          <li>Revisa el panel con lo que entendió (tipo, monto, fecha, descripción, categoría, banco) — todo editable. Presta atención al banco y la categoría, que se adivinan por parecido.</li>
+          <li>Presiona <code class="ui">Guardar</code>, o <code class="ui">Nueva</code> para dictar otra.</li>
+        </ol>
+        <p>Reconoce fechas relativas ("ayer", "el 15"), montos dichos en palabras ("quince con cuarenta y cinco") y palabras clave para decidir si es ingreso o gasto ("gasté", "pagué" = gasto; "recibí", "me depositaron" = ingreso).</p>
+
+        <div class="simulacro">
+          <span class="simulacro-tag">Simulacro</span>
+          <p>Presionas el micrófono y dices: <em>"Pagué 20 dólares en Netflix guardar"</em>. La app detecta "pagué" (gasto), el monto $20, y asocia "Netflix" con tu categoría "Entretenimiento" por la pista semántica. Se abre el panel de confirmación pre-rellenado; ajustas el banco si hace falta y presionas Guardar.</p>
+        </div>
+
+        <div class="conexiones">
+          <span class="conexiones-tag">Se conecta con</span>
+          <p>Guarda en el mismo lugar que Registros — solo una forma distinta de llegar al mismo resultado. Comparte tus categorías, bancos y descripciones.</p>
+        </div>
+      </section>
+
+      <!-- 3. PROYECCION -->
+      <section class="tool" id="proyeccion" style="--accent:#06b6d4">
+        <div class="tool-head">
+          <div class="tool-badge">📈</div>
+          <div><span class="tool-eyebrow">Herramienta 3 de 12</span><h2>Proyección</h2></div>
+        </div>
+        <p class="lede">Responde la pregunta que de verdad importa: si nada cambia, ¿cómo va a terminar mi mes? Combina tus transacciones reales con estimaciones tuyas y con los recurrentes que aún no llegan a su fecha.</p>
+
+        <h3 class="subhead">Cómo se usa, paso a paso</h3>
+        <ol class="step-list">
+          <li>Abre Proyección: verás filas reales (ya ocurrieron), estimaciones tuyas, y filas "virtuales" que la app genera sola a partir de tus recurrentes (marcadas <em>proyectado</em>) — estas desaparecen solas en cuanto la transacción real ya se registró.</li>
+          <li>Presiona <code class="ui">+ Proyección</code> para agregar una estimación (formulario idéntico al de Registros), pero guarda en una lista aparte, no en tus transacciones reales.</li>
+          <li>Activa <strong>"Ver también el mes siguiente"</strong> si quieres mirar más adelante.</li>
+        </ol>
+        <p>El saldo proyectado se acumula fila por fila, igual que en Registros — al final de la tabla ves tu saldo estimado a fin de mes.</p>
+
+        <div class="simulacro">
+          <span class="simulacro-tag">Simulacro</span>
+          <p>A mitad de mes sabes que en dos semanas vas a tener un gasto médico de $200 que aún no ocurrió. Vas a Proyección → <code class="ui">+ Proyección</code> → Gasto → $200 → fecha en dos semanas → categoría "Salud" → Guardar. Esa fila aparece junto a tus recurrentes ya proyectados (alquiler, Netflix) y tus transacciones reales. Si el saldo final proyectado da negativo, ya lo sabes con anticipación y puedes ajustar ahora, no cuando sea tarde.</p>
+        </div>
+
+        <div class="conexiones">
+          <span class="conexiones-tag">Se conecta con</span>
+          <p>Usa el mismo motor de cálculo de saldo que Registros y Saldos, y lee tus Gastos Recurrentes para generar las filas virtuales.</p>
+        </div>
+      </section>
+
+      <!-- 4. RECURRENTES -->
+      <section class="tool" id="recurrentes" style="--accent:#22c97a">
+        <div class="tool-head">
+          <div class="tool-badge">🔁</div>
+          <div><span class="tool-eyebrow">Herramienta 4 de 12</span><h2>Gastos Recurrentes</h2></div>
+        </div>
+        <p class="lede">Para los pagos que se repiten mes a mes: una suscripción, el alquiler, un servicio. Los defines una sola vez y la app los registra sola cada mes, además de avisarte antes de que venzan.</p>
+
+        <h3 class="subhead">Cómo se usa, paso a paso</h3>
+        <ol class="step-list">
+          <li>Presiona <code class="ui">+ Añadir</code>.</li>
+          <li>Completa descripción, categoría, banco, el monto que pagas tú, y el día del mes en que se cobra.</li>
+          <li>Si es un gasto compartido donde el banco cobra un total distinto a lo que tú aportas, completa el campo opcional "Monto total cobrado por el banco".</li>
+          <li>Guarda. No tienes que volver a tocar nada — el resto es automático.</li>
+        </ol>
+        <p>Cuando llega el día configurado, la app crea sola una transacción de gasto en Registros (termina con " ®"), y en los días previos muestra un aviso — y una notificación nativa si las activaste en Configuración.</p>
+
+        <div class="tip"><strong>Consejo del propio formulario:</strong> usa en la descripción una palabra que también aparezca igual en el extracto de tu banco (ej. "Netflix"). Así, si más adelante importas ese extracto, la app reconoce que ya lo tenías registrado en vez de duplicarlo.</div>
+
+        <div class="simulacro">
+          <span class="simulacro-tag">Simulacro</span>
+          <p>Configuras "Alquiler", categoría "Vivienda", banco "Cuenta Corriente", $800, día de pago 1. El día 1 de cada mes aparece solo en Registros "Alquiler ®" por $800. Tres días antes, ves en el Dashboard: "Alquiler vence en 3 días".</p>
+        </div>
+
+        <div class="conexiones">
+          <span class="conexiones-tag">Se conecta con</span>
+          <p>Sus registros automáticos aparecen en Registros, Saldos y Reportes. Alimenta las filas proyectadas de Proyección. Si luego importas un extracto y ese pago aparece ahí, la app reemplaza el registro automático por el real importado.</p>
+        </div>
+      </section>
+
+      <!-- 5. COMUNES -->
+      <section class="tool" id="comunes" style="--accent:#f59e0b">
+        <div class="tool-head">
+          <div class="tool-badge">🤝</div>
+          <div><span class="tool-eyebrow">Herramienta 5 de 12</span><h2>Gastos Comunes</h2></div>
+        </div>
+        <p class="lede">Para cuando un gasto se paga entre varias personas — alquiler compartido, una cena de grupo — y necesitas saber cuánto le toca a cada quien y quién ya pagó.</p>
+
+        <h3 class="subhead">Cómo se usa, paso a paso</h3>
+        <ol class="step-list">
+          <li>Presiona <code class="ui">+ Añadir Ítem</code>: nombre del gasto y monto total.</li>
+          <li>Agrega a las personas involucradas con el botón "+".</li>
+          <li>Para cada persona eliges cómo se calcula su parte: partes iguales del monto que quede, un porcentaje, o un monto fijo. El cálculo es <strong>en cascada</strong> — cada persona reduce lo que queda por repartir para las que siguen, así que el orden importa.</li>
+          <li>Cuando alguien paga, escribes el día y presionas <code class="ui">OK</code> — eliges el banco donde recibiste el dinero y la app crea automáticamente un ingreso en Registros. Si te equivocas, puedes revertirlo.</li>
+        </ol>
+
+        <div class="simulacro">
+          <span class="simulacro-tag">Simulacro</span>
+          <p>La renta de julio es $900, compartida con Ana y Luis. Creas "Renta julio" con $900. Ana: "Porcentaje 30%" ($270). Luis: "Partes iguales" del resto. Cuando Ana transfiere su parte el día 3, marcas su fila con día 3 → OK → eliges el banco donde llegó el dinero. Aparece automáticamente un ingreso de $270 en Registros como "Ana - Renta julio" — no lo registras tú a mano.</p>
+        </div>
+
+        <div class="conexiones">
+          <span class="conexiones-tag">Se conecta con</span>
+          <p>Los pagos se vuelven ingresos reales en Registros, Saldos y Reportes. Al iniciar un mes nuevo, todos los "pagado" se reinician solos.</p>
+        </div>
+      </section>
+
+      <!-- 6. TARJETAS -->
+      <section class="tool" id="tarjetas" style="--accent:#f05252">
+        <div class="tool-head">
+          <div class="tool-badge">💳</div>
+          <div><span class="tool-eyebrow">Herramienta 6 de 12</span><h2>Tarjetas y Préstamos</h2></div>
+        </div>
+        <p class="lede">Control de cualquier deuda con cuotas e interés — tarjetas o préstamos. Sabes cuánto te costaría pagarla en el plazo que elijas y cuánto te queda disponible antes del límite.</p>
+
+        <h3 class="subhead">Cómo se usa, paso a paso</h3>
+        <ol class="step-list">
+          <li>Presiona <code class="ui">+ Añadir Tarjeta</code>: nombre, monto que debes hoy, línea de crédito, día de pago, interés anual, y meses para saldarla.</li>
+          <li>Cada tarjeta es editable directamente — cualquier campo se guarda solo al salir de él.</li>
+          <li>La app calcula tu <strong>Pago Mensual Estimado</strong>: la cuota fija para saldar la deuda en el plazo elegido, considerando el interés (el mismo cálculo que usa un banco para un plan de cuotas).</li>
+          <li>Si una tarjeta no debe contar en tus totales generales, marca su checkbox <strong>Excluir</strong>.</li>
+        </ol>
+        <p>Cada tarjeta muestra el % de línea usada — amarillo desde 70%, rojo desde 90%. Al 80% la app avisa en el Dashboard y, si tienes notificaciones activas, con notificación nativa.</p>
+
+        <div class="simulacro">
+          <span class="simulacro-tag">Simulacro</span>
+          <p>Tienes $3,000 de deuda, línea de $5,000, interés anual 24%, y quieres pagarla en 12 meses. La app muestra un pago mensual estimado de ~$283, y que ya usaste el 60% de tu línea. Si el mes que viene la deuda sube a $4,100, cruzas el 82% de uso y el Dashboard te avisa apenas entres.</p>
+        </div>
+
+        <div class="conexiones">
+          <span class="conexiones-tag">Se conecta con</span>
+          <p>Si eliminas en Configuración un banco con tarjeta asociada, esa tarjeta se elimina con él (con aviso previo). Sus alertas de 80%+ aparecen en el Dashboard.</p>
+        </div>
+      </section>
+
+      <!-- 7. METAS -->
+      <section class="tool" id="metas" style="--accent:#4f8fff">
+        <div class="tool-head">
+          <div class="tool-badge">🎯</div>
+          <div><span class="tool-eyebrow">Herramienta 7 de 12</span><h2>Metas de Ahorro</h2></div>
+        </div>
+        <p class="lede">Convierte un objetivo de ahorro ("quiero juntar $2,000 para un viaje") en algo visible, con progreso y fecha, en vez de una intención que se diluye con el tiempo.</p>
+
+        <h3 class="subhead">Cómo se usa, paso a paso</h3>
+        <ol class="step-list">
+          <li>Presiona <code class="ui">+ Nueva Meta</code>: nombre, monto objetivo, cuánto llevas ahorrado (opcional) y, si quieres, una fecha objetivo.</li>
+          <li>Cada vez que ahorres algo, entra a la tarjeta y edita el campo <strong>"Ahorrado"</strong> sumando el nuevo monto.</li>
+          <li>La tarjeta muestra progreso, cuánto falta y cuántos días quedan (o si venció, o si ya cumpliste la meta 🎉).</li>
+        </ol>
+        <div class="tip"><strong>Importante:</strong> esta sección es intencionalmente independiente de tus Registros — actualizar "Ahorrado" no descuenta nada de ningún banco ni crea ninguna transacción. Es un lugar para llevar la cuenta de tu progreso, no un movimiento de dinero real.</div>
+
+        <div class="simulacro">
+          <span class="simulacro-tag">Simulacro</span>
+          <p>Creas "Fondo de emergencia", objetivo $3,000, $0 ahorrado, sin fecha. Este mes apartas $150 y cambias "Ahorrado" a $150 — la barra pasa a 5%. El mes siguiente lo subes a $300, y así hasta llegar al 100%, donde la tarjeta te felicita.</p>
+        </div>
+
+        <div class="conexiones">
+          <span class="conexiones-tag">Se conecta con</span>
+          <p>Nada — es deliberadamente un espacio aparte para seguimiento de objetivos.</p>
+        </div>
+      </section>
+
+      <!-- 8. SALDOS -->
+      <section class="tool" id="saldos" style="--accent:#a78bfa">
+        <div class="tool-head">
+          <div class="tool-badge">🏦</div>
+          <div><span class="tool-eyebrow">Herramienta 8 de 12</span><h2>Saldos</h2></div>
+        </div>
+        <p class="lede">Cuánto dinero tienes en cada banco por separado, no solo el total general — útil si manejas varias cuentas.</p>
+
+        <h3 class="subhead">Cómo se usa</h3>
+        <p>Es de solo lectura — no hay nada que crear aquí. Abres Saldos y ves una tarjeta por cada banco configurado, con su saldo neto (todo lo que entró menos lo que salió, incluyendo transferencias entre cuentas) y su número de movimientos. Al final, una tarjeta de <strong>Balance Total</strong> suma tu saldo inicial más el neto de todos los bancos.</p>
+
+        <div class="simulacro">
+          <span class="simulacro-tag">Simulacro</span>
+          <p>Tienes "Cuenta Corriente" y "Ahorros". Transfieres $200 de Corriente a Ahorros. En Saldos, Corriente baja $200 y Ahorros sube $200 — el Balance Total no cambia, porque el dinero solo se movió de lugar.</p>
+        </div>
+
+        <div class="conexiones">
+          <span class="conexiones-tag">Se conecta con</span>
+          <p>Usa el mismo motor de cálculo que Registros y Proyección, así que el número siempre coincide entre secciones.</p>
+        </div>
+      </section>
+
+      <!-- 9. REPORTES -->
+      <section class="tool" id="reportes" style="--accent:#a78bfa">
+        <div class="tool-head">
+          <div class="tool-badge">📊</div>
+          <div><span class="tool-eyebrow">Herramienta 9 de 12</span><h2>Reportes</h2></div>
+        </div>
+        <p class="lede">Entender de un vistazo visual hacia dónde se va tu dinero. Aquí los datos que registraste se convierten en información útil para decidir.</p>
+
+        <h3 class="subhead">Qué vas a encontrar</h3>
+        <p>Filtras por mes y aparecen siete bloques:</p>
+        <ol class="step-list">
+          <li><strong>Tasa de Ahorro del Mes</strong> — ingresos, gastos, ahorro neto y % ahorrado.</li>
+          <li><strong>Gastos por Categoría</strong> (dona) — toca una porción o su leyenda para ver el detalle de cada transacción.</li>
+          <li><strong>Flujo de Caja</strong> de los últimos 6 meses — ingresos contra gastos.</li>
+          <li><strong>Evolución del Saldo</strong> — cómo subió o bajó día a día en el mes.</li>
+          <li><strong>Recurrentes vs. Variables</strong> — cuánto de tu gasto es comprometido y cuánto libre.</li>
+          <li><strong>Gasto por Día del Mes</strong> — resalta tu día de mayor gasto.</li>
+          <li><strong>Comparativa vs. Mes Anterior</strong> — categoría por categoría, con flechas ▲/▼.</li>
+        </ol>
+        <p>Además, un <strong>Resumen Anual</strong> muestra ingresos y gastos mes a mes en lo que va del año.</p>
+
+        <div class="simulacro">
+          <span class="simulacro-tag">Simulacro</span>
+          <p>Terminando el mes entras a Reportes: Tasa de Ahorro del 12%. En la dona, "Alimentación" ocupa el 35% — más de lo esperado. Tocas esa porción y ves tres pedidos de comida a domicilio que suman más de lo que pensabas. Con eso decides ajustar el presupuesto de esa categoría el próximo mes, en vez de "sentir" que gastaste de más sin saber en qué.</p>
+        </div>
+
+        <div class="conexiones">
+          <span class="conexiones-tag">Se conecta con</span>
+          <p>Lee directamente tus Registros y Recurrentes, y los meses archivados (los cerrados con "Iniciar Nuevo Mes") para mostrar comparativas históricas.</p>
+        </div>
+      </section>
+
+      <!-- 10. PRESUPUESTO -->
+      <section class="tool" id="presupuesto" style="--accent:#7c5cfc">
+        <div class="tool-head">
+          <div class="tool-badge">📐</div>
+          <div><span class="tool-eyebrow">Herramienta 10 de 12</span><h2>Presupuesto</h2></div>
+        </div>
+        <p class="lede">Ponle un límite a cuánto quieres gastar por categoría cada mes, y ve en tiempo real cuánto llevas gastado y cuánto te queda — antes de que sea tarde para frenar.</p>
+
+        <h3 class="subhead">Cómo se usa</h3>
+        <p>Ves una tabla con todas tus categorías (menos "Sueldo" y "Transferencia Interna"). Para cada una, escribes el monto que quieres presupuestar; se guarda al salir del campo. Junto a cada categoría verás cuánto ya gastaste, cuánto te queda disponible, y una barra que se pone amarilla al 80% y roja al 100%.</p>
+        <p>Al cruzar el 80% recibes un aviso; al 90%, uno más urgente — cada uno una sola vez por categoría por mes.</p>
+
+        <div class="simulacro">
+          <span class="simulacro-tag">Simulacro</span>
+          <p>Le pones $300 a "Alimentación". A mitad de mes ya llevas $250 (83%) — la barra se pone amarilla y recibes el aviso. Decides cocinar más en casa el resto del mes, porque ya sabes con anticipación que te vas a pasar del límite si sigues igual.</p>
+        </div>
+
+        <div class="conexiones">
+          <span class="conexiones-tag">Se conecta con</span>
+          <p>Depende de las categorías de Configuración y de tus transacciones reales en Registros — es el "semáforo" que vigila a Registros en tiempo real.</p>
+        </div>
+      </section>
+
+      <!-- 11. CONFIGURACION -->
+      <section class="tool" id="configuracion" style="--accent:#64748b">
+        <div class="tool-head">
+          <div class="tool-badge">⚙️</div>
+          <div><span class="tool-eyebrow">Herramienta 11 de 12</span><h2>Configuración</h2></div>
+        </div>
+        <p class="lede">El centro de administración de toda tu cuenta: catálogos base que usan las demás secciones, seguridad, notificaciones, y respaldo/exportación de tus datos.</p>
+
+        <h3 class="subhead">Qué vas a encontrar</h3>
+        <ul>
+          <li><strong>Categorías</strong> — nombre e ícono; eliminar una no borra el historial que ya la usó.</li>
+          <li><strong>Bancos/Cuentas</strong> — eliminar un banco elimina también la tarjeta asociada, si tenía.</li>
+          <li><strong>Descripciones</strong> — se agregan solas al registrar; puedes limpiarlas aquí.</li>
+          <li><strong>Tu nombre/alias</strong>, <strong>cambio de contraseña</strong>, y tu <strong>Saldo Inicial</strong>.</li>
+          <li><strong>Divisa</strong> — 15 monedas; cambia símbolo y formato, no hace conversión de tipo de cambio.</li>
+          <li><strong>Apariencia</strong> — modo claro u oscuro.</li>
+          <li><strong>Notificaciones</strong> — navegador, correo y push al teléfono, cada una con su propio interruptor.</li>
+          <li><strong>Iniciar Nuevo Mes</strong> — archiva el mes actual sin borrar tu historial, y te mueve al siguiente.</li>
+          <li><strong>Exportar/Importar</strong> — respaldo JSON completo, PDF de transacciones del mes, o Excel con 4 hojas y fórmulas activas.</li>
+          <li><strong>Zona de Peligro</strong> — Reiniciar Período y Eliminar Mi Cuenta (irreversible).</li>
+        </ul>
+
+        <div class="simulacro">
+          <span class="simulacro-tag">Simulacro</span>
+          <p>Terminaste de explorar la app con los datos de ejemplo y quieres empezar en serio. Vas a Configuración → Zona de Peligro → <strong>Reiniciar Período</strong> (confirmas que entiendes que borra transacciones y proyecciones) → revisas tus categorías y bancos reales → cargas tu Saldo Inicial real → activas notificaciones del navegador → y ya puedes registrar tu vida financiera real desde cero.</p>
+        </div>
+
+        <div class="conexiones">
+          <span class="conexiones-tag">Se conecta con</span>
+          <p>Es la base de la que dependen casi todas las secciones: sin categorías y bancos definidos aquí, Registros, Voz, Recurrentes, Tarjetas y Presupuesto no tienen de dónde elegir.</p>
+        </div>
+      </section>
+
+      <!-- 12. IMPORTAR -->
+      <section class="tool" id="importar" style="--accent:#06b6d4">
+        <div class="tool-head">
+          <div class="tool-badge">📥</div>
+          <div><span class="tool-eyebrow">Herramienta 12 de 12</span><h2>Importar</h2></div>
+        </div>
+        <p class="lede">Para no tipear a mano decenas de movimientos: subes un extracto (o una foto) y la app hace la mayor parte del trabajo, dejándote revisar antes de confirmar.</p>
+
+        <h3 class="subhead">Cómo se usa, paso a paso</h3>
+        <ol class="step-list">
+          <li>Arrastra o selecciona el archivo — CSV, Excel, o una foto del extracto (beta, reconoce Bank of America, Chase y Wells Fargo).</li>
+          <li>En CSV/Excel, la app detecta el banco por el <strong>nombre del archivo</strong> — si no reconoce ninguno, te pide renombrarlo. En foto, lo detecta por el contenido.</li>
+          <li>Revisa la vista previa editable: fecha, descripción, categoría (la asignas tú — nunca se elige sola), banco y monto. Las filas con ⚠️ son posibles duplicados.</li>
+          <li>Ajusta lo que haga falta y presiona <code class="ui">Deseleccionar duplicados</code> si aplica.</li>
+          <li>Presiona <code class="ui">Guardar en Registros</code>. Si una fila coincide con un recurrente ya auto-registrado, lo reemplaza por el real importado. Al final ves cuántas se guardaron, omitieron o fallaron.</li>
+        </ol>
+
+        <div class="simulacro">
+          <span class="simulacro-tag">Simulacro</span>
+          <p>Descargas el extracto de julio en CSV y lo renombras a "WellsFargo-Julio.csv". Lo arrastras a Importar. La vista previa muestra 40 movimientos, 3 con ⚠️ por ya estar registrados a mano. Presionas "Deseleccionar duplicados", asignas categoría a los 6 que faltan, y presionas <strong>Guardar en Registros</strong>. La app avisa: "34 importadas, 3 omitidas por duplicado" y te lleva directo a Registros.</p>
+        </div>
+
+        <div class="conexiones">
+          <span class="conexiones-tag">Se conecta con</span>
+          <p>Escribe en el mismo lugar que Registros y Voz, y coordina con Recurrentes para no dejar registros duplicados.</p>
+        </div>
+      </section>
+
+      <section class="plain" id="cierre">
+        <div class="closing" style="padding:0;">
+          <h2>Para cerrar: tu rutina ideal con Foresee</h2>
+          <p>No hace falta usar las 12 secciones todos los días. Una rutina simple y efectiva se ve así:</p>
+          <ul class="routine">
+            <li><b>Al momento del gasto</b>Regístralo enseguida por Registros, Voz o foto del recibo — mientras más fresco, menos se te olvida.</li>
+            <li><b>Una vez por semana</b>Revisa el Dashboard (dos segundos) y, si algo llama la atención, entra a Reportes.</li>
+            <li><b>Una vez al mes</b>Revisa Presupuesto para ajustar límites, Tarjetas para confirmar que ninguna se acerca al límite, y Metas de Ahorro para actualizar tu progreso.</li>
+            <li><b>Al cerrar el mes</b>Usa "Iniciar Nuevo Mes" en Configuración para archivar el período y empezar el siguiente con la casa limpia, sin perder tu historial.</li>
+          </ul>
+          <p class="final">Esa constancia pequeña — segundos por transacción, minutos por semana — es lo que convierte a Foresee en algo que realmente usas, no en otra app financiera que se abandona a la segunda semana.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="pagefoot">Guía de Usuario — Foresee 2.0</footer>
+
+  <a href="#bienvenida" class="to-top" id="toTop" aria-label="Volver arriba">↑</a>
+</div>
+
+<script>
+(function(){
+  var toTop = document.getElementById('toTop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 700){ toTop.classList.add('show'); } else { toTop.classList.remove('show'); }
+  }, {passive:true});
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('#tocNav a'));
+  var map = {};
+  links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var targets = Object.keys(map).map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  if('IntersectionObserver' in window && targets.length){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var link = map[entry.target.id];
+        if(!link) return;
+        if(entry.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, {rootMargin:'-15% 0px -70% 0px'});
+    targets.forEach(function(t){ obs.observe(t); });
+  }
+})();
+</script>
