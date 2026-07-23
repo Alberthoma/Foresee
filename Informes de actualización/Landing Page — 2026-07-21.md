@@ -194,3 +194,35 @@ Se agregó el link "Guía completa" → `como-funciona.html`, entre "Beneficios"
 ## Estado final
 - `landing/landing.html` (explorador con color real + desplegable) y `landing/como-funciona.html` (página nueva) listos y verificados.
 - Sigue pendiente la misma acción del usuario de rondas anteriores: publicar las reglas de Firestore en Firebase Console.
+
+---
+
+## Actualización — 2026-07-22, sexta ronda: la imagen del hero deja de ser una tarjeta con bordes
+
+### El problema señalado por el usuario
+Tras ver la quinta ronda, el usuario fue explícito: "la landing quedó exactamente igual" — la ronda anterior solo había tocado el explorador "Explora Foresee" y el nav, sin rediseñar el resto de la página a propósito (para no adivinar a ciegas qué no le convencía). Preguntado qué específicamente no funcionaba, señaló cuatro cosas: el estilo visual en general, las animaciones/efectos, la estructura/orden del contenido, y en particular — la imagen de la mujer meditando ("el verdadero tesoro") está bien como imagen, pero **no debe verse como una tarjeta con bordes**; debe **fundirse con el fondo**, como hace `land.html` (la landing de referencia más antigua, conservada en el repo).
+
+### Análisis
+Se revisó `landing/land.html` para entender el tratamiento exacto que el usuario señalaba: su `.hero-bg` es una imagen de fondo absoluta (`position: absolute; inset: 0`), a `opacity: 0.25`, con `background-size: cover` — es decir, una textura de fondo detrás del contenido, no un elemento visual aparte. En cambio, `landing.html` (V5) usaba `.hero-visual-card`: una tarjeta con `border`, `box-shadow`, `border-radius` y animación de flotación — exactamente lo opuesto de lo que pedía el usuario.
+
+Se descargaron y revisaron las 3 ilustraciones de Cloudinary usadas en hero + los 2 bloques narrativos ("el peso de las deudas", "el verdadero tesoro"): son imágenes generadas por IA con texto propio incrustado en los píxeles (a veces con errores de tipeo, ej. "SAILDA" en vez de "SALIDA", "ROMPECAEZAS" en vez de "ROMPECABEZAS") y, en un caso, una marca de agua "ai" en la esquina. Esto reforzó que la baja opacidad de fondo no es solo una preferencia estética: también diluye estos defectos, que se notan mucho más cuando la imagen se muestra nítida y grande en una tarjeta protagonista.
+
+### Modificaciones realizadas (`landing/landing.html`)
+
+1. **Nueva clase compartida `.atmosphere`/`.atmosphere-bg`** — reemplaza el patrón de tarjeta. La imagen va absoluta detrás de todo el contenido de la sección, a `opacity: 0.24` (0.16 en tema claro) con `filter: saturate(0.85) brightness(0.85)`, y un degradado (`.atmosphere::after`) que funde los bordes superior/inferior de la imagen con `var(--bg)` para que el corte con la sección siguiente no sea brusco.
+2. **Hero rehecho**: de layout de 2 columnas (texto + tarjeta de imagen) a una sola columna centrada, con la imagen de la meditación como fondo atmosférico de toda la sección. Se eliminaron `.hero-visual`, `.hero-visual-card`, `.hero-visual-glow`, los 3 `.sparkle` (✦) y sus 3 `@keyframes` (`float-card`, `glow-pulse`, `twinkle`).
+3. **Los dos bloques narrativos** ("Del peso a la salida" y "El verdadero tesoro") pasan del layout `.story` (grid 2 columnas, imagen en tarjeta con borde/sombra/zoom-on-hover) al mismo tratamiento `.atmosphere`: texto centrado sobre la imagen de fondo fundida, sin tarjeta.
+4. **Imagen de "Beneficios" (rompecabezas)**: no encajaba en el patrón atmosférico (va junto a una lista de beneficios, necesita verse como imagen, no como textura ambiental). Se le quitó el borde/sombra duros y se le agregó una nueva clase `.benefit-img` con un `mask-image: radial-gradient(ellipse...)` que difumina las 4 esquinas — ya no es un rectángulo de bordes duros, pero sigue siendo una imagen protagonista, a diferencia del hero.
+5. **Efectos genéricos removidos**: el brillo diagonal que atravesaba los botones primarios al pasar el mouse (`.btn-primary::after`), y la rotación de los íconos de confianza al hacer hover (`scale(1.2) rotate(-6deg)` → `scale(1.1)`, sin rotación). Se mantiene el único mecanismo de movimiento restante: el fade-in al hacer scroll (`.reveal`), que ya era sutil y consistente.
+6. **Orden de las secciones**: se revisó pero **no se cambió** — el orden actual (Hero → problema → cómo funciona → explora → beneficios → el verdadero tesoro → confianza → encuesta → CTA) ya sigue un arco narrativo razonable (gancho → problema → mecánica/prueba → pago emocional → confianza → pedido). Si la queja de "estructura" del usuario apuntaba a otra cosa, queda pendiente de una vuelta más de feedback.
+
+### Verificación
+- Playwright, dark/light/mobile (390px), con capturas de página completa y zooms puntuales del hero, del bloque "el verdadero tesoro" y de la imagen de Beneficios.
+- Confirmado visualmente: el texto del hero es legible sobre la imagen fundida en ambos temas; el corte entre secciones ya no es brusco (el degradado lo disimula); la imagen de Beneficios conserva un suavizado en las esquinas sin verse rota.
+- Sin errores de consola ni `pageerror` en ninguna de las 3 capturas. `scrollWidth === clientWidth` en mobile (sin overflow horizontal).
+- Se verificó que no quedaran referencias sueltas a las clases eliminadas (`hero-visual`, `sparkle`, `story-img`, `float-card`, `glow-pulse`, `twinkle`) — cero coincidencias tras el cambio.
+
+## Estado final
+- `landing/landing.html` con el hero y los dos bloques narrativos fundidos al fondo (sin tarjetas ni bordes), efectos genéricos removidos, listo para revisión del usuario.
+- Sigue pendiente la misma acción de rondas anteriores: publicar las reglas de Firestore en Firebase Console.
+- Pendiente de confirmar con el usuario: si "estructura/orden del contenido" se refería a algo más allá del tratamiento visual ya corregido.
