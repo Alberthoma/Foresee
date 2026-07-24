@@ -53,12 +53,12 @@ No hay comandos de build, lint, ni tests automatizados. La verificación se hace
 
 ## Estado actual
 
-- **Versión activa:** `V F2 0012` (2026-07-22) — botón "❓ Cómo funciona" agregado en la barra de acciones (visible en las 12 secciones), abre un modal con explicación paso a paso + simulacro de la sección activa, contenido centralizado en `js/lib/section-help.js` — material de apoyo al tutorial en video existente
-- **Próxima versión:** `V F2 0013`
+- **Versión activa:** `V F2 0013` (2026-07-24) — barra de acciones rediseñada para mobile: flecha de regreso en vez de texto, "❓ Cómo funciona" recoloreado y siempre pegado al borde derecho, botones a 44px de alto parejos entre sí (incluido "Filtros", que antes tenía tipografía/radio distintos), secciones con varios botones propios (Registros, Proyección) agrupadas en su propia fila repartida en partes iguales, resto en una sola fila. Etiquetas acortadas ("+ Añadir Ítem"/"+ Añadir Tarjeta" → "+ Añadir", "+ Nueva Meta" → "+ Metas")
+- **Próxima versión:** `V F2 0014`
 - **Archivo de entrada:** `index.html` (raíz) — carga `css/base.css`, `css/secciones.css` y `js/main.js`
 - **Último informe de sesión:** `MD/Sesion 2026-07-19 — Firebase App Check y Verificacion de Email.md`
-- **Último informe de actualización:** `Informes de actualización/V F2 0012 — 2026-07-22.md`
-- **Último respaldo:** `Respaldos/V F2 0012 — 2026-07-22/`
+- **Último informe de actualización:** `Informes de actualización/V F2 0013 — 2026-07-24.md`
+- **Último respaldo:** `Respaldos/V F2 0013 — 2026-07-24/`
 - **Landing page (marketing):** `landing/landing.html` (movida por el usuario desde la raíz del repo a su propia carpeta `landing/`) — página de captación de clientes, **independiente del versionado `V F2 XXXX`** (no se carga desde `index.html`, no toca `css/`/`js/`/`sw.js`, no lleva footer de versión ni respaldo en `Respaldos/`). Sus links a la app usan `../index.html` (relativo, porque vive un nivel más adentro que antes). Ver `Informes de actualización/Landing Page — 2026-07-21.md` (tres rondas de cambios documentadas ahí). `landing/land.html` es la landing anterior que sirvió de referencia de estructura/activos; se conserva sin tocar. `landing/capturas-app/` se movió junto con `landing.html`.
   - Hero con la ilustración de "El verdadero tesoro" (mujer meditando), animaciones de flotación/resplandor/destellos, y efectos de hover en botones/tarjetas/imágenes en toda la página.
   - Stat-row, sección de confianza y encuesta rediseñados a partir de una comparativa real (`WebFetch`) contra YNAB, Fintonic y Goodbudget — ver el informe para el detalle de qué se comparó y por qué.
@@ -384,6 +384,7 @@ cp "skill/foresee2-mejora-done/SKILL.md" "$HOME/.claude/skills/foresee2-mejora-d
 | V F2 0010 | 2026-07-19 | El backup JSON de Configuración (exportar/importar) ahora incluye `gastosComunes` y `currency` — faltaban comparado con todo lo que guarda `appState`. `gastosComunes` se restaura aparte (es un documento único, no una colección, no encaja en el helper `importCol` existente). Bump de `CACHE_NAME` (v10→v11). |
 | V F2 0011 | 2026-07-19 | Pestaña "Tarjetas de Crédito" renombrada a "Tarjetas y Préstamos" (Deudas y Préstamos del plan de comercialización resuelto sin sección nueva — los mismos campos de una tarjeta sirven para un préstamo). Fix: el botón "⚙ Filtros" de Proyección y Reportes no tenía ningún listener (solo Registros lo tenía, scopeado a sí mismo) — se centralizó en `js/main.js` para cubrir los tres. Bump de `CACHE_NAME` (v11→v12). |
 | V F2 0012 | 2026-07-22 | Botón "❓ Cómo funciona" agregado una sola vez en `#action-bar` (visible en las 12 secciones) — abre un modal genérico (`#section-help-modal`) con para-qué-sirve + paso a paso + simulacro de la sección activa. Contenido nuevo en `js/lib/section-help.js` (separado de `index.html`/`main.js`, mismo patrón que `js/lib/icons.js`), adaptado de la guía de usuario redactada en esta sesión (`MD/Guia de Usuario — Foresee 2.0.md`). Bump de `CACHE_NAME` (v12→v13). |
+| V F2 0013 | 2026-07-24 | Barra de acciones rediseñada para mobile: flecha de regreso (ícono, antes texto "← Inicio"), "❓ Cómo funciona" recoloreado (azul oscuro fijo) y siempre pegado al borde derecho (con `order`/`margin-left:auto` dinámico según la sección), botones a 44px de alto parejos entre sí incluido "Filtros" (antes con tipografía/radio propios), secciones con 2+ botones (Registros, Proyección) agrupadas en su propia fila repartida en partes iguales vía la clase `split-secondary` (`js/main.js`), resto en una sola fila. Etiquetas acortadas para que quepan a 360px: "+ Añadir Ítem"/"+ Añadir Tarjeta" → "+ Añadir", "+ Nueva Meta" → "+ Metas". Bump de `CACHE_NAME` (v13→v14). |
 
 ---
 
