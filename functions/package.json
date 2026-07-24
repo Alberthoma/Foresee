@@ -1,0 +1,13 @@
+{
+  "name": "functions",
+  "description": "Cloud Functions de Foresee — notificación por correo cuando alguien deja su correo o responde la encuesta en la landing",
+  "private": true,
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-functions": "^5.1.1",
+    "nodemailer": "^6.9.14"
+  }
+}
