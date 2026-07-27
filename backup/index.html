@@ -1,0 +1,1370 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#1f2937" />
+    <title>Foresee Finances</title>
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto,c_scale,w_180/v1782545519/Logotipo_Foresee2_vqou8q.png"
+    />
+    <script>
+      (function () {
+        var t = localStorage.getItem("foresee-theme");
+        if (t) document.documentElement.setAttribute("data-theme", t);
+      })();
+    </script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("sw.js").catch(function (err) {
+            console.error("[ServiceWorker] Error al registrar:", err);
+          });
+        });
+      }
+    </script>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/secciones.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  </head>
+  <body class="view-dashboard">
+    <!-- Pull-to-refresh indicator -->
+    <div id="ptr-container">
+      <div class="ptr-arrow"></div>
+      <div class="ptr-spinner"></div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="active">
+      <div class="spinner"></div>
+      <p class="loading-text">Cargando datos...</p>
+    </div>
+
+    <!-- Toast notifications -->
+    <div id="toast-container"></div>
+
+    <!-- Mobile fullscreen prompt -->
+    <div id="fullscreen-prompt">
+      <img src="https://res.cloudinary.com/datwdagbf/image/upload/v1783207500/Logo_Blanco_sin_Fondo_Textura_con_Foresse_Finances_fjojou.png" alt="Logo Foresee" />
+      <h2>Bienvenido a tu Gestor Financiero</h2>
+      <p>Toca el botón para iniciar en modo de pantalla completa y disfrutar de una mejor experiencia.</p>
+      <button id="btn-enter-fullscreen">Iniciar Aplicación</button>
+    </div>
+
+    <!-- AUTH MODAL -->
+    <div class="modal-overlay" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+      <div class="modal-box">
+        <div class="auth-brand">
+          <img
+            class="auth-brand-logo"
+            src="https://res.cloudinary.com/datwdagbf/image/upload/v1783207500/Logo_Blanco_sin_Fondo_Textura_con_Foresse_Finances_fjojou.png"
+            alt="Logo Foresee"
+          />
+          <h1 class="auth-brand-title" id="auth-title">Gestor Financiero<br />y de Presupuesto Web</h1>
+          <p class="auth-brand-tagline">Inicia sesión para acceder a tus datos</p>
+        </div>
+        <div class="auth-divider"></div>
+        <form id="auth-form" class="auth-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="auth-email">Correo Electrónico</label>
+            <input class="form-input" id="auth-email" type="email" autocomplete="email" required />
+            <span class="input-error" id="auth-email-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="auth-password">Contraseña</label>
+            <input class="form-input" id="auth-password" type="password" autocomplete="current-password" required />
+            <span class="input-error" id="auth-password-error" role="alert"></span>
+          </div>
+          <div class="auth-btn-row">
+            <button class="btn-primary" id="login-btn" type="submit">
+              Iniciar Sesión
+              <span class="btn-spinner hidden" id="login-spinner"></span>
+            </button>
+            <button class="btn-outline" id="register-btn" type="button">
+              Registrarse
+              <span class="btn-spinner hidden" id="register-spinner"></span>
+            </button>
+          </div>
+          <div class="auth-forgot-row">
+            <button class="auth-forgot-btn" id="forgot-password-btn" type="button">¿Olvidaste tu contraseña?</button>
+          </div>
+          <span class="auth-reset-msg hidden" id="auth-reset-msg" role="alert"></span>
+        </form>
+      </div>
+    </div>
+
+    <!-- CONFIRM MODAL (genérico, reutilizado desde la Fase 2) -->
+    <div class="modal-overlay" id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+      <div class="modal-box modal-box--sm">
+        <div class="modal-header">
+          <span class="modal-title" id="confirm-title">Confirmar</span>
+          <button class="btn-modal-close" id="confirm-close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="confirm-message" id="confirm-message"></p>
+          <div class="confirm-actions" style="display: flex; gap: var(--space-sm); justify-content: flex-end; margin-top: var(--space-md)">
+            <button class="btn-outline" id="confirm-cancel-btn">Cancelar</button>
+            <button class="btn-primary" id="confirm-ok-btn">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── HTML Templates (invisibles, clonados por JS) ──────────────────── -->
+    <template id="tpl-cc-card">
+      <div class="cc-card">
+        <div class="cc-card-header">
+          <div class="cc-card-title">
+            <span class="cc-card-icon">💳</span>
+            <span class="js-bank"></span>
+          </div>
+          <div class="cc-card-actions">
+            <label class="cc-exclude-label" title="Excluir del total adeudado">
+              <input type="checkbox" class="card-data-input" data-field="exclude" />
+              <span>Excluir</span>
+            </label>
+            <button class="btn-icon btn-icon--danger" data-action="delete" title="Eliminar tarjeta"></button>
+          </div>
+        </div>
+        <div class="cc-card-due js-due-date"></div>
+        <div class="cc-card-bar-wrap">
+          <div class="cc-card-bar-track"><div class="cc-card-bar-fill js-bar"></div></div>
+          <span class="cc-card-bar-pct js-pct"></span>
+        </div>
+        <div class="cc-card-figures">
+          <div class="cc-card-fig">
+            <span class="cc-fig-label">Adeudado</span>
+            <span class="cc-fig-val amount--expense js-deuda-display"></span>
+          </div>
+          <div class="cc-card-fig">
+            <span class="cc-fig-label">Disponible</span>
+            <span class="cc-fig-val js-disp"></span>
+          </div>
+        </div>
+        <div class="cc-card-inputs">
+          <div class="cc-input-row">
+            <label>Monto Adeudado</label>
+            <input type="number" class="cc-table-input card-data-input" data-field="amount" step="0.01" autocomplete="off" />
+          </div>
+          <div class="cc-input-row">
+            <label>Línea de Crédito</label>
+            <input type="number" class="cc-table-input card-data-input" data-field="limit" step="0.01" placeholder="0.00" autocomplete="off" />
+          </div>
+          <div class="cc-input-row">
+            <label>Interés Anual %</label>
+            <input type="number" class="cc-table-input card-data-input" data-field="rate" step="0.01" autocomplete="off" />
+          </div>
+          <div class="cc-input-row">
+            <label>Meses p/Saldar</label>
+            <input type="number" class="cc-table-input card-data-input" data-field="months" min="1" autocomplete="off" />
+          </div>
+          <div class="cc-input-row cc-input-row--pago">
+            <label class="cc-fig-label">Pago Mensual Estimado</label>
+            <span class="cc-fig-val js-pago"></span>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template id="tpl-goal-card">
+      <div class="cc-card goal-card">
+        <div class="cc-card-header">
+          <div class="cc-card-title">
+            <span class="cc-card-icon">🎯</span>
+            <span class="js-name"></span>
+          </div>
+          <div class="cc-card-actions">
+            <button class="btn-icon btn-icon--danger" data-action="delete" title="Eliminar meta"></button>
+          </div>
+        </div>
+        <div class="cc-card-due js-due-date"></div>
+        <div class="cc-card-bar-wrap">
+          <div class="cc-card-bar-track"><div class="cc-card-bar-fill js-bar"></div></div>
+          <span class="cc-card-bar-pct js-pct"></span>
+        </div>
+        <div class="cc-card-figures">
+          <div class="cc-card-fig">
+            <span class="cc-fig-label">Ahorrado</span>
+            <span class="cc-fig-val amount--income js-saved-display"></span>
+          </div>
+          <div class="cc-card-fig">
+            <span class="cc-fig-label">Restante</span>
+            <span class="cc-fig-val js-remain-display"></span>
+          </div>
+        </div>
+        <div class="cc-card-inputs">
+          <div class="cc-input-row">
+            <label>Ahorrado</label>
+            <input type="number" class="cc-table-input goal-data-input" data-field="savedAmount" step="0.01" min="0" autocomplete="off" />
+          </div>
+          <div class="cc-input-row">
+            <label>Objetivo</label>
+            <input type="number" class="cc-table-input goal-data-input" data-field="targetAmount" step="0.01" min="0" autocomplete="off" />
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template id="tpl-comunes-card">
+      <div class="item-card">
+        <div class="item-card-header">
+          <input type="text" class="item-card-name" placeholder="Nombre del gasto" />
+          <input type="number" class="item-card-total" placeholder="0.00" step="0.01" />
+          <button class="item-delete-btn" title="Eliminar ítem"></button>
+        </div>
+        <div class="item-people-panel"></div>
+        <div class="item-distributions"></div>
+      </div>
+    </template>
+
+    <template id="tpl-person-chip">
+      <div class="person-chip">
+        <div class="person-chip-avatar"></div>
+        <input type="text" class="person-chip-name" />
+        <button class="person-chip-delete" title="Eliminar">×</button>
+      </div>
+    </template>
+
+    <template id="tpl-dist-row">
+      <div class="dist-row">
+        <div class="dist-avatar"></div>
+        <div class="dist-person-info">
+          <div class="dist-person-name"></div>
+          <div class="dist-method-tag"></div>
+        </div>
+        <div class="dist-amount-col"></div>
+        <div class="dist-status-col"></div>
+      </div>
+    </template>
+
+    <!-- HEADER BAR (desktop) -->
+    <header id="app-header">
+      <img
+        class="logotipo"
+        src="https://res.cloudinary.com/datwdagbf/image/upload/v1783207500/Logo_Blanco_sin_Fondo_Textura_con_Foresse_Finances_fjojou.png"
+        alt="Logo Foresee"
+      />
+      <div class="header-center">
+        <h1>Gestor Financiero y de Presupuesto Web</h1>
+        <p id="header-subtitle">Bienvenido, <strong id="user-alias">Cargando...</strong></p>
+        <button id="btn-philosophy">Conoce nuestra filosofía</button>
+      </div>
+      <div class="header-actions">
+        <div class="header-actions-group">
+          <button class="btn-header" id="btn-fullscreen">Pantalla Completa</button>
+          <button class="btn-header" id="btn-exit-fullscreen">Mostrar Navegador</button>
+        </div>
+        <div class="header-actions-group">
+          <button class="btn-header btn-header--danger" id="logout-btn">
+            Cerrar Sesión
+            <span class="btn-spinner hidden"></span>
+          </button>
+          <button class="btn-header" id="btn-theme-toggle" title="Cambiar tema">☀ Claro</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- TAB BAR (fija abajo) -->
+    <nav id="tab-bar" role="tablist" aria-label="Secciones de la aplicación">
+      <button class="tab-btn" data-tab="registros" role="tab" aria-selected="false">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514689/registro_mc8ed8.png" alt="" />
+        <span>Registros</span>
+      </button>
+      <button class="tab-btn" id="btn-voice" data-tab="voz" role="tab" aria-selected="false">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/v1757199087/voz_w5ctvq.png" alt="" />
+        <span>Voz</span>
+      </button>
+      <button class="tab-btn" data-tab="proyeccion" role="tab" aria-selected="false">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514685/proyeccion_hh3xyt.png" alt="" />
+        <span>Proyección</span>
+      </button>
+      <button class="tab-btn" data-tab="recurrentes" role="tab" aria-selected="false">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514673/gastos-recurrentes2_udrbey.png" alt="" />
+        <span>Gastos<br />Recurrentes</span>
+      </button>
+      <button class="tab-btn" data-tab="gastos-comunes" role="tab" aria-selected="false">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756767509/comunes_xjuxxt.png" alt="" />
+        <span>Gastos<br />Comunes</span>
+      </button>
+      <button class="tab-btn" data-tab="tarjetas" role="tab" aria-selected="false">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514697/tarjetas2_z3jokx.png" alt="" />
+        <span>Tarjetas<br />y Préstamos</span>
+      </button>
+      <button class="tab-btn" data-tab="metas" role="tab" aria-selected="false">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/v1756514663/ahorro_vhwhw7.png" alt="" />
+        <span>Metas<br />de Ahorro</span>
+      </button>
+      <button class="tab-btn" data-tab="saldos" role="tab" aria-selected="false">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514692/saldos_lntcfz.png" alt="" />
+        <span>Saldos<br />de Cuentas</span>
+      </button>
+      <button class="tab-btn" data-tab="reportes" role="tab" aria-selected="false">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514690/reportes_qisw3e.png" alt="" />
+        <span>Reportes</span>
+      </button>
+      <button class="tab-btn" data-tab="presupuesto" role="tab" aria-selected="false">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514684/presupuesto_r7qkr9.png" alt="" />
+        <span>Presupuesto</span>
+      </button>
+      <button class="tab-btn" data-tab="configuracion" role="tab" aria-selected="false">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514668/configuracion_puo2ap.png" alt="" />
+        <span>Configuración</span>
+      </button>
+      <button class="tab-btn" data-tab="importar" role="tab" aria-selected="false">
+        <span style="font-size: 2rem; width: 3rem; height: 3rem; display: flex; align-items: center; justify-content: center; line-height: 1">⬇</span>
+        <span>Importar</span>
+      </button>
+      <button class="tab-btn" id="logout-tab-btn" role="button">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/v1756889218/51B410C2-D58E-47D8-9ECC-000296533E2C_udpy1y.png" alt="" />
+        <span>Salir</span>
+      </button>
+      <div id="offline-dot" title="Conectado"></div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-wrapper">
+      <!-- DASHBOARD VIEW -->
+      <section id="dashboard">
+        <div class="dash-card" id="dash-balance" data-goto="registros">
+          <div>
+            <p class="dash-card__label">Saldo Actual</p>
+            <p class="dash-card__value" id="dash-balance-value">$0.00</p>
+          </div>
+          <div class="dash-card__icon">
+            <img src="https://res.cloudinary.com/datwdagbf/image/upload/v1756889458/AA7C0FC4-9F29-48D3-BA63-CDF884DA716B_uwkqfp.png" alt="" />
+          </div>
+        </div>
+        <div class="dash-card" id="dash-income" data-goto="registros">
+          <div>
+            <p class="dash-card__label">Ingresos del Mes</p>
+            <p class="dash-card__value" id="dash-income-value">$0.00</p>
+          </div>
+          <div class="dash-card__icon">
+            <img src="https://res.cloudinary.com/datwdagbf/image/upload/v1757548984/ingresos1_mhofiz.png" alt="" />
+          </div>
+        </div>
+        <div class="dash-card" id="dash-expense" data-goto="registros">
+          <div>
+            <p class="dash-card__label">Gastos del Mes</p>
+            <p class="dash-card__value" id="dash-expense-value">$0.00</p>
+          </div>
+          <div class="dash-card__icon">
+            <img src="https://res.cloudinary.com/datwdagbf/image/upload/v1757548983/egresos1_zpgahj.png" alt="" />
+          </div>
+        </div>
+        <div id="dash-month-label"></div>
+      </section>
+
+      <section id="alerts-area">
+        <div id="dash-proj-banner" class="alert-item alert-item--danger hidden"></div>
+        <div class="alert-item alert-item--info hidden" id="email-verify-banner">
+          <span class="alert-item-icon">✉️</span>
+          <div class="alert-item-content">
+            <p>Todavía no confirmaste tu correo. Revisá tu bandeja de entrada, o volvé a enviarlo.</p>
+            <button type="button" class="alert-item-action" id="email-verify-resend">Reenviar correo</button>
+          </div>
+          <button type="button" class="alert-item-close" id="email-verify-dismiss" aria-label="Cerrar aviso">✕</button>
+        </div>
+        <div id="credit-card-alerts"></div>
+        <div id="recurring-alerts"></div>
+      </section>
+
+      <!-- CONTENT VIEW -->
+      <div id="content-area">
+        <div id="action-bar">
+          <button class="btn-action btn-action--icon" id="btn-to-dashboard" aria-label="Volver al inicio" title="Volver al inicio">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+          </button>
+          <div id="action-bar-secondary">
+            <button class="btn-action btn-action--primary hidden" id="btn-add-transaction">+ Registrar</button>
+            <button class="btn-action btn-action--purple hidden" id="btn-transfer">⇄ Transferir</button>
+            <button class="btn-action btn-action--primary hidden" id="btn-add-rec">+ Añadir</button>
+            <button class="btn-action btn-action--primary hidden" id="btn-add-projection">+ Proyección</button>
+            <button class="btn-action btn-action--primary hidden" id="btn-add-comun">+ Añadir</button>
+            <button class="btn-action btn-action--primary hidden" id="btn-add-card">+ Añadir</button>
+            <button class="btn-action btn-action--primary hidden" id="btn-add-meta">+ Metas</button>
+            <button class="btn-action btn-action--edit hidden" id="btn-edit-selected">✎ Editar</button>
+            <button class="btn-action btn-action--danger hidden" id="btn-delete-selected">✕ Eliminar Selec.</button>
+            <div id="reg-filter-group" class="filter-group hidden">
+              <button class="btn-action btn-filter-toggle" aria-label="Mostrar filtros">&#9881; Filtros</button>
+              <select id="reg-filter-month" aria-label="Filtrar por mes"></select>
+              <select id="reg-filter-bank" aria-label="Filtrar por banco"><option value="">Todos los bancos</option></select>
+              <select id="reg-filter-cat" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select>
+            </div>
+            <div id="proj-filter-group" class="filter-group hidden">
+              <button class="btn-action btn-filter-toggle" aria-label="Mostrar filtros">&#9881; Filtros</button>
+              <select id="proj-filter-month" aria-label="Filtrar por mes"></select>
+              <label class="proj-next-month-label">
+                <input type="checkbox" id="proj-show-next-month" />
+                Ver también el mes siguiente
+              </label>
+            </div>
+            <div id="rep-filter-group" class="filter-group hidden">
+              <button class="btn-action btn-filter-toggle" aria-label="Mostrar filtros">&#9881; Filtros</button>
+              <select id="rep-filter-month" aria-label="Filtrar período"></select>
+            </div>
+          </div>
+          <button class="btn-action btn-action--info" id="btn-section-help" title="Cómo funciona esta sección">❓ Cómo funciona</button>
+        </div>
+
+        <div id="section-registros" class="tab-pane" data-section="registros">
+          <div class="table-wrapper">
+            <table class="data-table" id="reg-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" class="tx-select" id="reg-select-all" aria-label="Seleccionar todos" /></th>
+                  <th>Fecha</th>
+                  <th>Descripción</th>
+                  <th>Categoría</th>
+                  <th>Banco</th>
+                  <th>Monto</th>
+                  <th>Saldo</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="reg-tbody"></tbody>
+              <tfoot id="reg-tfoot">
+                <tr>
+                  <td colspan="5" class="tfoot-label">Ingresos del mes:</td>
+                  <td id="reg-total-income" class="amount--income"></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td colspan="5" class="tfoot-label">Gastos del mes:</td>
+                  <td id="reg-total-expenses" class="amount--expense"></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <p id="reg-empty" class="empty-state hidden">No hay registros para este período.</p>
+          <datalist id="description-list"></datalist>
+        </div>
+        <div id="section-voz" class="tab-pane" data-section="voz">
+          <div class="voice-container">
+            <div class="voice-status-area" id="voice-status-idle">
+              <p>Toca el micrófono y dicta tu transacción.</p>
+              <p>Di <strong>"guardar"</strong> al final para procesarla.</p>
+            </div>
+            <div class="voice-status-area hidden" id="voice-status-listening">
+              <div class="voice-listening-dots"><span></span><span></span><span></span></div>
+              <p>Escuchando… di <strong>"guardar"</strong> cuando termines</p>
+            </div>
+
+            <button class="voice-mic-btn" id="voice-mic-btn" aria-label="Activar micrófono">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V20H9v2h6v-2h-2v-2.08A7 7 0 0 0 19 11h-2z" />
+              </svg>
+              <span id="voice-mic-label">Hablar</span>
+            </button>
+
+            <p class="voice-hint" id="voice-hint-text">
+              <strong>Ejemplos:</strong> "El quince compré queso en Walmart por quince con cuarenta y cinco, usé Wells Fargo, categoría Alimentación" · "Recibí sueldo de dos mil en Banco Nacional guardar"
+            </p>
+
+            <div class="voice-transcript-area hidden" id="voice-transcript-area">
+              <div class="voice-transcript-label">Lo que escuché</div>
+              <div class="voice-transcript-text" id="voice-transcript-text"></div>
+            </div>
+
+            <div class="voice-confirmation hidden" id="voice-confirmation">
+              <div class="voice-confirm-header">Confirma la transacción</div>
+              <div class="voice-confirm-body">
+                <div class="voice-type-row">
+                  <button class="voice-type-btn" id="voice-type-income">▲ Ingreso</button>
+                  <button class="voice-type-btn" id="voice-type-expense">▼ Gasto</button>
+                </div>
+                <div class="voice-field-row">
+                  <label for="voice-amount">Monto</label>
+                  <input id="voice-amount" type="number" step="0.01" min="0" placeholder="0.00" />
+                </div>
+                <div class="voice-field-row">
+                  <label for="voice-date">Fecha</label>
+                  <input id="voice-date" type="date" />
+                </div>
+                <div class="voice-field-row">
+                  <label for="voice-description">Descripción</label>
+                  <input id="voice-description" type="text" placeholder="Descripción del registro" />
+                </div>
+                <div class="voice-field-row">
+                  <label for="voice-category">Categoría</label>
+                  <select id="voice-category"></select>
+                </div>
+                <div class="voice-field-row">
+                  <label for="voice-bank">Banco / Cuenta</label>
+                  <select id="voice-bank"></select>
+                </div>
+              </div>
+              <div class="voice-confirm-actions">
+                <button class="btn-primary" id="voice-save-btn">Guardar</button>
+                <button class="btn-outline" id="voice-new-btn">Nueva</button>
+                <button class="btn-outline" id="voice-cancel-btn">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="section-proyeccion" class="tab-pane" data-section="proyeccion">
+          <div class="table-wrapper">
+            <table class="data-table" id="proj-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="proj-select-all" aria-label="Seleccionar todos" /></th>
+                  <th>Fecha</th>
+                  <th>Descripción</th>
+                  <th>Categoría</th>
+                  <th>Banco</th>
+                  <th>Monto</th>
+                  <th>Saldo</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="proj-tbody"></tbody>
+              <tfoot id="proj-tfoot" class="hidden">
+                <tr>
+                  <td colspan="5" class="tfoot-label">Ingresos proyectados:</td>
+                  <td id="proj-total-income" class="amount--income"></td>
+                  <td colspan="2"></td>
+                </tr>
+                <tr>
+                  <td colspan="5" class="tfoot-label">Gastos proyectados:</td>
+                  <td id="proj-total-expenses" class="amount--expense"></td>
+                  <td colspan="2"></td>
+                </tr>
+              </tfoot>
+            </table>
+            <p id="proj-empty" class="empty-state hidden">No hay entradas para este período.</p>
+          </div>
+        </div>
+        <div id="section-recurrentes" class="tab-pane" data-section="recurrentes">
+          <div class="table-wrapper">
+            <table class="data-table" id="rec-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="rec-select-all" aria-label="Seleccionar todos" /></th>
+                  <th>Día</th>
+                  <th>Descripción</th>
+                  <th>Categoría</th>
+                  <th>Monto</th>
+                  <th>Banco/Cuenta</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="rec-tbody"></tbody>
+              <tfoot id="rec-tfoot" class="hidden">
+                <tr>
+                  <td colspan="4">Total Mensual Proyectado</td>
+                  <td id="rec-total" class="rec-amount">$0.00</td>
+                  <td colspan="2"></td>
+                </tr>
+              </tfoot>
+            </table>
+            <p id="rec-empty" class="rec-empty">No has añadido ningún gasto recurrente.</p>
+          </div>
+        </div>
+        <div id="section-comunes" class="tab-pane" data-section="gastos-comunes">
+          <p id="comunes-empty" class="comunes-empty hidden">No hay gastos comunes. Usa "Añadir" para comenzar.</p>
+          <div id="comunes-cards"></div>
+          <div id="dist-popover" class="hidden">
+            <div class="dist-popover-item" data-method="equal">Dividir en partes iguales</div>
+            <div class="dist-popover-item" data-method="percentage">Dividir por Porcentaje (%)</div>
+            <div class="dist-popover-item" data-method="manual">Ingresar Monto Manual</div>
+          </div>
+        </div>
+        <div id="section-tarjetas" class="tab-pane" data-section="tarjetas">
+          <div id="cc-cards" class="cc-cards-grid"></div>
+          <div id="cc-tfoot" class="cc-totals-card hidden" style="margin-top: var(--space-md)">
+            <p class="cc-totals-title">Totales</p>
+            <div class="cc-totals-grid">
+              <div class="cc-total-item">
+                <span class="cc-fig-label">Total Adeudado</span>
+                <span id="cc-total-amount" class="cc-fig-val amount--expense">$0.00</span>
+              </div>
+              <div class="cc-total-item">
+                <span class="cc-fig-label">Línea Total</span>
+                <span id="cc-total-limit" class="cc-fig-val">$0.00</span>
+              </div>
+              <div class="cc-total-item">
+                <span class="cc-fig-label">Disponible Total</span>
+                <span id="cc-total-available" class="cc-fig-val balance--positive">$0.00</span>
+              </div>
+              <div class="cc-total-item">
+                <span class="cc-fig-label">Pago Mensual Total</span>
+                <span id="cc-total-monthly" class="cc-fig-val">$0.00</span>
+              </div>
+            </div>
+          </div>
+          <p id="cc-empty" class="cc-empty">No has añadido ninguna tarjeta de crédito.</p>
+        </div>
+        <div id="section-metas" class="tab-pane" data-section="metas">
+          <div id="goal-cards" class="cc-cards-grid"></div>
+          <p id="goal-empty" class="cc-empty">No has creado ninguna meta de ahorro.</p>
+        </div>
+        <div id="section-saldos" class="tab-pane" data-section="saldos">
+          <div class="saldo-grid" id="saldos-grid"></div>
+          <p id="saldos-empty" class="empty-state hidden">Agrega bancos en Configuración para ver tus saldos.</p>
+        </div>
+        <div id="section-reportes" class="tab-pane" data-section="reportes">
+          <div class="rep-grid">
+            <div class="rep-card rep-card--full">
+              <p class="rep-card__title">Tasa de Ahorro del Mes</p>
+              <div class="rep-stat-row rep-savings-row" id="rep-savings-stats"></div>
+            </div>
+            <div class="rep-card">
+              <p class="rep-card__title">Gastos por Categoría</p>
+              <div class="rep-canvas-wrap"><canvas id="rep-donut-canvas"></canvas></div>
+              <div class="rep-legend" id="rep-donut-legend"></div>
+              <div id="rep-cat-detail" class="rep-cat-detail hidden">
+                <div class="rep-cat-detail__header">
+                  <span id="rep-cat-detail-name" class="rep-cat-detail__name"></span>
+                  <button id="rep-cat-detail-close" class="rep-cat-detail__close" aria-label="Cerrar">✕</button>
+                </div>
+                <div id="rep-cat-detail-list" class="rep-cat-detail__list"></div>
+              </div>
+            </div>
+            <div class="rep-card">
+              <p class="rep-card__title">Flujo de Caja (últimos 6 meses)</p>
+              <div class="rep-canvas-wrap"><canvas id="rep-bar-canvas"></canvas></div>
+            </div>
+          </div>
+          <p id="rep-empty" class="empty-state hidden">No hay gastos registrados para este período.</p>
+
+          <div class="rep-card rep-card--full">
+            <p class="rep-card__title">Evolución del Saldo</p>
+            <div class="rep-canvas-wrap" id="rep-balance-wrap"><canvas id="rep-balance-canvas"></canvas></div>
+            <p id="rep-balance-empty" class="rep-async-msg hidden">Sin transacciones en este período.</p>
+          </div>
+
+          <div class="rep-card rep-card--full">
+            <p class="rep-card__title">Recurrentes vs Variables</p>
+            <div class="rep-stat-row" id="rep-recurring-stats"></div>
+          </div>
+
+          <div class="rep-card rep-card--full">
+            <p class="rep-card__title">Gasto por Día del Mes</p>
+            <div class="rep-canvas-wrap"><canvas id="rep-days-canvas"></canvas></div>
+          </div>
+
+          <div class="rep-card rep-card--full">
+            <p class="rep-card__title">Comparativa vs Mes Anterior</p>
+            <div id="rep-compare-body"></div>
+          </div>
+
+          <div class="rep-card rep-card--full">
+            <p class="rep-card__title">Resumen Anual</p>
+            <div class="rep-canvas-wrap" id="rep-annual-wrap"><canvas id="rep-annual-canvas"></canvas></div>
+            <p id="rep-annual-empty" class="rep-async-msg hidden"></p>
+          </div>
+        </div>
+        <div id="section-presupuesto" class="tab-pane" data-section="presupuesto">
+          <div class="table-wrapper">
+            <table class="data-table" id="budget-table">
+              <thead>
+                <tr>
+                  <th>Categoría</th>
+                  <th>Presupuesto</th>
+                  <th>Gastado</th>
+                  <th>Disponible</th>
+                </tr>
+              </thead>
+              <tbody id="budget-tbody"></tbody>
+              <tfoot>
+                <tr>
+                  <td class="tfoot-label">Totales</td>
+                  <td id="budget-total-budgeted" class="amount--income"></td>
+                  <td id="budget-total-spent" class="amount--expense"></td>
+                  <td id="budget-total-remaining"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <p id="budget-empty" class="empty-state hidden">Agrega categorías en Configuración para asignar presupuestos.</p>
+        </div>
+        <div id="section-configuracion" class="tab-pane" data-section="configuracion">
+          <div class="cfg-body">
+            <div class="cfg-grid">
+              <div class="cfg-grid-section">
+                <h3>Categorías</h3>
+                <div class="cfg-form">
+                  <input type="text" id="cfg-cat-name" placeholder="Nombre de categoría" autocomplete="off" />
+                  <button class="btn-primary btn-cfg" id="cfg-cat-add-btn">+ Agregar</button>
+                </div>
+                <span class="cfg-error" id="cfg-cat-error"></span>
+                <div class="cfg-list-container"><ul class="cfg-list" id="cfg-cat-list"></ul></div>
+              </div>
+              <div class="cfg-grid-section">
+                <h3>Bancos / Cuentas</h3>
+                <div class="cfg-form">
+                  <input type="text" id="cfg-bank-name" placeholder="Nombre del banco o cuenta" autocomplete="off" />
+                  <button class="btn-primary btn-cfg" id="cfg-bank-add-btn">+ Agregar</button>
+                </div>
+                <span class="cfg-error" id="cfg-bank-error"></span>
+                <div class="cfg-list-container"><ul class="cfg-list" id="cfg-bank-list"></ul></div>
+              </div>
+              <div class="cfg-grid-section">
+                <h3>Descripciones</h3>
+                <p class="cfg-desc">Se guardan automáticamente al registrar transacciones.</p>
+                <div class="cfg-list-container"><ul class="cfg-list" id="cfg-desc-list"></ul></div>
+              </div>
+            </div>
+
+            <div class="cfg-section">
+              <h3>Configuración de Usuario</h3>
+              <div class="cfg-form">
+                <label for="cfg-alias">Alias / Nombre visible</label>
+                <input type="text" id="cfg-alias" placeholder="Tu nombre o alias visible" autocomplete="off" />
+                <span class="cfg-error" id="cfg-alias-error"></span>
+                <button class="btn-primary btn-cfg" id="cfg-alias-btn">Guardar Alias</button>
+              </div>
+            </div>
+
+            <div class="cfg-section">
+              <h3>Cambiar Contraseña</h3>
+              <form id="cfg-password-form" novalidate>
+                <div class="cfg-form">
+                  <label for="cfg-pwd-current">Contraseña actual</label>
+                  <input type="password" id="cfg-pwd-current" autocomplete="current-password" required />
+                  <span class="cfg-error" id="cfg-pwd-current-error"></span>
+                  <label for="cfg-pwd-new">Nueva contraseña (mín. 6 caracteres)</label>
+                  <input type="password" id="cfg-pwd-new" autocomplete="new-password" required />
+                  <span class="cfg-error" id="cfg-pwd-new-error"></span>
+                  <label for="cfg-pwd-confirm">Confirmar nueva contraseña</label>
+                  <input type="password" id="cfg-pwd-confirm" autocomplete="new-password" required />
+                  <span class="cfg-error" id="cfg-pwd-confirm-error"></span>
+                  <button class="btn-primary btn-cfg-submit" type="submit" id="cfg-pwd-btn">Actualizar Contraseña</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="cfg-section">
+              <h3>Saldo Inicial</h3>
+              <div class="cfg-form">
+                <label for="cfg-opening-balance">Saldo de partida antes de cualquier transacción</label>
+                <input type="number" id="cfg-opening-balance" placeholder="0.00" min="0" step="0.01" />
+                <button class="btn-primary btn-cfg" id="cfg-balance-btn">Guardar</button>
+              </div>
+            </div>
+
+            <div class="cfg-section">
+              <h3>Divisa</h3>
+              <div class="cfg-form">
+                <label for="cfg-currency">Moneda para mostrar importes</label>
+                <select id="cfg-currency" class="cfg-select">
+                  <option value="USD">USD — Dólar estadounidense ($)</option>
+                  <option value="EUR">EUR — Euro (€)</option>
+                  <option value="GBP">GBP — Libra esterlina (£)</option>
+                  <option value="CAD">CAD — Dólar canadiense (CA$)</option>
+                  <option value="AUD">AUD — Dólar australiano (A$)</option>
+                  <option value="MXN">MXN — Peso mexicano ($)</option>
+                  <option value="COP">COP — Peso colombiano ($)</option>
+                  <option value="ARS">ARS — Peso argentino ($)</option>
+                  <option value="CLP">CLP — Peso chileno ($)</option>
+                  <option value="PEN">PEN — Sol peruano (S/)</option>
+                  <option value="BRL">BRL — Real brasileño (R$)</option>
+                  <option value="JPY">JPY — Yen japonés (¥)</option>
+                  <option value="CNY">CNY — Yuan chino (¥)</option>
+                  <option value="INR">INR — Rupia india (₹)</option>
+                  <option value="CHF">CHF — Franco suizo (CHF)</option>
+                </select>
+                <button class="btn-primary btn-cfg" id="cfg-currency-btn">Guardar Divisa</button>
+              </div>
+            </div>
+
+            <div class="cfg-section">
+              <h3>Apariencia</h3>
+              <div class="cfg-notif-row">
+                <span id="cfg-theme-status" class="cfg-notif-status">Modo oscuro</span>
+                <button class="btn-outline btn-cfg" id="cfg-theme-btn">☀ Modo Claro</button>
+              </div>
+              <p class="cfg-desc">Alterna entre el modo oscuro y el modo claro de la interfaz.</p>
+            </div>
+
+            <div class="cfg-section">
+              <h3>Notificaciones</h3>
+              <div class="cfg-notif-row">
+                <span id="cfg-notif-status" class="cfg-notif-status">Cargando...</span>
+                <button class="btn-outline btn-cfg" id="cfg-notif-btn">Activar</button>
+              </div>
+              <p class="cfg-desc">Recibe alertas del navegador cuando un gasto recurrente vence mañana o una tarjeta de crédito supera el 80% del límite.</p>
+            </div>
+
+            <div class="cfg-section">
+              <h3>Recordatorios por Correo</h3>
+              <div class="cfg-notif-row">
+                <span id="cfg-email-status" class="cfg-notif-status">Cargando...</span>
+                <button class="btn-outline btn-cfg" id="cfg-email-btn">Activar</button>
+              </div>
+              <p class="cfg-desc">Recibe un correo 5 días antes, 1 día antes y el día de vencimiento de cada gasto recurrente — incluso si no tenés la app abierta.</p>
+            </div>
+
+            <div class="cfg-section">
+              <h3>Recordatorios Push (Teléfono)</h3>
+              <div class="cfg-notif-row">
+                <span id="cfg-push-status" class="cfg-notif-status">Cargando...</span>
+                <button class="btn-outline btn-cfg" id="cfg-push-btn">Activar</button>
+              </div>
+              <p class="cfg-desc">Recibe una notificación push en tu teléfono o computadora — sin tener la app abierta. En iPhone solo funciona si agregaste la app a la pantalla de inicio.</p>
+            </div>
+
+            <div class="cfg-section">
+              <h3>Acciones de Período</h3>
+              <button class="btn-outline btn-cfg" id="cfg-new-month-btn">Iniciar Nuevo Mes</button>
+              <p class="cfg-desc">Archiva una copia del mes actual y cambia el filtro al siguiente mes. Las transacciones históricas se conservan.</p>
+              <button class="btn-primary btn-cfg" id="cfg-recover-archive-btn">Recuperar Datos Archivados</button>
+              <p class="cfg-desc">Restaura las transacciones del último archivo de cambio de mes. Úsalo si los datos desaparecieron tras el cambio automático.</p>
+            </div>
+
+            <div class="cfg-section">
+              <h3>Importar y Exportar</h3>
+              <div class="cfg-actions">
+                <button class="btn-primary" id="cfg-export-btn">Exportar JSON</button>
+                <button class="btn-outline" id="cfg-import-btn">Importar JSON</button>
+                <button class="btn-outline" id="cfg-pdf-btn">Exportar PDF</button>
+                <input type="file" id="cfg-import-file" accept=".json" class="hidden" />
+              </div>
+              <p class="cfg-desc">El JSON incluye transacciones, proyecciones, recurrentes, tarjetas, metas de ahorro, gastos comunes, presupuestos y configuración. El PDF exporta las transacciones del mes activo.</p>
+            </div>
+
+            <div class="cfg-section">
+              <h3>Exportar Datos</h3>
+              <p class="cfg-desc">Exporta todas las secciones a un único archivo Excel con 4 hojas: Registro, Proyecciones, Gastos Recurrentes y Tarjetas.</p>
+              <div class="cfg-form" style="flex-direction: row; flex-wrap: wrap">
+                <button class="btn-outline btn-cfg" id="cfg-export-excel-btn">⬇ Exportar Excel (.xlsx)</button>
+              </div>
+            </div>
+
+            <div class="cfg-section cfg-danger">
+              <h3>Zona de Peligro</h3>
+              <button class="btn-outline cfg-btn-danger btn-cfg" id="cfg-reset-btn">Reiniciar Período</button>
+              <p class="cfg-desc">Elimina todas las transacciones y proyecciones. Conserva categorías, bancos, descripciones y gastos recurrentes.</p>
+              <button class="btn-outline cfg-btn-danger btn-cfg" id="cfg-delete-account-btn" style="margin-top: var(--space-md)">Eliminar Mi Cuenta</button>
+              <p class="cfg-desc">Elimina permanentemente tu cuenta y todos tus datos. Esta acción no se puede deshacer.</p>
+            </div>
+          </div>
+        </div>
+        <div id="section-importar" class="tab-pane" data-section="importar">
+          <div id="import-drop-zone" class="import-drop-zone">
+            <span class="import-drop-icon">⬇</span>
+            <p class="import-drop-title">Importar extracto bancario</p>
+            <p class="import-drop-desc">Arrastra un archivo .csv, .xlsx o una captura de pantalla aquí, o haz clic para seleccionar</p>
+            <button class="btn-primary" id="import-select-btn">Seleccionar archivo</button>
+            <p class="import-drop-hint">Compatible: Bank of America · Chase · Wells Fargo · Captura de pantalla (beta)</p>
+          </div>
+          <input type="file" id="import-file-input" accept=".csv,.xlsx,.xls,image/*" multiple hidden />
+
+          <div id="import-preview" class="hidden">
+            <div class="import-stats" id="import-stats"></div>
+            <div class="import-sel-bar">
+              <span id="import-sel-count"></span>
+              <button class="btn-outline" id="import-deselect-dups-btn" style="font-size: var(--font-xs); padding: 2px 8px">Deseleccionar duplicados</button>
+            </div>
+            <div class="table-wrapper">
+              <table class="data-table" id="import-table">
+                <thead>
+                  <tr>
+                    <th><input type="checkbox" id="import-select-all" /></th>
+                    <th>Fecha</th>
+                    <th>Descripción</th>
+                    <th>Categoría</th>
+                    <th>
+                      <select id="import-th-banco" class="import-th-bank-select" title="Asignar el mismo banco a todas las filas">
+                        <option value="">Banco ▾</option>
+                      </select>
+                    </th>
+                    <th>Monto</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="import-tbody"></tbody>
+              </table>
+            </div>
+            <p style="text-align: center; font-size: var(--font-xs); color: var(--color-text-muted); margin: 0 var(--space-md);">
+              Las transacciones seleccionadas se agregarán a tu sección <strong>Registros</strong>
+            </p>
+            <div class="import-action-bar">
+              <button class="btn-primary" id="import-confirm-btn">Guardar en Registros</button>
+              <button class="btn-outline" id="import-reset-btn">Limpiar</button>
+            </div>
+          </div>
+
+          <div id="import-summary" class="hidden">
+            <div class="import-summary-box">
+              <span class="import-summary-icon">✅</span>
+              <h3 id="import-summary-title"></h3>
+              <p id="import-summary-detail"></p>
+              <button class="btn-primary" id="import-new-btn">Importar otro archivo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- MODAL: AÑADIR / EDITAR GASTO RECURRENTE (#rec-modal) -->
+    <div class="modal-overlay" id="rec-modal" role="dialog" aria-modal="true" aria-labelledby="rec-modal-title">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title" id="rec-modal-title">Añadir Gasto Recurrente</span>
+          <button class="btn-modal-close" id="rec-close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="alert-item alert-item--info" id="rec-tip-banner">
+            <span class="alert-item-icon">💡</span>
+            <div class="alert-item-content">
+              <p>Para evitar duplicados al importar: usa una palabra que aparezca igual en el extracto del banco (ej. el nombre de la empresa) y ajusta el día lo más cerca posible de la fecha real del cargo.</p>
+              <label class="alert-item-dismiss">
+                <input type="checkbox" id="rec-tip-dismiss" />
+                No volver a mostrar
+              </label>
+            </div>
+          </div>
+          <form id="rec-form" novalidate>
+            <input type="hidden" id="rec-edit-id" />
+            <div class="modal-form">
+              <div class="modal-input-wrap">
+                <input type="text" id="rec-desc" list="description-list" autocomplete="off" placeholder="Descripción del gasto" required />
+              </div>
+              <div class="modal-input-wrap">
+                <select id="rec-cat" required><option value="">— Categoría —</option></select>
+              </div>
+              <div class="modal-input-wrap">
+                <select id="rec-bank" required><option value="">— Banco / Cuenta —</option></select>
+              </div>
+              <div class="modal-input-wrap modal-input-wrap--prefix">
+                <span class="modal-prefix">$</span>
+                <input type="number" id="rec-amount" min="0.01" step="0.01" placeholder="Monto que pagas tú" required />
+              </div>
+              <div class="modal-input-wrap modal-input-wrap--prefix">
+                <span class="modal-prefix">#</span>
+                <input type="number" id="rec-day" min="1" max="31" placeholder="Día de pago (1–31)" required />
+              </div>
+              <div class="modal-input-wrap modal-input-wrap--prefix">
+                <span class="modal-prefix">$</span>
+                <input type="number" id="rec-shared-amount" min="0" step="0.01" placeholder="Monto total cobrado (si es compartido)" />
+              </div>
+              <p class="field-hint">Llena esto solo si el monto que cobra el banco es distinto al que pagas tú (ej. gasto compartido con otras personas).</p>
+            </div>
+            <button type="submit" class="btn-modal-save" id="rec-save-btn">Guardar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: AÑADIR TARJETA DE CRÉDITO (#cc-modal) -->
+    <div class="modal-overlay" id="cc-modal" role="dialog" aria-modal="true" aria-labelledby="cc-modal-title">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title" id="cc-modal-title">Añadir Tarjeta</span>
+          <button class="btn-modal-close" id="cc-close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body">
+          <form id="cc-form" novalidate>
+            <div class="modal-form">
+              <div class="modal-input-wrap">
+                <input type="text" id="cc-bank" placeholder="Banco o nombre de la tarjeta" required />
+              </div>
+              <div class="modal-input-wrap modal-input-wrap--prefix">
+                <span class="modal-prefix">$</span>
+                <input type="number" id="cc-amount" min="0" step="0.01" placeholder="Monto adeudado" required />
+              </div>
+              <div class="modal-input-wrap modal-input-wrap--prefix">
+                <span class="modal-prefix">$</span>
+                <input type="number" id="cc-limit" min="0" step="0.01" placeholder="Línea de crédito (opcional)" />
+              </div>
+              <div class="modal-input-wrap modal-input-wrap--prefix">
+                <span class="modal-prefix">#</span>
+                <input type="number" id="cc-due-date" min="1" max="31" placeholder="Día de pago (1–31)" required />
+              </div>
+              <div class="modal-input-wrap modal-input-wrap--prefix">
+                <span class="modal-prefix">%</span>
+                <input type="number" id="cc-rate" min="0" step="0.01" placeholder="Interés anual" required />
+              </div>
+              <div class="modal-input-wrap modal-input-wrap--prefix">
+                <span class="modal-prefix">÷</span>
+                <input type="number" id="cc-months" min="1" placeholder="Meses para saldar" required />
+              </div>
+            </div>
+            <button type="submit" class="btn-modal-save" id="cc-save-btn">Añadir Tarjeta</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: NUEVA META DE AHORRO (#meta-modal) -->
+    <div class="modal-overlay" id="meta-modal" role="dialog" aria-modal="true" aria-labelledby="meta-modal-title">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title" id="meta-modal-title">Nueva Meta de Ahorro</span>
+          <button class="btn-modal-close" id="meta-close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body">
+          <form id="meta-form" novalidate>
+            <div class="modal-form">
+              <div class="modal-input-wrap">
+                <input type="text" id="meta-name" placeholder="Nombre de la meta (ej. Viaje a México)" required />
+              </div>
+              <div class="modal-input-wrap modal-input-wrap--prefix">
+                <span class="modal-prefix">$</span>
+                <input type="number" id="meta-target" min="0" step="0.01" placeholder="Monto objetivo" required />
+              </div>
+              <div class="modal-input-wrap modal-input-wrap--prefix">
+                <span class="modal-prefix">$</span>
+                <input type="number" id="meta-saved" min="0" step="0.01" placeholder="Ya ahorrado (opcional)" />
+              </div>
+              <div class="modal-input-wrap">
+                <input type="date" id="meta-date" placeholder="Fecha objetivo (opcional)" />
+              </div>
+            </div>
+            <button type="submit" class="btn-modal-save" id="meta-save-btn">Crear Meta</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: VALOR DE DISTRIBUCIÓN (% o monto manual) -->
+    <div class="modal-overlay" id="dist-input-modal" role="dialog" aria-modal="true">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title" id="dist-input-title">Ingresar Valor</span>
+          <button class="btn-modal-close" id="dist-input-close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body">
+          <form id="dist-input-form" novalidate>
+            <div class="form-field">
+              <label id="dist-input-label" for="dist-input-value">Valor</label>
+              <input type="number" id="dist-input-value" step="0.01" min="0" required />
+            </div>
+            <div class="form-actions" style="display: flex; gap: var(--space-sm); justify-content: flex-end; margin-top: var(--space-md)">
+              <button type="button" class="btn-outline" id="dist-input-cancel-btn">Cancelar</button>
+              <button type="submit" class="btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: BANCO PARA REGISTRAR PAGO DE GASTO COMÚN -->
+    <div class="modal-overlay" id="shared-bank-modal" role="dialog" aria-modal="true">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title">Seleccionar Banco para el Pago</span>
+          <button class="btn-modal-close" id="shared-bank-close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body">
+          <p id="shared-bank-summary" class="cfg-note"></p>
+          <div class="form-field">
+            <label for="shared-bank-select">Banco/Cuenta de Origen</label>
+            <select id="shared-bank-select" required><option value="">-- Banco --</option></select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-outline" id="shared-bank-cancel-btn">Cancelar</button>
+          <button type="button" class="btn-primary" id="shared-bank-confirm-btn">Registrar Pago</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: SELECTOR DE ÍCONO PARA CATEGORÍA -->
+    <div class="modal-overlay" id="cfg-cat-icon-modal" role="dialog" aria-modal="true" aria-labelledby="cfg-cat-icon-modal-title">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title" id="cfg-cat-icon-modal-title">Selecciona un Ícono</span>
+          <button class="btn-modal-close" id="cfg-cat-icon-close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body">
+          <div id="cfg-cat-icon-grid" class="icon-grid"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-outline" id="cfg-cat-icon-cancel-btn">Cancelar</button>
+          <button type="button" class="btn-primary" id="cfg-cat-icon-save-btn">Guardar Categoría</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: ELIMINAR CUENTA -->
+    <div class="modal-overlay" id="delete-account-modal" role="dialog" aria-modal="true" aria-labelledby="delete-account-title">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title" id="delete-account-title">Eliminar Cuenta</span>
+          <button class="btn-modal-close" id="delete-account-close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body">
+          <p style="color: var(--color-danger); font-weight: 600; margin-bottom: var(--space-sm)">⚠️ Esta acción es permanente e irreversible.</p>
+          <p style="color: var(--color-text-muted); font-size: var(--font-sm); margin-bottom: var(--space-md)">
+            Se eliminarán todos tus datos: transacciones, proyecciones, tarjetas, metas de ahorro, gastos recurrentes, presupuestos y configuración.
+          </p>
+          <div class="form-group">
+            <label class="form-label" for="delete-account-password">Confirma tu contraseña para continuar</label>
+            <input class="form-input" id="delete-account-password" type="password" autocomplete="current-password" placeholder="Tu contraseña actual" />
+            <span class="input-error" id="delete-account-error" role="alert"></span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-outline" id="delete-account-cancel-btn">Cancelar</button>
+          <button class="btn-primary" id="delete-account-confirm-btn" style="background: var(--color-danger); border-color: var(--color-danger)">
+            Eliminar Todo
+            <span class="btn-spinner hidden" id="delete-account-spinner"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTÓN FLOTANTE: TUTORIAL -->
+    <button id="tutorial-fab" title="Ver tutoriales" aria-label="Ver tutoriales en video">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7z" /></svg>
+    </button>
+
+    <!-- MODAL: TUTORIAL DE VIDEOS -->
+    <div id="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorial-modal-heading">
+      <div id="tutorial-modal-content">
+        <div id="tutorial-modal-header">
+          <h2 id="tutorial-modal-heading">Aprende Foresee</h2>
+          <button id="tutorial-modal-close" aria-label="Cerrar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div id="tutorial-modal-body">
+          <div id="tutorial-video-section">
+            <p id="tutorial-video-title">Selecciona un video</p>
+            <div class="tutorial-video-wrap"><video id="tutorial-player" controls preload="none"></video></div>
+          </div>
+          <div id="tutorial-list-section">
+            <h4>Paso a paso</h4>
+            <div id="tutorial-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: ONBOARDING (bienvenida) -->
+    <div id="onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboarding-title">
+      <div id="onboarding-box">
+        <div class="onboarding-progress" id="onboarding-progress">
+          <div class="onboarding-dot done" data-step="0"></div>
+          <div class="onboarding-dot" data-step="1"></div>
+          <div class="onboarding-dot" data-step="2"></div>
+        </div>
+
+        <div class="onboarding-step active" id="onboarding-step-0">
+          <div class="onboarding-logo">🎯</div>
+          <h2 class="onboarding-title" id="onboarding-title">Bienvenido a Foresee</h2>
+          <p class="onboarding-desc">Tu gestor de presupuesto personal. En menos de 2 minutos estarás listo para controlar tu dinero.</p>
+          <div class="cfg-form" style="margin-top: 0">
+            <label class="form-label" for="onboarding-alias">¿Cómo te llamamos?</label>
+            <input class="form-input" id="onboarding-alias" type="text" placeholder="Tu nombre o alias" autocomplete="given-name" maxlength="30" />
+          </div>
+          <div class="onboarding-actions">
+            <button class="btn-primary" id="onboarding-next-0">Continuar →</button>
+          </div>
+        </div>
+
+        <div class="onboarding-step" id="onboarding-step-1">
+          <div class="onboarding-logo">📊</div>
+          <h2 class="onboarding-title">¿Empezar con datos de ejemplo?</h2>
+          <p class="onboarding-desc">Cargamos categorías, bancos y transacciones de muestra para que veas la app en acción. Puedes borrarlos cuando quieras.</p>
+          <div class="onboarding-actions">
+            <button class="btn-primary" id="onboarding-demo-yes">Sí, cargar datos de ejemplo</button>
+            <button class="btn-outline" id="onboarding-demo-no">No, empezar desde cero</button>
+          </div>
+        </div>
+
+        <div class="onboarding-step" id="onboarding-step-2">
+          <div class="onboarding-logo">🎬</div>
+          <h2 class="onboarding-title">¡Listo para comenzar!</h2>
+          <p class="onboarding-desc">Te recomendamos ver el tutorial de 7 videos. Aprenderás todo lo que necesitas en pocos minutos.</p>
+          <div class="onboarding-actions">
+            <button class="btn-primary" id="onboarding-watch-tutorial">Ver tutorial ahora</button>
+            <button class="btn-outline" id="onboarding-finish">Explorar solo</button>
+          </div>
+          <button class="onboarding-skip" id="onboarding-skip-all">Saltar por ahora</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: CALCULADORA (#calc-modal) -->
+    <div class="modal-overlay" id="calc-modal" role="dialog" aria-modal="true" aria-labelledby="calc-modal-title">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title" id="calc-modal-title">Nueva Transacción</span>
+          <button class="btn-modal-close" id="calc-close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="tipo-bar">
+            <button class="btn-tipo" data-tipo="income">Ingreso</button>
+            <button class="btn-tipo" data-tipo="expense">Gasto</button>
+          </div>
+          <div class="calc-meta">
+            <input type="date" id="calc-date" />
+            <input type="text" id="calc-desc" list="description-list" placeholder="Descripción…" autocomplete="off" />
+            <select id="calc-bank"><option value="">— Banco / Cuenta —</option></select>
+            <button type="button" class="btn-scan-receipt" id="calc-scan-receipt-btn" title="Escanear recibo">📷 Escanear recibo</button>
+            <input type="file" id="calc-receipt-input" accept="image/*" capture="environment" class="hidden" />
+          </div>
+          <div class="calc-display" id="calc-display" aria-live="polite">0</div>
+          <div class="keypad">
+            <button class="btn-key" data-key="7">7</button>
+            <button class="btn-key" data-key="8">8</button>
+            <button class="btn-key" data-key="9">9</button>
+            <button class="btn-key btn-key--del" data-key="DEL">⌫</button>
+            <button class="btn-key" data-key="4">4</button>
+            <button class="btn-key" data-key="5">5</button>
+            <button class="btn-key" data-key="6">6</button>
+            <button class="btn-key btn-key--op" data-key="+">+</button>
+            <button class="btn-key" data-key="1">1</button>
+            <button class="btn-key" data-key="2">2</button>
+            <button class="btn-key" data-key="3">3</button>
+            <button class="btn-key btn-key--op" data-key="-">−</button>
+            <button class="btn-key" data-key="0">0</button>
+            <button class="btn-key" data-key=".">.</button>
+            <button class="btn-key btn-key--op" data-key="*">×</button>
+            <button class="btn-key btn-key--op" data-key="/">÷</button>
+            <button class="btn-key btn-key--ok" id="calc-ok-btn" data-key="OK">✓ Listo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: CATEGORÍA (#cat-modal) -->
+    <div class="modal-overlay" id="cat-modal" role="dialog" aria-modal="true" aria-labelledby="cat-modal-title">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title" id="cat-modal-title">Seleccionar Categoría</span>
+          <button class="btn-modal-close" id="cat-close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body modal-body--compact">
+          <div class="cat-grid" id="cat-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: TRANSFERENCIA (#transfer-modal) -->
+    <div class="modal-overlay" id="transfer-modal" role="dialog" aria-modal="true" aria-labelledby="transfer-modal-title">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title" id="transfer-modal-title">Transferencia entre Cuentas</span>
+          <button class="btn-modal-close" id="transfer-close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body">
+          <form id="transfer-form" novalidate>
+            <div class="modal-form">
+              <div class="modal-input-wrap"><input type="date" id="tr-date" required /></div>
+              <div class="modal-input-wrap">
+                <select id="tr-from" required><option value="">— Origen —</option></select>
+              </div>
+              <div class="modal-input-wrap">
+                <select id="tr-to" required><option value="">— Destino —</option></select>
+              </div>
+              <div class="modal-input-wrap modal-input-wrap--prefix">
+                <span class="modal-prefix">$</span>
+                <input type="number" id="tr-amount" min="0.01" step="0.01" placeholder="Monto" required />
+              </div>
+            </div>
+            <button type="submit" class="btn-modal-save">Transferir</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: CÓMO FUNCIONA ESTA SECCIÓN -->
+    <div class="modal-overlay" id="section-help-modal" role="dialog" aria-modal="true" aria-labelledby="section-help-title">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title" id="section-help-title">Cómo funciona</span>
+          <button class="btn-modal-close" id="section-help-close" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body info-modal-body" id="section-help-body"></div>
+      </div>
+    </div>
+
+    <!-- MODAL: FILOSOFÍA -->
+    <div class="modal-overlay" id="philosophy-modal" role="dialog" aria-modal="true">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title">Nuestra Filosofía</span>
+          <button class="btn-modal-close" id="philosophy-modal-close" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body info-modal-body">
+          <p>Foresee nace de una convicción simple: <strong>ver tu dinero con claridad es el primer paso para controlarlo.</strong></p>
+          <p>No somos una app de inversiones ni de crédito. Somos una herramienta de visibilidad: un espejo financiero que te muestra exactamente qué entra, qué sale y a dónde va.</p>
+          <p>Creemos que la salud financiera no depende de cuánto ganas, sino de cuánto entiendes. Y entender empieza por registrar.</p>
+          <p>Foresee es tuya: tus datos viven en tu cuenta de Firebase, bajo tu control. Sin anuncios, sin algoritmos que te empujen a gastar. Solo tú y tus números.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: PRIVACIDAD -->
+    <div class="modal-overlay" id="privacy-modal" role="dialog" aria-modal="true">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title">Política de Privacidad</span>
+          <button class="btn-modal-close" id="privacy-modal-close" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body info-modal-body">
+          <p><strong>Tus datos son tuyos.</strong> Foresee no recopila ni comparte información personal con terceros.</p>
+          <p>Toda la información que ingresas (transacciones, presupuestos, configuración) se almacena en Firebase Firestore bajo tu cuenta de usuario. Nadie más tiene acceso a esos datos.</p>
+          <p>Usamos Firebase Authentication para gestionar tu acceso de forma segura. No almacenamos contraseñas — Firebase se encarga de eso con sus propios estándares de seguridad.</p>
+          <p>No existen cookies de seguimiento ni herramientas de analítica de terceros en esta aplicación.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: TÉRMINOS -->
+    <div class="modal-overlay" id="terms-modal" role="dialog" aria-modal="true">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title">Términos y Condiciones</span>
+          <button class="btn-modal-close" id="terms-modal-close" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body info-modal-body">
+          <p>Foresee es una herramienta de gestión financiera personal. Al usarla, aceptas los siguientes términos:</p>
+          <p><strong>Uso personal:</strong> Esta aplicación está diseñada para uso personal. No está autorizada para uso comercial sin permiso expreso.</p>
+          <p><strong>Exactitud de datos:</strong> Eres responsable de la exactitud de la información que ingresas. Foresee no valida datos financieros contra fuentes externas.</p>
+          <p><strong>Disponibilidad:</strong> La app depende de Firebase (Google). Foresee no garantiza disponibilidad continua en caso de interrupciones del servicio de terceros.</p>
+          <p><strong>Sin asesoría financiera:</strong> Foresee no ofrece asesoramiento financiero, de inversión ni legal.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: COOKIES -->
+    <div class="modal-overlay" id="cookies-modal" role="dialog" aria-modal="true">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title">Política de Cookies</span>
+          <button class="btn-modal-close" id="cookies-modal-close" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="modal-body info-modal-body">
+          <p>Foresee no utiliza cookies propias de seguimiento ni publicidad.</p>
+          <p>Firebase (el servicio de backend que usamos) puede establecer cookies técnicas necesarias para el funcionamiento de la autenticación y la sincronización de datos. Estas cookies son esenciales y no pueden desactivarse sin afectar el funcionamiento de la app.</p>
+          <p>No usamos Google Analytics, Facebook Pixel ni ninguna otra herramienta de seguimiento de terceros.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>Foresee Finances &copy; 2025</p>
+      <nav class="footer-links">
+        <button id="btn-privacy">Privacidad</button>
+        <button id="btn-terms">Términos</button>
+        <button id="btn-cookies">Cookies</button>
+      </nav>
+      <p id="app-version">Foresee 2.0 — V F2 0015</p>
+    </footer>
+
+    <div id="foresee-tip" class="foresee-tip"></div>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

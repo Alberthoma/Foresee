@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Foresee — Convierte el caos financiero en claridad</title>
+<meta name="description" content="Foresee es tu guía hacia la estabilidad financiera: deudas, presupuesto, reportes y proyección en un solo flujo — hablando en español, sin vincular tu banco a nadie." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>" />
+<style>
+  :root {
+    --bg: #0a0c11;
+    --bg-2: #11141d;
+    --surface: #171b26;
+    --surface-2: #1e2330;
+    --border: #2a3040;
+    --text: #f2f3f7;
+    --text-muted: #9aa2bd;
+    --accent: #4f8fff;
+    --accent-2: #2f6fe0;
+    --warm: #f0b84f;
+    --warm-2: #d99a2b;
+    --success: #22c97a;
+    --danger: #f05252;
+    --font-display: Georgia, Cambria, "Times New Roman", serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f0f2f5; --bg-2: #e7eaf0; --surface: #ffffff; --surface-2: #f5f7fa;
+      --border: #dde1e9; --text: #1a1d23; --text-muted: #5a6070;
+      --accent: #1d4ed8; --accent-2: #1740b0; --warm: #a66a06; --warm-2: #8a5705; --success: #15803d; --danger: #b91c1c;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body);
+    line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  img { display: block; max-width: 100%; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  .eyebrow { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--warm); display: inline-block; }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  a { color: inherit; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  /* ── NAV ─────────────────────────────────────────────────────────── */
+  header.nav { position: sticky; top: 0; z-index: 30; background: color-mix(in srgb, var(--bg) 80%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; gap: 20px; }
+  .nav-brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; flex-shrink: 0; }
+  .nav-brand img { width: 30px; height: 30px; object-fit: contain; border-radius: 6px; }
+  .nav-links { display: flex; gap: 26px; font-size: 0.88rem; color: var(--text-muted); }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta { font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; background: var(--accent); color: #fff; border: none; border-radius: 999px; padding: 9px 18px; cursor: pointer; text-decoration: none; white-space: nowrap; transition: transform 0.15s, box-shadow 0.15s; }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(79,143,255,0.3); }
+  @media (max-width: 760px) { .nav-links { display: none; } }
+
+  /* ── shared buttons ──────────────────────────────────────────────── */
+  .btn-primary, .btn-secondary {
+    font-weight: 600; font-size: 1rem; padding: 14px 28px; border-radius: 999px; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary { position: relative; overflow: hidden; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; border: none; box-shadow: 0 12px 32px rgba(79,143,255,0.3); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(79,143,255,0.4); }
+  .btn-primary::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%); transform: translateX(-120%); transition: transform 0.6s ease; }
+  .btn-primary:hover::after { transform: translateX(120%); }
+  .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  /* ── HERO ────────────────────────────────────────────────────────── */
+  .hero { position: relative; isolation: isolate; padding: 76px 0 70px; overflow: hidden; }
+  .hero::before { content: ""; position: absolute; inset: -20% -10% auto auto; width: 60%; height: 90%; background: radial-gradient(circle, color-mix(in srgb, var(--warm) 22%, transparent) 0%, transparent 68%); z-index: -1; pointer-events: none; }
+  .hero-inner { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center; }
+  .hero .eyebrow { margin-bottom: 18px; }
+  .hero h1 { font-size: clamp(2.2rem, 4.4vw, 3.2rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; }
+  .hero h1 .hl { color: var(--accent); }
+  .hero-sub { margin-top: 22px; font-size: 1.1rem; color: var(--text-muted); max-width: 52ch; line-height: 1.65; }
+  .stat-row { display: flex; gap: 0; margin-top: 34px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 0; }
+  .stat { flex: 1; padding: 0 22px; border-left: 1px solid var(--border); }
+  .stat:first-child { border-left: none; padding-left: 0; }
+  .stat b { font-family: var(--font-display); font-size: 1.8rem; color: var(--warm); display: block; line-height: 1; }
+  .stat span { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; display: block; }
+  .hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+  .hero-trust { margin-top: 24px; font-size: 0.87rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+  .hero-trust b { color: var(--text); }
+
+  /* ── hero visual (imagen de la meditación) ───────────────────────── */
+  .hero-visual { position: relative; }
+  .hero-visual-glow { position: absolute; inset: -12%; background: radial-gradient(circle, color-mix(in srgb, var(--warm) 38%, transparent) 0%, transparent 70%); filter: blur(6px); z-index: -1; animation: glow-pulse 6s ease-in-out infinite; }
+  .hero-visual-card { position: relative; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 30px 70px rgba(0,0,0,0.4); animation: float-card 6s ease-in-out infinite; }
+  .hero-visual-card img { width: 100%; display: block; }
+  .sparkle { position: absolute; color: var(--warm); font-size: 1.1rem; animation: twinkle 3.2s ease-in-out infinite; pointer-events: none; }
+  .sparkle.s1 { top: -6%; left: -4%; animation-delay: 0s; }
+  .sparkle.s2 { top: 18%; right: -6%; font-size: 0.85rem; animation-delay: 1.1s; }
+  .sparkle.s3 { bottom: 10%; left: -7%; font-size: 0.9rem; animation-delay: 2s; }
+  @keyframes float-card { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes glow-pulse { 0%, 100% { opacity: 0.7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
+  @keyframes twinkle { 0%, 100% { opacity: 0.25; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.1); } }
+  @media (max-width: 900px) { .hero-inner { grid-template-columns: 1fr; } .hero-visual { max-width: 420px; margin: 0 auto; order: -1; } }
+
+  /* ── SECTION shared ──────────────────────────────────────────────── */
+  section { padding: 78px 0; }
+  .section-head { max-width: 640px; margin: 0 auto 46px; text-align: center; }
+  .section-head h2 { font-size: clamp(1.8rem, 3.2vw, 2.4rem); margin-top: 14px; }
+  .section-head p { margin-top: 16px; color: var(--text-muted); font-size: 1.03rem; }
+  .alt { background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+  /* ── narrative (story) blocks ────────────────────────────────────── */
+  .story { display: grid; grid-template-columns: 1fr 0.86fr; gap: 56px; align-items: center; }
+  .story.reverse .story-copy { order: 2; }
+  .story.reverse .story-img { order: 1; }
+  .story-copy .eyebrow { margin-bottom: 14px; }
+  .story-copy h2 { font-size: clamp(1.7rem, 3vw, 2.3rem); }
+  .story-copy p { margin-top: 18px; color: var(--text-muted); font-size: 1.03rem; line-height: 1.7; max-width: 48ch; }
+  .story-copy .btn-primary, .story-copy .btn-secondary { margin-top: 26px; }
+  .story-img { position: relative; overflow: hidden; border-radius: 20px; }
+  .story-img img { border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 30px 70px rgba(0,0,0,0.35); transition: transform 0.5s ease; }
+  .story-img:hover img { transform: scale(1.035); }
+  @media (max-width: 860px) {
+    .story, .story.reverse { grid-template-columns: 1fr; text-align: center; }
+    .story.reverse .story-copy, .story.reverse .story-img { order: unset; }
+    .story-copy p { margin-left: auto; margin-right: auto; }
+  }
+
+  /* ── VIDEO STEPS ─────────────────────────────────────────────────── */
+  .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+  .step-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
+  .step-card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(79,143,255,0.18); }
+  .step-card video { width: 100%; display: block; aspect-ratio: 16/10; object-fit: contain; background: var(--bg-2); }
+  .step-body { padding: 18px 20px 22px; }
+  .step-num { font-family: var(--font-display); color: var(--accent); font-weight: 700; font-size: 0.85rem; opacity: 0.8; }
+  .step-body h3 { font-size: 1.04rem; font-weight: 700; margin-top: 6px; }
+  .step-body p { margin-top: 8px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.55; }
+
+  /* ── FEATURE EXPLORER ────────────────────────────────────────────── */
+  .feat-explorer { display: grid; grid-template-columns: 300px 1fr; background: var(--surface); border: 1px solid var(--border); border-radius: 22px; overflow: hidden; min-height: 360px; }
+  .feat-list { display: flex; flex-direction: column; border-right: 1px solid var(--border); max-height: 500px; overflow-y: auto; }
+  .feat-btn { display: flex; align-items: center; gap: 12px; padding: 13px 18px; background: none; border: none; border-bottom: 1px solid var(--border); text-align: left; cursor: pointer; font-family: inherit; font-size: 0.92rem; font-weight: 600; color: var(--text-muted); transition: background 0.15s, color 0.15s; }
+  .feat-btn:last-child { border-bottom: none; }
+  .feat-btn img { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
+  .feat-btn .feat-emoji { width: 26px; font-size: 1.3rem; text-align: center; flex-shrink: 0; }
+  .feat-btn:hover { background: var(--surface-2); color: var(--text); }
+  .feat-btn.active { background: var(--surface-2); color: var(--text); box-shadow: inset 3px 0 0 var(--accent); }
+  .feat-detail { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+  .feat-detail-icon { margin-bottom: 18px; }
+  .feat-detail-icon img { width: 56px; height: 56px; object-fit: contain; }
+  .feat-detail-icon .feat-emoji { font-size: 2.3rem; display: block; }
+  .feat-detail-title { font-family: var(--font-display); font-size: 1.5rem; }
+  .feat-detail-desc { margin-top: 14px; color: var(--text-muted); font-size: 1.03rem; line-height: 1.7; max-width: 52ch; }
+  .feat-detail-shot { margin-top: 22px; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 20px 45px rgba(0,0,0,0.3); background: var(--bg-2); }
+  .feat-detail-shot img { width: 100%; display: block; }
+  @media (max-width: 760px) {
+    .feat-explorer { grid-template-columns: 1fr; }
+    .feat-list { flex-direction: row; overflow-x: auto; max-height: none; border-right: none; border-bottom: 1px solid var(--border); -webkit-overflow-scrolling: touch; }
+    .feat-btn { flex-direction: column; gap: 6px; text-align: center; border-bottom: none; border-right: 1px solid var(--border); flex-shrink: 0; width: 88px; font-size: 0.7rem; padding: 14px 8px; }
+    .feat-btn.active { box-shadow: inset 0 -3px 0 var(--accent); }
+    .feat-detail { padding: 26px 22px; }
+  }
+
+  /* ── BENEFITS ────────────────────────────────────────────────────── */
+  .benefits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .chip-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 22px; }
+  .chip { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+  .chip b { font-family: var(--font-display); color: var(--warm); font-size: 1.02rem; display: block; }
+  .chip span { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; display: block; }
+  .benefit-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+  .benefit-list li { display: flex; gap: 14px; align-items: flex-start; }
+  .benefit-check { width: 24px; height: 24px; border-radius: 50%; background: color-mix(in srgb, var(--success) 18%, transparent); color: var(--success); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; margin-top: 2px; }
+  .benefit-list p { color: var(--text-muted); font-size: 1rem; }
+  .benefit-list b { color: var(--text); }
+  @media (max-width: 860px) { .benefits-grid { grid-template-columns: 1fr; } }
+
+  /* ── TRUST STRIP ─────────────────────────────────────────────────── */
+  .trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .trust-card { text-align: center; padding: 8px; }
+  .trust-icon { font-size: 2rem; margin-bottom: 12px; display: inline-block; transition: transform 0.3s ease; }
+  .trust-card:hover .trust-icon { transform: scale(1.2) rotate(-6deg); }
+  .trust-card h3 { font-family: var(--font-body); font-weight: 700; font-size: 1rem; }
+  .trust-card p { margin-top: 8px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.55; }
+  @media (max-width: 760px) { .trust-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+  /* ── LEAD CAPTURE (paso 1 — un solo campo) ──────────────────────────── */
+  .lead-box { max-width: 560px; margin: 0 auto 30px; background: var(--surface); border: 1px solid var(--border); border-radius: 22px; padding: 36px; text-align: center; }
+  .lead-form { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .lead-form input { flex: 1; min-width: 220px; padding: 13px 18px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg-2); color: var(--text); font-family: inherit; font-size: 0.95rem; }
+  .lead-form input:focus { outline: none; border-color: var(--accent); }
+  .lead-form button { border-radius: 999px; white-space: nowrap; font-family: inherit; }
+  .lead-form button:disabled { opacity: 0.55; cursor: not-allowed; }
+  .form-status { margin-top: 14px; font-size: 0.87rem; color: var(--text-muted); min-height: 1.3em; }
+  .form-status.ok { color: var(--success); }
+  .form-status.err { color: var(--danger); }
+
+  /* ── survey toggle (paso 2 — opcional) ──────────────────────────────── */
+  .survey-toggle { max-width: 720px; margin: 0 auto; }
+  .survey-toggle summary { cursor: pointer; list-style: none; font-weight: 600; color: var(--accent); text-align: center; padding: 16px; border: 1px dashed var(--border); border-radius: 14px; transition: background 0.15s ease; }
+  .survey-toggle summary::-webkit-details-marker { display: none; }
+  .survey-toggle summary:hover { background: var(--surface); }
+  .survey-toggle[open] summary { margin-bottom: 22px; }
+  .survey-toggle .survey-box { margin: 0; }
+
+  /* ── SURVEY ──────────────────────────────────────────────────────── */
+  .survey-box { background: var(--surface); border: 1px solid var(--border); border-radius: 22px; padding: 40px; max-width: 720px; margin: 0 auto; }
+  .survey-quote { font-style: italic; color: var(--text-muted); font-size: 0.98rem; border-left: 3px solid var(--warm); padding-left: 16px; margin-bottom: 30px; }
+  fieldset { border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin: 0 0 18px; }
+  legend { padding: 0 8px; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; }
+  .opt { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; font-size: 0.92rem; color: var(--text); cursor: pointer; }
+  .opt input { margin-top: 3px; accent-color: var(--accent); }
+  select, input[type="text"], input[type="email"], input[type="tel"] {
+    width: 100%; padding: 11px 13px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--bg-2); color: var(--text); font-family: inherit; font-size: 0.95rem;
+  }
+  select:focus, input:focus { outline: none; border-color: var(--accent); }
+  .field { margin: 14px 0; }
+  .field label { display: block; margin-bottom: 6px; font-size: 0.88rem; color: var(--text-muted); }
+  .survey-fine { font-size: 0.8rem; color: var(--text-muted); margin-top: 16px; line-height: 1.6; }
+  .survey-fine.ok { color: var(--success); }
+  .survey-fine.err { color: var(--danger); }
+  .survey-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+  button.btn-primary { font-family: inherit; border: none; }
+
+  /* ── FINAL CTA ───────────────────────────────────────────────────── */
+  .final-cta { text-align: center; }
+  .final-cta img { width: 56px; height: 56px; margin: 0 auto 18px; border-radius: 14px; }
+  .final-cta h2 { font-size: clamp(2rem, 4vw, 2.7rem); max-width: 22ch; margin: 0 auto; }
+  .final-cta p { margin-top: 16px; color: var(--text-muted); font-size: 1.05rem; }
+  .final-cta .hero-ctas { justify-content: center; margin-top: 30px; }
+
+  /* ── FOOTER ──────────────────────────────────────────────────────── */
+  footer { border-top: 1px solid var(--border); padding: 36px 0; }
+  .foot-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; font-size: 0.85rem; color: var(--text-muted); }
+  .foot-links { display: flex; gap: 18px; }
+  .foot-links a { text-decoration: underline; }
+
+  /* ── reveal-on-scroll + hero load sequence ───────────────────────── */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+    .hero-visual-card, .hero-visual-glow, .sparkle { animation: none; }
+  }
+
+  @media (max-width: 520px) {
+    .stat-row { flex-direction: column; gap: 16px; }
+    .stat { border-left: none; padding-left: 0; }
+    .chip-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <div class="nav-brand">
+        <img src="https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto,c_scale,w_64/v1782545519/Logotipo_Foresee2_vqou8q.png" alt="Foresee" />
+        <span>Foresee</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#funciones">Funciones</a>
+        <a href="#beneficios">Beneficios</a>
+        <a href="#encuesta">Encuesta</a>
+      </nav>
+      <a class="nav-cta" href="../index.html">Empezar gratis</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <span class="eyebrow">Tu guía hacia la estabilidad financiera</span>
+        <h1>Convierte el caos financiero en <span class="hl">claridad</span> y control</h1>
+        <p class="hero-sub">Deja atrás el peso de las deudas. Anticípate al mes, elimina recargos por olvido y toma decisiones con confianza — hablando en español, con una foto, o a mano. Sin darle tu banco a nadie.</p>
+        <div class="stat-row">
+          <div class="stat"><b>$0</b><span>Vinculado a tu banco</span></div>
+          <div class="stat"><b>100%</b><span>Tus datos, en tu cuenta</span></div>
+          <div class="stat"><b>0</b><span>Contratos ni tarjetas</span></div>
+        </div>
+        <div class="hero-ctas">
+          <a class="btn-primary" href="../index.html">Empezar gratis →</a>
+          <a class="btn-secondary" href="#como-funciona">Ver cómo funciona</a>
+        </div>
+        <p class="hero-trust"><span>🔒</span><span>Nunca vinculamos tu cuenta bancaria a nadie — tus datos quedan en <b>tu</b> cuenta.</span></p>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-visual-glow"></div>
+        <span class="sparkle s1">✦</span>
+        <span class="sparkle s2">✦</span>
+        <span class="sparkle s3">✦</span>
+        <div class="hero-visual-card">
+          <img src="https://res.cloudinary.com/datwdagbf/image/upload/v1759021617/10_v1xmfj.png" alt="El verdadero tesoro es la tranquilidad emocional y control" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap story reveal">
+      <div class="story-copy">
+        <span class="eyebrow">Del peso a la salida</span>
+        <h2>El verdadero problema no son los números</h2>
+        <p>Las deudas pueden abrumar. Pero lo que de verdad pesa es sentir que no hay salida. En Foresee trazas un camino concreto, paso a paso, con resultados que ves — no una promesa vacía.</p>
+        <a class="btn-secondary" href="#como-funciona">Ver el camino →</a>
+      </div>
+      <div class="story-img"><img src="https://res.cloudinary.com/datwdagbf/image/upload/v1759021618/2_yhphft.png" alt="El peso de las deudas" /></div>
+    </div>
+  </section>
+
+  <section id="como-funciona">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Cómo funciona</span>
+        <h2>El corazón del flujo, en 7 pasos</h2>
+        <p>Cada paso es un video real de la app, con la interfaz real — no una demo genérica. Foresee tiene 12 herramientas en total; estas son las que usarás cada semana. <a href="#funciones">Explora las 12 →</a></p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card reveal">
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512589/Paso_1_Bienvenida_y_Gestion_de_Categoria_y_Bancos_plya2u.mp4" poster="capturas-app/capture-configuracion.png"></video>
+          <div class="step-body"><div class="step-num">01</div><h3>Construye tu universo financiero</h3><p>Configura categorías, registra bancos y define descripciones clave. Un mapa listo en minutos.</p></div>
+        </div>
+        <div class="step-card reveal">
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512570/Paso_2_Gastos_Recurrentes_mboofi.mp4" poster="capturas-app/capture-recurrentes.png"></video>
+          <div class="step-body"><div class="step-num">02</div><h3>Automatiza tu tranquilidad</h3><p>Registra una vez tus gastos fijos. Se repiten cada mes, con aviso antes del vencimiento.</p></div>
+        </div>
+        <div class="step-card reveal">
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512577/Paso_3_Targetas_de_Credito_krqk9f.mp4" poster="capturas-app/capture-tarjetas.png"></video>
+          <div class="step-body"><div class="step-num">03</div><h3>De monstruo a herramienta</h3><p>Registra tarjetas y préstamos, define el plazo, y recibe tu pago mensual sugerido + alertas.</p></div>
+        </div>
+        <div class="step-card reveal">
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512590/Paso_4_Registro_Diaro_cujs8c.mp4" poster="capturas-app/capture-registros.png"></video>
+          <div class="step-body"><div class="step-num">04</div><h3>El hábito que lo cambia todo</h3><p>Registra en segundos con botones de ingreso/gasto, tabla detallada, o hablando por voz 🎙️.</p></div>
+        </div>
+        <div class="step-card reveal">
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758512588/Paso_5_Reportes_Presupuesto_y_Tablas_p0zj9b.mp4" poster="capturas-app/capture-reportes.png"></video>
+          <div class="step-body"><div class="step-num">05</div><h3>Reportes, presupuesto y tablas</h3><p>Mira porcentajes consumidos, saldos disponibles, y un historial claro para decidir.</p></div>
+        </div>
+        <div class="step-card reveal">
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1758514065/Paso_6_Proyeccion_bhrr1a.mp4" poster="capturas-app/capture-proyeccion.png"></video>
+          <div class="step-body"><div class="step-num">06</div><h3>Proyección — la esencia</h3><p>Anticipa ingresos, gastos y ahorro real. Si el mes viene corto, prioriza antes de que sea tarde.</p></div>
+        </div>
+        <div class="step-card reveal">
+          <video controls preload="none" src="https://res.cloudinary.com/datwdagbf/video/upload/v1759005488/Gastos_comunes_kvozqf.mp4" poster="capturas-app/capture-gastos-comunes.png"></video>
+          <div class="step-body"><div class="step-num">07</div><h3>Gastos comunes</h3><p>Reúne la parte de cada persona y cierra el total, sin enredos ni planillas aparte.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="funciones">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Explora Foresee</span>
+        <h2>12 herramientas, una sola app</h2>
+        <p>Toca cada una y mira, en simple, qué hace por ti.</p>
+      </div>
+      <div class="feat-explorer reveal">
+        <div class="feat-list" id="feat-list"></div>
+        <div class="feat-detail">
+          <div class="feat-detail-icon" id="feat-detail-icon"></div>
+          <h3 class="feat-detail-title" id="feat-detail-title"></h3>
+          <p class="feat-detail-desc" id="feat-detail-desc"></p>
+          <div class="feat-detail-shot" id="feat-detail-shot"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="beneficios" class="alt">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Beneficios</span>
+        <h2>Emocionales, y muy prácticos</h2>
+      </div>
+      <div class="benefits-grid">
+        <div class="story-img reveal"><img src="https://res.cloudinary.com/datwdagbf/image/upload/v1759021619/5_que_te_ayuden_a_armar_ese_rompecabezas_financiero_i8jm3x.png" alt="Rompecabezas financiero" /></div>
+        <div class="reveal">
+          <ul class="benefit-list">
+            <li><span class="benefit-check">✓</span><p><b>Tranquilidad emocional:</b> sin sustos de último minuto ni recargos por olvido.</p></li>
+            <li><span class="benefit-check">✓</span><p><b>Claridad total:</b> deudas, presupuesto, reportes y proyección en un mismo flujo.</p></li>
+            <li><span class="benefit-check">✓</span><p><b>Control real:</b> convierte números en decisiones — prioriza y ajusta a tiempo.</p></li>
+          </ul>
+          <div class="chip-row">
+            <div class="chip"><b>Alertas</b><span>Antes del vencimiento</span></div>
+            <div class="chip"><b>Pago sugerido</b><span>Liquida con estrategia</span></div>
+            <div class="chip"><b>Presupuesto</b><span>% consumido y saldo</span></div>
+            <div class="chip"><b>Proyección</b><span>Disponible y ahorro</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap story reverse reveal">
+      <div class="story-copy">
+        <span class="eyebrow">El verdadero tesoro</span>
+        <h2>Más allá de los números, buscas calma</h2>
+        <p>La meta no es una hoja de cálculo perfecta — es esa sensación de control sereno. Cada paso en Foresee te acerca un poco más a eso.</p>
+        <a class="btn-secondary" href="#encuesta">Ayúdanos a mejorar →</a>
+      </div>
+      <div class="story-img"><img src="https://res.cloudinary.com/datwdagbf/image/upload/v1759021619/7_y_Te_permita_avanzar_cada_vez_mas_wibht1.png" alt="Avanzar cada vez más" /></div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Seguridad, en criollo</span>
+        <h2>Confianza, no letra chica</h2>
+      </div>
+      <div class="trust-grid">
+        <div class="trust-card reveal"><div class="trust-icon">🔒</div><h3>Tu banco es tuyo</h3><p>Foresee no se conecta a tu banco ni a un agregador externo — tú registras tus movimientos, nadie más los toca.</p></div>
+        <div class="trust-card reveal"><div class="trust-icon">🔐</div><h3>Aislamiento real, no una promesa</h3><p>Reglas de seguridad de Firestore garantizan, a nivel de base de datos, que cada cuenta solo puede leer y escribir sus propios datos.</p></div>
+        <div class="trust-card reveal"><div class="trust-icon">🛡️</div><h3>Protección contra bots</h3><p>Firebase App Check verifica que cada solicitud venga de la app real, no de un script automatizado.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="encuesta">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Sé de los primeros</span>
+        <h2>Únete a la lista de acceso anticipado</h2>
+        <p>Déjanos tu correo y te avisamos apenas Foresee esté listo para ti.</p>
+      </div>
+
+      <div class="lead-box reveal">
+        <form id="lead-form" class="lead-form">
+          <input type="email" name="email" placeholder="tu@correo.com" required aria-label="Correo electrónico" autocomplete="email" />
+          <button class="btn-primary" type="submit">Quiero probarlo →</button>
+        </form>
+        <p class="form-status" id="lead-status" aria-live="polite"></p>
+      </div>
+
+      <details class="survey-toggle reveal">
+        <summary>¿Tienes 2 minutos más? Ayúdanos a mejorar Foresee</summary>
+        <div class="survey-box">
+          <p class="survey-quote">"Imagina que cada pregunta es una pequeña conversación sobre tu experiencia personal. No hay respuestas correctas o incorrectas, solo tu realidad."</p>
+          <form id="survey-form">
+            <fieldset>
+              <legend>1. El peso de las deudas</legend>
+              <label class="opt"><input type="radio" name="1_control_deudas" value="control_claro" /> Sí, tengo control claro</label>
+              <label class="opt"><input type="radio" name="1_control_deudas" value="a_veces_evito" /> No, a veces lo evito</label>
+              <label class="opt"><input type="radio" name="1_control_deudas" value="dificil_responder" /> Me resulta difícil responder</label>
+            </fieldset>
+            <fieldset>
+              <legend>2. Tu manera de organizarte hoy (marca varias)</legend>
+              <label class="opt"><input type="checkbox" name="2_org" value="no_organizo" /> No lo organizo</label>
+              <label class="opt"><input type="checkbox" name="2_org" value="memoria" /> Lo llevo en la memoria</label>
+              <label class="opt"><input type="checkbox" name="2_org" value="notas_excel" /> Uso notas, libretas o Excel</label>
+              <label class="opt"><input type="checkbox" name="2_org" value="banco" /> Consulto el estado de cuenta del banco</label>
+              <div class="field"><label>Otra forma</label><input type="text" name="2_org_otra" /></div>
+            </fieldset>
+            <fieldset>
+              <legend>3. Tu preocupación principal</legend>
+              <label class="opt"><input type="radio" name="3_preocupacion" value="cuanto_pagar" /> No sé cuánto pagar para salir de deudas</label>
+              <label class="opt"><input type="radio" name="3_preocupacion" value="olvidos" /> Olvidar fechas de pago</label>
+              <label class="opt"><input type="radio" name="3_preocupacion" value="no_se_va" /> No darme cuenta en qué se me va el dinero</label>
+              <label class="opt"><input type="radio" name="3_preocupacion" value="pasarme" /> Pasarme de lo que había planeado</label>
+              <label class="opt"><input type="radio" name="3_preocupacion" value="no_disponible" /> No saber cuánto tendré disponible el próximo mes</label>
+            </fieldset>
+            <fieldset>
+              <legend>4. Lo que más te ayudaría (elige hasta 3)</legend>
+              <label class="opt"><input type="checkbox" name="4_func" value="recordatorios" /> Recordatorios automáticos antes de pagar</label>
+              <label class="opt"><input type="checkbox" name="4_func" value="pago_exact" /> Saber el pago exacto para liquidar una deuda</label>
+              <label class="opt"><input type="checkbox" name="4_func" value="limites" /> Poner límites de gasto por categoría</label>
+              <label class="opt"><input type="checkbox" name="4_func" value="proyeccion" /> Proyección del mes: disponible/ahorro</label>
+              <label class="opt"><input type="checkbox" name="4_func" value="tablas" /> Tablas claras con historial</label>
+              <label class="opt"><input type="checkbox" name="4_func" value="registro_rapido" /> Registrar rápido ingresos o gastos</label>
+              <label class="opt"><input type="checkbox" name="4_func" value="graficos" /> Ver gastos en gráficos simples</label>
+            </fieldset>
+            <fieldset>
+              <legend>5. Cuánto pagarías por evitar perder dinero</legend>
+              <div class="field"><select name="5_inversion"><option>Nada, solo si es gratis</option><option>Entre $2 y $5</option><option>Entre $6 y $10</option><option>Más de $10</option><option>Prefiero pago anual con descuento</option></select></div>
+            </fieldset>
+            <fieldset>
+              <legend>6. ¿Qué tan probable es que la pruebes este mes?</legend>
+              <div class="field"><select name="6_intencion"><option>Nada probable</option><option>Poco probable</option><option>Probable</option><option>Muy probable</option><option>Ya quiero empezar</option></select></div>
+            </fieldset>
+            <div class="field"><label>Nombre (opcional si ya dejaste tu correo arriba)</label><input type="text" name="nombre" /></div>
+            <div class="field"><label>Email (opcional si ya dejaste tu correo arriba)</label><input type="email" name="email" /></div>
+            <div class="survey-actions">
+              <button class="btn-primary" type="submit">Enviar respuestas</button>
+            </div>
+            <p class="survey-fine" id="survey-status" aria-live="polite">Tus respuestas nos ayudan a mejorar Foresee — no las compartimos con nadie.</p>
+          </form>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="final-cta alt">
+    <div class="wrap reveal">
+      <img src="https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto,c_scale,w_112/v1782545519/Logotipo_Foresee2_vqou8q.png" alt="Foresee" />
+      <h2>Empieza hoy — conviértelo en hábito</h2>
+      <p>Pequeñas acciones diarias, resultados gigantes. Gratis para empezar, sin vincular tu banco.</p>
+      <div class="hero-ctas"><a class="btn-primary" href="../index.html">Empezar gratis →</a></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap foot-inner">
+      <p>© 2025 Foresee Finances · <a href="mailto:albertomatosgil@gmail.com" style="text-decoration:underline;">albertomatosgil@gmail.com</a></p>
+      <div class="foot-links">
+        <a href="../index.html">Privacidad</a>
+        <a href="../index.html">Términos</a>
+        <a href="../index.html">Cookies</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app-check.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseApp = initializeApp({
+      apiKey: "AIzaSyCTicX5tqqVr3pK_RFqgvqpRavsUuTvS2g",
+      authDomain: "wittfinances-282f1.firebaseapp.com",
+      projectId: "wittfinances-282f1",
+      storageBucket: "wittfinances-282f1.firebasestorage.app",
+      messagingSenderId: "998192322959",
+      appId: "1:998192322959:web:e2afcdd7f47da3767853fa",
+    });
+    initializeAppCheck(firebaseApp, {
+      provider: new ReCaptchaV3Provider("6Lew4FotAAAAABNZIUZKyBsjJyaVJkvf8VDfrN5-"),
+      isTokenAutoRefreshEnabled: true,
+    });
+    const db = getFirestore(firebaseApp);
+
+    function setStatus(el, msg, kind) {
+      el.textContent = msg;
+      el.className = el.className.replace(/\s*(ok|err)\b/g, "") + (kind ? " " + kind : "");
+    }
+
+    const leadForm = document.getElementById("lead-form");
+    const leadStatus = document.getElementById("lead-status");
+    leadForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = leadForm.querySelector("button");
+      btn.disabled = true;
+      try {
+        await addDoc(collection(db, "landing_leads"), {
+          email: leadForm.email.value.trim(),
+          createdAt: serverTimestamp(),
+        });
+        leadForm.reset();
+        setStatus(leadStatus, "¡Listo! Te avisamos apenas esté disponible.", "ok");
+      } catch (err) {
+        setStatus(leadStatus, "No pudimos guardarlo — escríbenos a albertomatosgil@gmail.com y te anotamos a mano.", "err");
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    const surveyForm = document.getElementById("survey-form");
+    const surveyStatus = document.getElementById("survey-status");
+    surveyForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = surveyForm.querySelector("button[type=submit]");
+      btn.disabled = true;
+      const payload = { createdAt: serverTimestamp() };
+      for (const [key, value] of new FormData(surveyForm).entries()) {
+        if (!value) continue;
+        payload[key] = key in payload ? [].concat(payload[key], value) : value;
+      }
+      try {
+        await addDoc(collection(db, "landing_survey"), payload);
+        surveyForm.reset();
+        setStatus(surveyStatus, "¡Gracias por tu tiempo! Tus respuestas nos ayudan a mejorar Foresee.", "ok");
+      } catch (err) {
+        setStatus(surveyStatus, "No pudimos enviarlo — escríbenos a albertomatosgil@gmail.com.", "err");
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+
+  <script>
+    (function () {
+      const FEATURES = [
+        { id: "registros", name: "Registros", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514689/registro_mc8ed8.png", shot: "capturas-app/capture-registros.png", desc: "Anota cada ingreso y gasto con categoría, banco, fecha y descripción. Elige cómo cargarlo: con la calculadora integrada, o hablando — tú decides." },
+        { id: "voz", name: "Voz", icon: "https://res.cloudinary.com/datwdagbf/image/upload/v1757199087/voz_w5ctvq.png", shot: "capturas-app/capture-voz.png", desc: "Habla y Foresee arma el registro sola. Entiende fechas, montos y categorías dichas en español natural, sin comandos fijos que memorizar." },
+        { id: "proyeccion", name: "Proyección", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514685/proyeccion_hh3xyt.png", shot: "capturas-app/capture-proyeccion.png", desc: "Mira cómo va a quedar tu saldo en los próximos días, combinando tus movimientos reales con tus gastos recurrentes. Así sabes si el mes viene corto antes de que sea tarde." },
+        { id: "recurrentes", name: "Gastos Recurrentes", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514673/gastos-recurrentes2_udrbey.png", shot: "capturas-app/capture-recurrentes.png", desc: "Carga una vez tus pagos fijos — streaming, renta, seguros — y Foresee los registra sola cada mes, con aviso antes del vencimiento." },
+        { id: "comunes", name: "Gastos Comunes", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756767509/comunes_xjuxxt.png", shot: "capturas-app/capture-gastos-comunes.png", desc: "Divide cualquier gasto compartido entre varias personas y lleva la cuenta de quién debe qué, sin armar una planilla aparte." },
+        { id: "tarjetas", name: "Tarjetas y Préstamos", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514697/tarjetas2_z3jokx.png", shot: "capturas-app/capture-tarjetas.png", desc: "Controla el saldo de tus tarjetas y préstamos, con alerta automática al acercarte al límite y el pago mensual sugerido para salir de la deuda a tiempo." },
+        { id: "metas", name: "Metas de Ahorro", icon: "https://res.cloudinary.com/datwdagbf/image/upload/v1756514663/ahorro_vhwhw7.png", shot: "capturas-app/capture-metas.png", desc: "Define una meta — un viaje, un auto, un fondo de emergencia — con monto y fecha, y mira tu progreso en una barra que se llena a medida que ahorras." },
+        { id: "saldos", name: "Saldos", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514692/saldos_lntcfz.png", shot: "capturas-app/capture-saldos.png", desc: "Un vistazo al saldo real de cada uno de tus bancos y al total combinado, siempre actualizado con cada movimiento que registras." },
+        { id: "reportes", name: "Reportes", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514690/reportes_qisw3e.png", shot: "capturas-app/capture-reportes.png", desc: "Gráficos claros de en qué se te va el dinero: por categoría, por mes, y la evolución de tu saldo en el tiempo." },
+        { id: "presupuesto", name: "Presupuesto", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514684/presupuesto_r7qkr9.png", shot: "capturas-app/capture-presupuesto.png", desc: "Pon un límite de gasto por categoría y mira, en tiempo real, cuánto llevas consumido de cada una — antes de pasarte." },
+        { id: "configuracion", name: "Configuración", icon: "https://res.cloudinary.com/datwdagbf/image/upload/f_auto,q_auto/v1756514668/configuracion_puo2ap.png", shot: "capturas-app/capture-configuracion.png", desc: "Personaliza tus categorías, bancos y moneda, activa o desactiva notificaciones, y exporta una copia de tus datos cuando quieras." },
+        { id: "importar", name: "Importar", emoji: "⬇", shot: "capturas-app/capture-importar.png", desc: "Sube el CSV o Excel de tu banco, o hasta una foto del extracto o de un recibo — Foresee arma los registros sola y detecta duplicados." },
+      ];
+
+      function iconHTML(f) {
+        return f.icon ? `<img src="${f.icon}" alt="" />` : `<span class="feat-emoji">${f.emoji}</span>`;
+      }
+
+      const list = document.getElementById("feat-list");
+      const detailIcon = document.getElementById("feat-detail-icon");
+      const detailTitle = document.getElementById("feat-detail-title");
+      const detailDesc = document.getElementById("feat-detail-desc");
+      const detailShot = document.getElementById("feat-detail-shot");
+
+      function selectFeature(f, btn) {
+        list.querySelectorAll(".feat-btn").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        detailIcon.innerHTML = iconHTML(f);
+        detailTitle.textContent = f.name;
+        detailDesc.textContent = f.desc;
+        detailShot.innerHTML = `<img src="${f.shot}" alt="Captura real de la sección ${f.name} en Foresee" />`;
+      }
+
+      FEATURES.forEach((f, i) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "feat-btn" + (i === 0 ? " active" : "");
+        btn.innerHTML = iconHTML(f) + `<span>${f.name}</span>`;
+        btn.addEventListener("click", () => selectFeature(f, btn));
+        list.appendChild(btn);
+      });
+
+      selectFeature(FEATURES[0], list.firstElementChild);
+    })();
+
+    (function () {
+      const items = document.querySelectorAll(".reveal");
+      if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        items.forEach((el) => el.classList.add("visible"));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) { entry.target.classList.add("visible"); io.unobserve(entry.target); }
+        });
+      }, { threshold: 0.12 });
+      items.forEach((el) => io.observe(el));
+    })();
+  </script>
+</body>
+</html>
